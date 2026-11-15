@@ -42,6 +42,8 @@ final class LeaveEntitlementDaoIntegrationTest extends TestCase
                 [2, 102, 1, '2026-01-01', '2026-12-31'],
                 [3, 101, 2, '2026-01-01', '2026-12-31'],
                 [4, 101, 1, '2025-01-01', '2025-12-31'],
+                // Limite inicial inclusivo: validade começa na data consultada.
+                [5, 101, 1, '2026-11-30', '2026-12-31'],
             ];
 
             foreach ($dados as [$id, $colaborador, $tipo, $inicio, $fim]) {
@@ -76,8 +78,8 @@ final class LeaveEntitlementDaoIntegrationTest extends TestCase
                 $resultados
             );
 
-            // Somente o registro do colaborador, tipo e período corretos.
-            $this->assertSame([1], $ids);
+            // Inclui o registro válido e aquele no limite inicial da validade.
+            $this->assertSame([1, 5], $ids);
         } finally {
             $em->clear();
             $connection->close();

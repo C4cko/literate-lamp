@@ -25,4 +25,21 @@ final class LeaveRequestStatusTest extends TestCase
 
         $this->assertSame([2, 1], $resultado);
     }
+
+    public function testRejeitaNomeDeStatusInexistente(): void
+    {
+        $service = $this->getMockBuilder(LeaveRequestService::class)
+            ->onlyMethods(['getAllLeaveStatusesAssoc'])
+            ->getMock();
+
+        $service->expects($this->once())
+            ->method('getAllLeaveStatusesAssoc')
+            ->willReturn([
+                1 => 'PENDING APPROVAL',
+                2 => 'SCHEDULED',
+            ]);
+
+        $this->expectException(InvalidArgumentException::class);
+        $service->getLeaveStatusesByNames(['STATUS INEXISTENTE']);
+    }
 }

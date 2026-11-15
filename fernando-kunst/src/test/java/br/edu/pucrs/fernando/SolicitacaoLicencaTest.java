@@ -10,6 +10,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
@@ -69,13 +70,12 @@ class SolicitacaoLicencaTest {
                         + "//div[contains(@class,'oxd-select-text-input')]"
         );
 
-        wait.until(ExpectedConditions.elementToBeClickable(seletorTipo))
-                .click();
+        clicarQuandoLivre(seletorTipo);
 
-        wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
+        clicarQuandoLivre(By.xpath(
                 "//*[@role='option'][normalize-space()='"
                         + TIPO_LICENCA + "']"
-        ))).click();
+        ));
 
         By campoInicial = campoData("From Date");
         By campoFinal = campoData("To Date");
@@ -101,21 +101,21 @@ class SolicitacaoLicencaTest {
                 "//button[@type='submit'][normalize-space()='Apply']"
         );
 
-        wait.until(ExpectedConditions.elementToBeClickable(botaoApply))
-                .click();
-
-        aguardarResultadoEnvio();
-
-        abrirMinhaLista();
-
         By pedidoPendente = localizarPedido("Pending Approval");
+        boolean envioTentado = false;
+        boolean cancelamentoConfirmado = false;
 
         try {
+            envioTentado = true;
+            clicarQuandoLivre(botaoApply);
+            aguardarResultadoEnvio();
+            abrirMinhaLista();
+
             String[] dadosPedido = wait
                     .ignoring(StaleElementReferenceException.class)
                     .until(navegador -> {
                         List<WebElement> pedidos =
-                                navegador.findElements(pedidoPendente);
+                                navegador.findElements(localizarPedido());
 
                         if (pedidos.isEmpty()) {
                             return null;
@@ -153,17 +153,50 @@ class SolicitacaoLicencaTest {
                         return null;
                     });
 
-            assertTrue(dadosPedido[0].contains(dataExibida));
-            assertTrue(dadosPedido[0].contains(TIPO_LICENCA));
+            assertTrue(dadosPedido[0].contains(dataExibida), "O pedido deve mostrar a data solicitada.");
+            assertTrue(dadosPedido[0].contains(TIPO_LICENCA), "O pedido deve mostrar o tipo solicitado.");
+            assertTrue(dadosPedido[0].contains("Pending Approval"),
+                    "O pedido criado deve estar pendente de aprovação.");
 
             assertEquals(
                     "1.00",
                     dadosPedido[1],
                     "A duração do pedido deve ser de um dia."
             );
-        } finally {
             cancelarPedido(pedidoPendente);
+            cancelamentoConfirmado = true;
+        } finally {
+            if (envioTentado && !cancelamentoConfirmado) {
+                try {
+                    abrirMinhaLista();
+                    cancelarPedido(pedidoPendente);
+                } catch (RuntimeException | AssertionError erroLimpeza) {
+                    System.err.println("Aviso: não foi possível confirmar a limpeza do pedido "
+                            + comentario + ": " + erroLimpeza);
+                }
+            }
         }
+    }
+
+    private void clicarQuandoLivre(By localizador) {
+        wait.ignoring(StaleElementReferenceException.class)
+                .ignoring(ElementClickInterceptedException.class)
+                .until(navegador -> {
+                    for (WebElement camada : navegador.findElements(
+                            By.cssSelector(".oxd-form-loader"))) {
+                        if (camada.isDisplayed()) {
+                            return false;
+                        }
+                    }
+
+                    WebElement elemento = navegador.findElement(localizador);
+                    if (!elemento.isDisplayed() || !elemento.isEnabled()) {
+                        return false;
+                    }
+
+                    elemento.click();
+                    return true;
+                });
     }
 
     private void fazerLogin() {
@@ -219,13 +252,19 @@ class SolicitacaoLicencaTest {
                 });
     }
 
+    private By localizarPedido() {
+        return By.xpath(
+                "//div[contains(@class,'oxd-table-card')]"
+                        + "[contains(.,'" + comentario + "')]"
+        );
+    }
+
+    // O status é necessário para acompanhar o desaparecimento do pedido pendente.
     private By localizarPedido(String status) {
         return By.xpath(
                 "//div[contains(@class,'oxd-table-card')]"
-                        + "[contains(.,'" + dataExibida + "')]"
-                        + "[contains(.,'" + TIPO_LICENCA + "')]"
-                        + "[contains(.,'" + status + "')]"
                         + "[contains(.,'" + comentario + "')]"
+                        + "[contains(.,'" + status + "')]"
         );
     }
 

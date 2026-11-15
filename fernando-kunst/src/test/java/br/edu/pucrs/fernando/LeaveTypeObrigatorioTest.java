@@ -10,6 +10,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
@@ -99,11 +100,19 @@ class LeaveTypeObrigatorioTest {
         preencherData(dataInicial, dataFormatada);
         preencherData(dataFinal, dataFormatada);
 
-        By botaoApply = By.cssSelector("button[type='submit']");
+        By botaoApply = By.xpath("//button[@type='submit'][normalize-space()='Apply']");
 
-        // O formulário pode recriar o botão após a alteração das datas.
+        // Aguarda a camada de carregamento e busca novamente o botão.
         wait.ignoring(StaleElementReferenceException.class)
+                .ignoring(ElementClickInterceptedException.class)
                 .until(navegador -> {
+                    for (WebElement camada : navegador.findElements(
+                            By.cssSelector(".oxd-form-loader"))) {
+                        if (camada.isDisplayed()) {
+                            return false;
+                        }
+                    }
+
                     WebElement botao = navegador.findElement(botaoApply);
 
                     if (!botao.isDisplayed() || !botao.isEnabled()) {
@@ -117,7 +126,7 @@ class LeaveTypeObrigatorioTest {
         By mensagemObrigatoria = By.xpath(
                 "//div[contains(@class,'oxd-input-group')]"
                         + "[.//label[normalize-space()='Leave Type']]"
-                        + "//span[normalize-space()='Required']"
+                        + "//span[contains(@class,'oxd-input-field-error-message')]"
         );
 
         WebElement mensagem = wait.until(
@@ -149,7 +158,7 @@ class LeaveTypeObrigatorioTest {
                     campo.sendKeys(Keys.chord(teclaSelecao, "a"));
                     campo.sendKeys(valor);
                     campo.sendKeys(Keys.TAB);
-                    return true;
+                    return valor.equals(campo.getAttribute("value"));
                 });
     }
 }

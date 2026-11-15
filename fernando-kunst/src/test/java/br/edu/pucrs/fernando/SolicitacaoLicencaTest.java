@@ -36,6 +36,8 @@ class SolicitacaoLicencaTest {
     );
 
     private String dataExibida;
+    private final String comentario = "CT-SIS-02 " + UUID.randomUUID();
+
 
     @BeforeEach
     void abrirNavegador() {
@@ -46,7 +48,12 @@ class SolicitacaoLicencaTest {
     @AfterEach
     void fecharNavegador() {
         if (driver != null) {
-            driver.quit();
+            try {
+                System.out.println("URL final: " + driver.getCurrentUrl());
+                System.out.println("Tela final: " + driver.findElement(By.tagName("body")).getText());
+            } finally {
+                driver.quit();
+            }
         }
     }
 
@@ -86,8 +93,6 @@ class SolicitacaoLicencaTest {
         preencherData(campoInicial, dataExibida);
         preencherData(campoFinal, dataExibida);
 
-        String comentario = "CT-SIS-02 " + UUID.randomUUID();
-
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.tagName("textarea")
         )).sendKeys(comentario);
@@ -99,9 +104,7 @@ class SolicitacaoLicencaTest {
         wait.until(ExpectedConditions.elementToBeClickable(botaoApply))
                 .click();
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.cssSelector(".oxd-toast--success")
-        ));
+        aguardarResultadoEnvio();
 
         abrirMinhaLista();
 
@@ -198,20 +201,93 @@ class SolicitacaoLicencaTest {
                         + "[contains(.,'" + dataExibida + "')]"
                         + "[contains(.,'" + TIPO_LICENCA + "')]"
                         + "[contains(.,'" + status + "')]"
+                        + "[contains(.,'" + comentario + "')]"
         );
     }
 
+    private void aguardarResultadoEnvio() {
+        try {
+            String resultado = wait.until(navegador -> {
+                List<WebElement> mensagens = navegador.findElements(
+                        By.cssSelector(
+                                ".oxd-toast--success, "
+                                        + ".oxd-toast--error, "
+                                        + ".oxd-input-field-error-message"
+                        )
+                );
+
+                for (WebElement mensagem : mensagens) {
+                    try {
+                        if (mensagem.isDisplayed()) {
+                            String classes = mensagem.getAttribute("class");
+
+                            if (classes.contains("oxd-toast--success")) {
+                                return "SUCESSO";
+                            }
+
+                            String texto = mensagem.getText().trim();
+
+                            if (!texto.isEmpty()) {
+                                return "Solicitação recusada: " + texto;
+                            }
+                        }
+                    } catch (StaleElementReferenceException elementoAtualizado) {
+                        // A próxima consulta lê novamente as mensagens do formulário.
+                    }
+                }
+
+                return null;
+            });
+
+            assertEquals("SUCESSO", resultado);
+        } catch (org.openqa.selenium.TimeoutException erro) {
+            throw new AssertionError(
+                    "O envio ficou sem confirmação. URL: "
+                            + driver.getCurrentUrl()
+                            + "\nTela: "
+                            + driver.findElement(By.tagName("body")).getText(),
+                    erro
+            );
+        }
+
+    }
+
     private void cancelarPedido(By localizador) {
-        WebElement pedido = wait.until(
-                ExpectedConditions.visibilityOfElementLocated(localizador)
-        );
+        wait.ignoring(StaleElementReferenceException.class)
+                .until(navegador -> {
+                    WebElement pedido = navegador.findElement(localizador);
+                    List<WebElement> botoes = pedido.findElements(By.tagName("button"));
+                    botoes.get(botoes.size() - 1).click();
+                    return true;
+                });
 
-        pedido.findElement(By.xpath(
-                ".//button[normalize-space()='Cancel']"
-        )).click();
+        By detalhes = By.xpath("//*[normalize-space()='View Leave Details']");
+        wait.ignoring(StaleElementReferenceException.class)
+                .until(navegador -> {
+                    navegador.findElement(detalhes).click();
+                    return true;
+                });
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(
-                localizarPedido("Cancelled")
+        wait.until(ExpectedConditions.urlMatches(
+                ".*/leave/viewLeaveRequest/[0-9]+.*"
         ));
+        String enderecoPedido = driver.getCurrentUrl();
+        System.out.println("Pedido desta execução: " + enderecoPedido);
+
+        abrirMinhaLista();
+        wait.ignoring(StaleElementReferenceException.class)
+                .until(navegador -> {
+                    navegador.findElement(localizador).findElement(By.xpath(
+                            ".//button[normalize-space()='Cancel']"
+                    )).click();
+                    return true;
+                });
+
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(localizador));
+        driver.get(enderecoPedido);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
+                "//*[normalize-space()='Cancelled']"
+        )));
+        assertEquals(enderecoPedido, driver.getCurrentUrl());
     }
 }

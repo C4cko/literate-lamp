@@ -110,6 +110,16 @@ Os resultados Java são gravados em `target/surefire-reports`, dentro de `fernan
 
 Os resumos Java e PHP aparecem separadamente no terminal. Uma falha interrompe a execução do Maven; nesse caso, os testes das etapas seguintes podem não ser executados.
 
+## Cobertura dos testes PHP
+
+A cobertura é medida fora do Maven, com o `phpdbg` como driver, sem executar Selenium e sem acessar o servidor público. O `phpdbg` acompanha a instalação do PHP. A partir da raiz de `literate-lamp`:
+
+```bash
+cd fernando-kunst && /opt/homebrew/opt/php@8.3/bin/phpdbg -qrr ../../orangehrm/src/vendor/bin/phpunit --no-configuration --do-not-cache-result --bootstrap ../../orangehrm/src/vendor/autoload.php --coverage-filter ../../orangehrm/src/plugins/orangehrmLeavePlugin/Service/LeaveRequestService.php --coverage-filter ../../orangehrm/src/plugins/orangehrmLeavePlugin/Dao/LeaveEntitlementDao.php --coverage-text src/test/php
+```
+
+Para gerar o relatório em HTML, troque `--coverage-text` por `--coverage-html target/coverage`. Os números medidos estão no [Relatório da Execução dos Testes](https://github.com/masmangan/literate-lamp/wiki/Relatorio-da-Execucao-dos-Testes).
+
 ## Resultado registrado
 
 **Histórico anterior à revisão da Issue #8:** em 15/11/2026, às 14h54, a execução integrada terminou com `BUILD SUCCESS`.

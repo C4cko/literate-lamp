@@ -15,6 +15,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.11.4</junit.version>
         <selenium.version>4.52.0</selenium.version>
+        <php.executable>php</php.executable>
+        <orangehrm.path>${project.basedir}/../../orangehrm</orangehrm.path>
     </properties>
 
     <dependencies>
@@ -45,6 +47,36 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.5.2</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.7.0</version>
+
+                <executions>
+                    <execution>
+                        <id>testes-php</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>${php.executable}</executable>
+                            <workingDirectory>${project.basedir}</workingDirectory>
+                            <arguments>
+                                <argument>${orangehrm.path}/src/vendor/bin/phpunit</argument>
+                                <argument>--no-configuration</argument>
+                                <argument>--do-not-cache-result</argument>
+                                <argument>--bootstrap</argument>
+                                <argument>${orangehrm.path}/src/vendor/autoload.php</argument>
+                                <argument>--log-junit</argument>
+                                <argument>${project.build.directory}/phpunit-results.xml</argument>
+                                <argument>${project.basedir}/src/test/php</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

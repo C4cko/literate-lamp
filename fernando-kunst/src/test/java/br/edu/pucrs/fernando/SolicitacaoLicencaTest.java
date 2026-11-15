@@ -110,31 +110,55 @@ class SolicitacaoLicencaTest {
 
         By pedidoPendente = localizarPedido("Pending Approval");
 
-        WebElement pedido = wait.until(
-                ExpectedConditions.visibilityOfElementLocated(pedidoPendente)
-        );
-
-        assertEquals(
-                1,
-                driver.findElements(pedidoPendente).size(),
-                "Deve existir apenas um pedido pendente com esses dados."
-        );
-
         try {
-            String dados = pedido.getText();
+            String[] dadosPedido = wait
+                    .ignoring(StaleElementReferenceException.class)
+                    .until(navegador -> {
+                        List<WebElement> pedidos =
+                                navegador.findElements(pedidoPendente);
 
-            assertTrue(dados.contains(dataExibida));
-            assertTrue(dados.contains(TIPO_LICENCA));
+                        if (pedidos.isEmpty()) {
+                            return null;
+                        }
 
-            List<WebElement> celulas = pedido.findElements(
-                    By.cssSelector(".oxd-table-cell")
-            );
+                        assertEquals(
+                                1,
+                                pedidos.size(),
+                                "Deve existir apenas um pedido com esses dados."
+                        );
 
-            WebElement duracao = celulas.get(4);
+                        WebElement pedido = pedidos.get(0);
+
+                        List<WebElement> cabecalhos = navegador.findElements(
+                                By.cssSelector(
+                                        ".oxd-table-header .oxd-table-header-cell"
+                                )
+                        );
+
+                        List<WebElement> celulas = pedido.findElements(
+                                By.cssSelector(".oxd-table-cell")
+                        );
+
+                        for (int i = 0; i < cabecalhos.size(); i++) {
+                            if (cabecalhos.get(i).getText().trim()
+                                    .equals("Number of Days")
+                                    && i < celulas.size()) {
+                                return new String[] {
+                                        pedido.getText(),
+                                        celulas.get(i).getText().trim()
+                                };
+                            }
+                        }
+
+                        return null;
+                    });
+
+            assertTrue(dadosPedido[0].contains(dataExibida));
+            assertTrue(dadosPedido[0].contains(TIPO_LICENCA));
 
             assertEquals(
                     "1.00",
-                    duracao.getText().trim(),
+                    dadosPedido[1],
                     "A duração do pedido deve ser de um dia."
             );
         } finally {

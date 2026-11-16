@@ -8,6 +8,7 @@ import br.pucrs.verval.orangehrm.e2e.support.Images;
 import br.pucrs.verval.orangehrm.e2e.support.TestData;
 import com.google.gson.JsonObject;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
@@ -15,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Casos de sistema dos fluxos de sucesso da jornada (docs/casos-de-teste.md, seção 4.3):
- * ST-01, ST-02, ST-03, ST-04 e ST-13.
+ * ST-01, ST-02, ST-03, ST-04, ST-12 e ST-13.
  */
 @DisplayName("Sistema: PIM > Add Employee (fluxos de sucesso)")
 class AddEmployeeE2ETest extends BaseE2ETest {
@@ -93,6 +94,38 @@ class AddEmployeeE2ETest extends BaseE2ETest {
         SystemUsersPage users = new SystemUsersPage(page).open().searchByUsername(username);
         assertThat(users.rows()).hasCount(1);
         assertThat(users.rows().first()).containsText("Disabled");
+    }
+
+    @Test
+    @DisplayName("ST-12 (controle): sem foto, o Employee Id sugerido avança no próximo cadastro")
+    void st12_semFotoIdSugeridoAvanca() {
+        AddEmployeePage form = new AddEmployeePage(page).open();
+        String suggested = form.employeeId().inputValue();
+        form.fillName("Ana" + TestData.unique(), null, "SemFoto");
+        saveSuccessfully(form);
+
+        AddEmployeePage again = new AddEmployeePage(page).open();
+        assertThat(again.employeeId()).not().hasValue(suggested);
+    }
+
+    /**
+     * ST-12: depois de um cadastro com foto, o formulário deve sugerir um novo Employee Id.
+     * FALHA no OrangeHRM 5.9: defeito D1 (docs/defeitos.md).
+     */
+    @Test
+    @Tag("defeito-conhecido")
+    @DisplayName("ST-12: com foto, o Employee Id sugerido avança no próximo cadastro (expõe D1)")
+    void st12_comFotoIdSugeridoAvanca() {
+        AddEmployeePage form = new AddEmployeePage(page).open();
+        String suggested = form.employeeId().inputValue();
+        form.fillName("Ana" + TestData.unique(), null, "ComFoto")
+                .attachPhoto("perfil.png", "image/png", Images.pngOfSize(2_000));
+        saveSuccessfully(form);
+
+        AddEmployeePage again = new AddEmployeePage(page).open();
+        assertThat(again.employeeId().inputValue())
+                .as("Defeito D1: depois de cadastrar com foto, o formulário sugere de novo o ID %s", suggested)
+                .isNotEqualTo(suggested);
     }
 
     @Test

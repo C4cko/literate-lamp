@@ -97,6 +97,9 @@ Prioridade: **A** alta, **M** média, **B** baixa. Rastreabilidade: CA = critér
 
 ### 4.2 Integração (Java + REST Assured), API REST v2
 
+> Implementados em `integracao/` (41 testes). Resultado em 16/11/2026: 39 passam no `mvn test`; IT-12 (com foto) e
+> IT-10 (8 caracteres) falham e ficam em quarentena (`defeito-conhecido`), pois expõem D1 e D2. IT-07 descartou o
+> risco R3; IT-11 caracterizou o R1.
 
 | ID | Requisição | Entrada | Resultado esperado | Rastreia | Prio |
 |---|---|---|---|---|---|
@@ -106,11 +109,11 @@ Prioridade: **A** alta, **M** média, **B** baixa. Rastreabilidade: CA = critér
 | IT-04 | POST employees | employeeId repetido | 422 | E2 | A |
 | IT-05 | POST employees | foto PNG em base64 | 200; `GET /pim/employees/{n}/picture` devolve imagem | A1 | M |
 | IT-06 | POST employees | foto com tipo `application/pdf` | 422 | E3 | M |
-| IT-07 | POST employees | foto PNG de 1.048.575, 1.048.576 e 1.048.577 bytes; tamanho declarado menor que o real | 200, 200, 422, 422 (verifica R3: o limite também é validado no servidor?) | R3, E3 | M |
+| IT-07 | POST employees | foto PNG de 1.048.575, 1.048.576 e 1.048.577 bytes; tamanho declarado menor que o real | 200, 200, 422, 422 (R3 descartado: o limite também é validado no servidor) | R3, E3 | M |
 | IT-08 | POST employees + POST users | username/senha válidos, userRoleId 2 | 200; GET users filtrado por username retorna o usuário com `empNumber` certo | A2 | A |
 | IT-09 | POST users | username existente | 422 | E4 | A |
 | IT-10 | POST users | senhas das classes I13–I19 | 422 para cada uma | E6 | A |
-| IT-11 | sequência do front-end com a 2ª chamada recusada (username existente) | – | verificar se o funcionário **permanece** criado sem usuário (R1) | R1 | A |
+| IT-11 | sequência do front-end com a 2ª chamada recusada (username existente) | – | caracteriza R1: o funcionário **permanece** criado, sem usuário | R1 | A |
 | IT-12 | POST employees ×2 (a 1ª com foto), sem employeeId | – | o ID sugerido depois deve ser diferente do usado (R2) | R2 | A |
 
 ### 4.3 Sistema / E2E (Playwright for Java)

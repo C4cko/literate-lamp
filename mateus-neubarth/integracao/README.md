@@ -12,7 +12,7 @@ mvn test -Dohrm.baseUrl=https://opensource-demo.orangehrmlive.com/web/index.php 
 mvn test -Dtest=CreateLoginApiTest                                 # uma classe
 ```
 
-Configuração completa em [`../docs/ambiente.md`](../docs/ambiente.md), seção 5.
+Configuração completa em [`../docs/ambiente.md`](../docs/ambiente.md), seção 6.
 
 ## Estrutura
 

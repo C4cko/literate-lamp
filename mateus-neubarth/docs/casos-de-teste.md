@@ -118,6 +118,8 @@ Prioridade: **A** alta, **M** média, **B** baixa. Rastreabilidade: CA = critér
 
 ### 4.3 Sistema / E2E (Playwright for Java)
 
+> Implementados em `sistema/` (23 testes). Resultado em 16/11/2026: 21 passam no `mvn test`; ST-12 (com foto) e
+> ST-10 (8 caracteres) falham e ficam em quarentena (`defeito-conhecido`), pois expõem D1 e D2.
 
 | ID | Cenário | Passos resumidos | Resultado esperado | Rastreia | Prio |
 |---|---|---|---|---|---|

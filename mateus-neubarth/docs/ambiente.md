@@ -46,7 +46,7 @@ docker compose exec phpunit ./src/vendor/bin/phpunit --testsuite Pim
 docker compose exec phpunit ./src/vendor/bin/phpunit src/plugins/orangehrmPimPlugin/test/Api/EmployeeAPITest.php
 docker compose exec phpunit ./src/vendor/bin/phpunit --filter EmployeeAPITest --testdox
 
-# os nossos testes (unitario/README.md e seção 5.1): padrão, sem os que expõem defeitos conhecidos, e só esses
+# os nossos testes (unitario/README.md e seção 6.1): padrão, sem os que expõem defeitos conhecidos, e só esses
 docker compose exec phpunit ./src/vendor/bin/phpunit --group T2AddEmployee --exclude-group defeito-conhecido
 docker compose exec phpunit ./src/vendor/bin/phpunit --group defeito-conhecido
 ```
@@ -62,17 +62,35 @@ mvn test -Dohrm.baseUrl=https://opensource-demo.orangehrmlive.com/web/index.php 
 A autenticação imita o navegador: lê o token CSRF da página de login e envia o formulário para
 `/auth/validate`; a API REST v2 aceita o cookie de sessão. Cada teste exclui, via API, os funcionários que criou.
 
-## 5. Configuração
+## 5. Testes de sistema (Java + Playwright)
+
+```bash
+cd mateus-neubarth/sistema
+mvn test                                   # headless, contra http://localhost:8200
+mvn test -Dheadless=false -DslowMo=500     # navegador visível e mais lento (para acompanhar)
+```
+
+Na primeira execução o Playwright baixa o Chromium (~150 MB). Cada teste grava um *trace* em
+`target/traces/<teste>.zip`; para abrir:
+
+```bash
+mvn exec:java -e -D exec.mainClass=com.microsoft.playwright.CLI -D exec.classpathScope=test \
+    -D exec.args="show-trace target/traces/st01_cadastroMinimo.zip"
+```
+
+## 6. Configuração
 
 | Propriedade (`-D`) | Variável de ambiente | Padrão |
 |---|---|---|
 | `ohrm.baseUrl` | `OHRM_BASE_URL` | `http://localhost:8200/web/index.php` |
 | `ohrm.user` | `OHRM_USER` | `Admin` |
 | `ohrm.password` | `OHRM_PASSWORD` | `Admin@OHRM123` |
+| `headless` (só E2E) | `HEADLESS` | `true` |
+| `slowMo` (só E2E) | `SLOW_MO` | `0` |
 
-### 5.1 Quarentena dos testes que expõem defeitos
+### 6.1 Quarentena dos testes que expõem defeitos
 
-Os testes que expõem os defeitos D1 e D2 (2 por nível) estão marcados como **`defeito-conhecido`**
+Os 6 testes que expõem os defeitos D1 e D2 (2 por nível) estão marcados como **`defeito-conhecido`**
 (`@group` no PHPUnit, `@Tag` no JUnit). Eles ficam fora da execução padrão, para que uma falha nova não se
 esconda atrás de falhas já conhecidas, e rodam à parte:
 
@@ -80,26 +98,29 @@ esconda atrás de falhas já conhecidas, e rodam à parte:
 |---|---|---|
 | Unitário | `phpunit --group T2AddEmployee --exclude-group defeito-conhecido` (47) | `phpunit --group defeito-conhecido` (2) |
 | Integração | `mvn test` (39) | `mvn test -Pdefeitos` (2) |
+| Sistema | `mvn test` (21) | `mvn test -Pdefeitos` (2) |
 
 Quando um defeito for corrigido, basta remover a marca do teste correspondente.
 
-## 6. Desligar e recomeçar do zero
+## 7. Desligar e recomeçar do zero
 
 ```bash
 docker compose down          # para os contêineres (mantém os bancos)
 docker compose down -v       # apaga também os bancos; repetir as seções 2 e 3 depois
 ```
 
-## 7. Problemas encontrados ao montar o ambiente
+## 8. Problemas encontrados ao montar o ambiente
 
 | Problema | Causa | Solução |
 |---|---|---|
 | `Source option 5 is no longer supported` | o Maven 3.8 usa por padrão o `maven-compiler-plugin` 3.1, que ignora `maven.compiler.release` | versão 3.13.0 fixada no `pom.xml` |
 | `no JSON serializer found in classpath` | o REST Assured não traz serializador JSON | dependência `jackson-databind` |
+| Título "Add Employee" encontrado, mas oculto | no layout 5.9 o `h6` do formulário fica escondido | o Page Object espera o campo *First Name* |
 | Suíte do PIM falha na 2ª execução (`CustomFieldAPITest::testDelete`) | testes originais dependentes de ordem/estado (ver `analise/codigo-original.md`) | recriar o banco de testes antes de cada execução completa: `docker compose exec phpunit php devTools/core/console.php i:create-test-db -p root --dump-options=--ssl=0` |
 | Depois de `docker compose up`, a aplicação responde 500 e pede reinstalação | o contêiner `app` foi recriado e `/var/www/html` ficava num volume anônimo (perdia `lib/confs/Conf.php`) | volume nomeado `app-html`; se acontecer, apagar o banco `orangehrm_app` e rodar o instalador de novo |
+| Toast "Successfully Saved" não encontrado | `SaveEmployee.vue` mostra o toast e em seguida navega para *Personal Details*, recarregando a página | o toast é verificado entre o `save()` e a espera pela nova URL |
 
-## 8. Execução dos testes originais (12/11/2026)
+## 9. Execução dos testes originais (12/11/2026)
 
 Clone `orangehrm/orangehrm` no commit `56e23b3b`, PHP 8.3.x, MariaDB 10.11, PHPUnit 9.6.
 
@@ -145,3 +166,4 @@ docker compose exec phpunit ./src/vendor/bin/phpunit --coverage-text --colors=ne
 | Projeto | Teste | Resultado contra o ambiente local (16/11/2026) |
 |---|---|---|
 | `integracao/` | IT-01 a IT-12 (41 testes) | `mvn test`: 39 passam; `-Pdefeitos`: IT-12 com foto (D1) e IT-10 com 8 caracteres (D2) falham |
+| `sistema/` | ST-01 a ST-13 (23 testes) | `mvn test`: 21 passam; `-Pdefeitos`: ST-12 com foto (D1) e ST-10 com 8 caracteres (D2) falham |

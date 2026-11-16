@@ -129,7 +129,26 @@ Prioridade: **A** alta, **M** média, **B** baixa. Rastreabilidade: CA = critér
 | ST-12 | ID sugerido após cadastro com foto | cadastra com foto sem mexer no ID → abre Add Employee de novo | ID sugerido ≠ ID anterior (R2) | R2 | A |
 | ST-13 | Cancelar | preenche e clica em Cancel | volta à lista; nada criado | FP | B |
 
-> Em andamento: as demais seções entram nos próximos commits.
+## 5. Matriz de rastreabilidade (resumo)
+
+| Item da jornada | Unitário | Integração | Sistema |
+|---|---|---|---|
+| FP / CA1 | – | IT-01 | ST-01 |
+| CA2 (ID sugerido) | UT-05, UT-07 | IT-12 | ST-12 |
+| A1 / CA4 | UT-04 | IT-05 | ST-02 |
+| A2 / CA5 | – | IT-08 | ST-03 |
+| A3 | UT-03 | IT-04 | ST-06 |
+| E1 | UT-02 | IT-02 | ST-05 |
+| E2 | UT-03 | IT-04 | ST-06 |
+| E3 | UT-04 | IT-06 | ST-07 |
+| E4 | – | IT-09 | ST-08 |
+| E5 | – | – (só no cliente) | ST-09 |
+| E6 | UT-08 | IT-10 | ST-10 |
+| E7 / E8 | UT-01, UT-03 | IT-03 | ST-11 |
+| E9 | UT-06 | – | – |
+| R1 | – | IT-11 | – |
+| R2 | UT-05 | IT-12 | ST-12 |
+| R3 | – | IT-07 | ST-07 |
 
 ## Fontes
 - Jornada e regras: [jornada.md](jornada.md) e os arquivos do OrangeHRM citados nela.

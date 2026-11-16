@@ -1,0 +1,39 @@
+# Ambiente local de testes da jornada PIM > Add Employee.
+#
+#   db       MariaDB compartilhado (bancos: orangehrm_app, orangehrm_dev e test_orangehrm_dev)
+#   app      OrangeHRM 5.9 (imagem oficial) = sistema sob teste dos testes de integração e de sistema
+#
+# Uso: ver ../docs/ambiente.md
+name: t2-orangehrm
+
+services:
+  db:
+    image: mariadb:10.11
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+    ports:
+      - "3307:3306"
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+    volumes:
+      - db-data:/var/lib/mysql
+
+  app:
+    image: orangehrm/orangehrm:5.9
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8200:80"
+    volumes:
+      # Volume nomeado: a instalação (lib/confs/Conf.php) sobrevive à recriação do contêiner.
+      # Com o volume anônimo da imagem, um "docker compose up" que recriasse o app perdia a instalação.
+      - app-html:/var/www/html
+      - ./config/cli_install_app.yaml:/var/www/html/installer/cli_install_config.yaml:ro
+
+volumes:
+  db-data:
+  app-html:

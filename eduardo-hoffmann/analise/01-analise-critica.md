@@ -6,7 +6,7 @@
 > Attendance. Critérios (os mesmos de #2, #4 e #5): nível, técnica, cobertura, isolamento, oráculo, legibilidade e
 > lacunas.
 > **Situação:** análise estática (leitura do código e dos arquivos YAML) mais a execução da suíte original (seção 6).
-> Falta explorar o servidor de demonstração (seção 7).
+> A exploração do demo está na seção 7.
 
 ## 1. Panorama
 
@@ -182,14 +182,36 @@ lógica, mas mostram que a classe não declara a propriedade `$fixture`.
 - `AttendanceDaoTest` passa com a asserção repetida das linhas 77 e 78, ou seja, a repetição passa despercebida.
   Que uma delas devesse conferir `getPunchInUtcTime()` continua sendo leitura minha, não algo que a execução prove.
 
-## 7. O que ainda falta nesta issue (#15)
+## 7. Exploração do servidor de demonstração (16/11/2026)
 
-- [ ] **Explorar** Time › Attendance no servidor de demonstração (campos, estados e mensagens), para confirmar as
-      mensagens e os limites vistos no código.
+Servidor: <https://opensource-demo.orangehrmlive.com/> (OrangeHRM OS 5.9), usuário Admin. Foi apenas navegação e
+leitura: **nenhum punch in/out foi registrado e nenhuma configuração foi salva**.
+
+| Tela (URL em `/web/index.php/`) | O que vi |
+|---|---|
+| Menu Time › Attendance | 4 itens: My Records, Punch In/Out, Employee Records, Configuration |
+| `attendance/punchIn` | Título "Punch In". Campos **Date\*** (placeholder `yyyy-dd-mm`, já preenchido com a data atual), **Time\*** (placeholder `hh:mm`, preenchido com a hora atual, formato "04:59 PM") e **Note** (opcional, placeholder "Type here"). Botão **In**. Aviso "\* Required" |
+| `attendance/viewMyAttendanceRecord` | "My Attendance Records", "Total Duration (Hours): 0.00" e "No Records Found" (para a data padrão do filtro) |
+| `attendance/viewAttendanceRecord` | "Employee Attendance Records", "No Records Found" |
+| `attendance/configure` | "Attendance Configuration" com três opções: "Employee can change current time when punching in/out", "Employee can edit/delete own attendance records" e "Supervisor can add/edit/delete attendance records of subordinates". Botão Save |
+| Dashboard | Bloco "Time at Work" mostrando "Punched Out" com "Punched Out: Mar 29th at 01:19 PM (GMT 7)" e "0h 0m Today" |
+
+**Relação com o código:** as três opções de configuração correspondem aos métodos `canUserChangeCurrentTime`,
+`canUserModifyAttendanceConfiguration` e `canSupervisorModifyAttendanceConfiguration` de `AttendanceService`. O
+formato de data `yyyy-dd-mm` é o formato configurado nesse demo, não algo que eu tenha verificado no código.
+
+**Não verificado nesta exploração** (exigiria registrar ponto ou salvar configuração em um servidor compartilhado):
+as mensagens de erro de punch in/out, o estado dos três interruptores de configuração e se os campos Date e Time
+aceitam edição.
+
+## 8. O que ainda falta nesta issue (#15)
+
 - [ ] Avaliar com mais cuidado a hipótese sobre valores-limite (por exemplo, saída igual à entrada), conferindo os
       cenários um a um.
+- [ ] Confirmar as mensagens de erro e as regras de edição dos campos em uma instalação **local**, onde é seguro
+      registrar ponto (o demo é compartilhado).
 
-## 8. Fontes consultadas
+## 9. Fontes consultadas
 
 - Código original, commit `56e23b3`: `src/plugins/orangehrmAttendancePlugin/` (`test/`, `Service/AttendanceService.php`,
   `entity/AttendanceRecord.php`, `Api/`), `phpunit.xml` e `src/test/phpunit/Util/EndpointIntegrationTestCase.php`.

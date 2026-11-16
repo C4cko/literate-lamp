@@ -1,6 +1,7 @@
 package br.pucrs.verval.orangehrm.api;
 
 import br.pucrs.verval.orangehrm.api.support.EmployeeApi;
+import br.pucrs.verval.orangehrm.api.support.Images;
 import br.pucrs.verval.orangehrm.api.support.OrangeHrmSession;
 import br.pucrs.verval.orangehrm.api.support.TestData;
 import io.restassured.response.Response;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -19,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Casos de integração de POST /api/v2/pim/employees (docs/casos-de-teste.md, seção 4.2):
- * IT-01 a IT-04.
+ * IT-01 a IT-04 e IT-12.
  */
 @DisplayName("API REST v2: criação de funcionário")
 class CreateEmployeeApiTest {
@@ -125,5 +127,38 @@ class CreateEmployeeApiTest {
         } else {
             assertInvalidParams(response, "employeeId");
         }
+    }
+
+    /**
+     * IT-12 (controle): sem foto, o Employee Id sugerido pelo formulário avança depois do cadastro.
+     */
+    @Test
+    @DisplayName("IT-12 (controle): cadastro sem foto avança o Employee Id sugerido")
+    void it12_semFotoAvancaIdSugerido() {
+        String suggested = employees.suggestedEmployeeId();
+        Map<String, Object> body = EmployeeApi.body("Ana", "SemFoto");
+        body.put("employeeId", suggested);
+        assertThat(employees.create(body).statusCode()).isEqualTo(200);
+
+        assertThat(employees.suggestedEmployeeId()).isNotEqualTo(suggested);
+    }
+
+    /**
+     * IT-12: com foto, o Employee Id sugerido também deve avançar.
+     * FALHA no OrangeHRM 5.9: defeito D1 (docs/defeitos.md).
+     */
+    @Test
+    @Tag("defeito-conhecido")
+    @DisplayName("IT-12: cadastro com foto avança o Employee Id sugerido (expõe D1)")
+    void it12_comFotoAvancaIdSugerido() {
+        String suggested = employees.suggestedEmployeeId();
+        Map<String, Object> body = EmployeeApi.body("Ana", "ComFoto");
+        body.put("employeeId", suggested);
+        body.put("empPicture", Images.smallPng("foto.png"));
+        assertThat(employees.create(body).statusCode()).isEqualTo(200);
+
+        assertThat(employees.suggestedEmployeeId())
+                .as("Defeito D1: depois de cadastrar com foto, o formulário sugere de novo o ID %s", suggested)
+                .isNotEqualTo(suggested);
     }
 }

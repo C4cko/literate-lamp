@@ -2,6 +2,7 @@
 #
 #   db       MariaDB compartilhado (bancos: orangehrm_app, orangehrm_dev e test_orangehrm_dev)
 #   app      OrangeHRM 5.9 (imagem oficial) = sistema sob teste dos testes de integração e de sistema
+#   phpunit  PHP 8.3 CLI com o código-fonte montado em /app, para os testes unitários
 #
 # Uso: ver ../docs/ambiente.md
 name: t2-orangehrm
@@ -33,6 +34,27 @@ services:
       # Com o volume anônimo da imagem, um "docker compose up" que recriasse o app perdia a instalação.
       - app-html:/var/www/html
       - ./config/cli_install_app.yaml:/var/www/html/installer/cli_install_config.yaml:ro
+
+  phpunit:
+    build: ./phpunit
+    depends_on:
+      db:
+        condition: service_healthy
+    # Mesmo usuário do host, para os arquivos gerados no clone (vendor/, config) não ficarem como root.
+    # Para outro usuário: HOST_UID=$(id -u) HOST_GID=$(id -g) docker compose ... (UID é somente leitura no bash).
+    user: "${HOST_UID:-1000}:${HOST_GID:-1000}"
+    environment:
+      HOME: /tmp
+      COMPOSER_HOME: /tmp/composer
+    working_dir: /app
+    volumes:
+      # Clone do orangehrm/orangehrm. Padrão: ../../../orangehrm (pasta VERVAL/orangehrm).
+      - ${OHRM_SRC:-../../../orangehrm}:/app
+      - ./config/cli_install_dev.yaml:/app/installer/cli_install_config.yaml:ro
+      - ./scripts:/scripts:ro
+      # Nossos testes PHPUnit entram no plugin PIM, onde o autoload e a suíte "Pim" os encontram
+      - ../unitario/T2AddEmployee:/app/src/plugins/orangehrmPimPlugin/test/T2AddEmployee:ro
+    entrypoint: ["sleep", "infinity"]
 
 volumes:
   db-data:

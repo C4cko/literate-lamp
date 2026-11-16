@@ -80,6 +80,9 @@ Prioridade: **A** alta, **M** média, **B** baixa. Rastreabilidade: CA = critér
 
 ### 4.1 Unitários (PHPUnit), em `src/plugins/orangehrmPimPlugin/test`
 
+> Implementados em `unitario/T2AddEmployee/` (49 testes com os data providers). Resultado em 16/11/2026: 47 passam
+> na execução padrão; UT-05 (com foto) e UT-08 (8 caracteres) falham e ficam em quarentena
+> (`defeito-conhecido`), pois expõem os defeitos D1 e D2 (`docs/defeitos.md`).
 
 | ID | Objetivo | Técnica | Rastreia | Prio |
 |---|---|---|---|---|
@@ -90,7 +93,7 @@ Prioridade: **A** alta, **M** média, **B** baixa. Rastreabilidade: CA = critér
 | UT-05 | `EmployeeAPI::create()` **com foto** deve incrementar o contador de ID | risco | R2, CA2 | A |
 | UT-06 | `EmployeeAPI::create()` sem permissão lança `BadRequestException` | PE | E9 | M |
 | UT-07 | `IDGeneratorService::getNextID(Employee)` completa com zeros até 4 dígitos (`0001`, `0999`, `1000`, `10000`) | AVL | CA2 | M |
-| UT-08 | `PasswordStrengthService::checkPasswordPolicies`: uma senha para cada classe I13–I20 retorna exatamente as mensagens esperadas; senhas válidas nos limites (8 e 64 caracteres) retornam lista vazia | PE/AVL | E6 | A |
+| UT-08 | `PasswordStrengthService::checkPasswordPolicies`: uma senha para cada classe I13–I20 retorna exatamente as mensagens esperadas; senhas válidas (9 e 64 caracteres) retornam lista vazia; senha de 8 caracteres que cumpre as regras deveria ser aceita (limite inferior anunciado; expõe D2) | PE/AVL | E6 | A |
 
 ### 4.2 Integração (Java + REST Assured), API REST v2
 

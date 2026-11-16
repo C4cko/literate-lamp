@@ -1,6 +1,6 @@
 # Ambiente de testes e como rodar os testes
 
-> Issue #E. Tudo roda em contêineres: a máquina precisa só de **Docker** (com Compose v2), **Java 17+** e
+> Issue #10. Tudo roda em contêineres: a máquina precisa só de **Docker** (com Compose v2), **Java 17+** e
 > **Maven 3.8+**. Testado em Linux com Docker 29.9, Java 21 e Maven 3.8.7.
 
 ## 1. Visão geral
@@ -46,6 +46,9 @@ docker compose exec phpunit ./src/vendor/bin/phpunit --testsuite Pim
 docker compose exec phpunit ./src/vendor/bin/phpunit src/plugins/orangehrmPimPlugin/test/Api/EmployeeAPITest.php
 docker compose exec phpunit ./src/vendor/bin/phpunit --filter EmployeeAPITest --testdox
 
+# os nossos testes (unitario/README.md): padrão, sem os que expõem defeitos conhecidos, e só esses
+docker compose exec phpunit ./src/vendor/bin/phpunit --group T2AddEmployee --exclude-group defeito-conhecido
+docker compose exec phpunit ./src/vendor/bin/phpunit --group defeito-conhecido
 ```
 
 > As seções sobre os testes de integração e de sistema entram junto com esses testes.

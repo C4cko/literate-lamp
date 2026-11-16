@@ -1,0 +1,45 @@
+# Ambiente local para rodar os testes PHPUnit originais de Attendance (#15).
+#
+#   db       MariaDB (bancos orangehrm_dev e test_orangehrm_dev)
+#   phpunit  PHP 8.3 CLI com o código-fonte do OrangeHRM montado em /app
+#
+# Adaptado de mateus-neubarth/ambiente (mesma imagem do phpunit e mesmo script de preparação),
+# sem o serviço "app", que não é necessário para a suíte PHPUnit. Porta do banco 3308 para
+# não conflitar com o ambiente do Mateus.
+name: t2-attendance
+
+services:
+  db:
+    image: mariadb:10.11
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+    ports:
+      - "3308:3306"
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+    volumes:
+      - db-data:/var/lib/mysql
+
+  phpunit:
+    build: ./phpunit
+    depends_on:
+      db:
+        condition: service_healthy
+    user: "${HOST_UID:-1000}:${HOST_GID:-1000}"
+    environment:
+      HOME: /tmp
+      COMPOSER_HOME: /tmp/composer
+    working_dir: /app
+    volumes:
+      # Clone do orangehrm/orangehrm no commit 56e23b3b. Padrão: ../../../orangehrm (pasta T2Verival/orangehrm,
+      # ao lado do clone do literate-lamp). Para outro caminho: OHRM_SRC=/caminho docker compose ...
+      - ${OHRM_SRC:-../../../orangehrm}:/app
+      - ./config/cli_install_dev.yaml:/app/installer/cli_install_config.yaml:ro
+      - ./scripts:/scripts:ro
+    entrypoint: ["sleep", "infinity"]
+
+volumes:
+  db-data:

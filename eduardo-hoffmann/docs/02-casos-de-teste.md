@@ -2,9 +2,10 @@
 
 > Issue: #16. Base: [01-jornada.md](01-jornada.md). Versão do código analisada: commit `56e23b3b` de
 > `orangehrm/orangehrm`. Análise dos testes existentes: [`../analise/01-analise-critica.md`](../analise/01-analise-critica.md).
-> Este documento **planeja** os casos. Nenhum deles foi implementado ou executado ainda (isso é a #17); as colunas
-> de resultado esperado vêm das regras confirmadas no código e estão marcadas **a confirmar** quando o código não
-> define o comportamento.
+> Este documento é o **planejamento** (#16). Os casos foram implementados e executados na #17; o resultado está em
+> [`03-relatorio-execucao.md`](03-relatorio-execucao.md). O que a execução mudou em relação ao planejado está na
+> seção 7, no fim deste documento. As colunas de resultado esperado vêm das regras confirmadas no código e foram
+> marcadas **a confirmar** quando o código não definia o comportamento.
 
 ## 1. Plano de Testes
 
@@ -34,8 +35,8 @@ usa o mesmo autoload, as mesmas fixtures e o mesmo banco de teste do projeto. Ja
 Por que o sistema roda no ambiente local e não no demo: a jornada **grava** dados (registros de ponto) e depende de
 configuração (CA8, A1), e o demo é compartilhado e reiniciado. Por isso a exploração do demo na #15 foi só de leitura.
 
-**Pendências de ambiente para a #17** (verificadas na máquina em 16/11/2026): o Maven não está instalado; e falta
-acrescentar o serviço `app` (OrangeHRM 5.9) ao `docker-compose.yml`, como no ambiente do Mateus.
+**Pendências de ambiente para a #17** (verificadas na máquina em 16/11/2026): o Maven não estava instalado e faltava
+acrescentar o serviço `app` (OrangeHRM 5.9) ao `docker-compose.yml`. **Resolvidas na #17** (ver a seção 7).
 
 ### 1.4 Técnicas de projeto
 - **Particionamento em classes de equivalência (PE)** para data, hora, fuso e nota.
@@ -173,6 +174,24 @@ Lacunas assumidas deste plano: **E5** (saída que engloba outro registro, "Punch
 (concorrência na saída) não têm caso. E5 pode ser acrescentado na #17 se houver tempo.
 
 Contagem: **5 unitários, 11 de integração e 9 de sistema (25 casos)**.
+
+## 7. O que a execução mudou em relação ao planejado (#17)
+
+Registro das diferenças entre este plano e o que foi implementado e executado. O texto das seções 1 a 6 foi mantido
+como planejado.
+
+| Item | Planejado | Na execução |
+|---|---|---|
+| IT-07, saída igual à entrada (R3) | "a confirmar" | **aceita**: a regra só rejeita entrada posterior à saída (observação O1 do relatório) |
+| IT-10, risco R1 | "se o sistema criar o registro, R1 se confirma" | **confirmado**: o registro foi criado; defeito D1 do relatório. O caso fica em quarentena (`defeito-conhecido`) |
+| IT-11 | `valid` falso nas datas de sobreposição | `valid` é **verdadeiro quando não há sobreposição**; a consulta devolve `valid` coerente com as fronteiras do IT-06 |
+| UT-03, hora `24:00` e UT-04, nome de fuso vazio | casos exploratórios | **não implementados** |
+| ST-03, mensagem do limite da nota | "mensagem de limite de caracteres" | "Should not exceed 250 characters" |
+| ST-04, campos obrigatórios | "mensagem Required em cada campo" | o erro da data some ao apagar a hora e só reaparece, junto com o da hora, ao clicar em **In** (observação O2); o teste clica em **In** |
+| Contagem dos casos de sistema | 9 casos | 9 casos em 11 métodos (ST-03 e ST-08 têm dois métodos cada) |
+| Ferramentas do plano | Maven e serviço `app` pendentes | Maven 3.9.16 instalado e serviço `app` (OrangeHRM 5.9, porta 8201) acrescentado ao Docker |
+| Formato da data e da hora | "o formato configurado na instância" | instância local: data `yyyy-mm-dd` e hora de 12 h (`hh:mm AM/PM`); o demo mostrou `yyyy-dd-mm` |
+| E5 e R2 | sem caso (lacuna assumida) | continuam sem caso |
 
 ## Fontes
 

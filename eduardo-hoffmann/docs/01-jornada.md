@@ -109,9 +109,9 @@
 
 | ID | Observação | Como será verificado |
 |---|---|---|
-| R1 | Em `MyAttendanceRecordAPI`, os métodos `userAllowedPunchInActions` e `userAllowedPunchOutActions` calculam `$allowed` com `in_array(...)`, mas **não usam o resultado nem lançam exceção**. Ao ler o código, a checagem de permissão parece não ter efeito nesse endpoint. | IT-10: retirar a ação de Punch In do papel no banco de teste e tentar registrar entrada. Se o sistema aceitar, R1 se confirma como defeito. |
+| R1 | Em `MyAttendanceRecordAPI`, os métodos `userAllowedPunchInActions` e `userAllowedPunchOutActions` calculam `$allowed` com `in_array(...)`, mas **não usam o resultado nem lançam exceção**. Ao ler o código, a checagem de permissão parece não ter efeito nesse endpoint. | IT-10: retirar a ação de Punch In do papel no banco de teste e tentar registrar entrada. Se o sistema aceitar, R1 se confirma como defeito. **Resultado: confirmado (defeito D1 do relatório de execução).** |
 | R2 | `create()` (entrada) abre transação e usa leitura com bloqueio; `update()` (saída) **não** abre transação. | Não coberto por caso de teste: exige concorrência real. Registrado como limitação. |
-| R3 | Saída **igual** à entrada: a regra só rejeita entrada posterior à saída. | IT-05: caso exploratório. |
+| R3 | Saída **igual** à entrada: a regra só rejeita entrada posterior à saída. | IT-07: caso exploratório. **Resultado: saída igual à entrada é aceita.** |
 
 ## 8. Diagrama de estados
 

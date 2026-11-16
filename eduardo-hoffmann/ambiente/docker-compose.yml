@@ -39,6 +39,8 @@ services:
       - ${OHRM_SRC:-../../../orangehrm}:/app
       - ./config/cli_install_dev.yaml:/app/installer/cli_install_config.yaml:ro
       - ./scripts:/scripts:ro
+      # Nossos testes PHPUnit entram no plugin Attendance, onde o autoload e a suíte "Attendance" os encontram
+      - ../testes-php/T2Attendance:/app/src/plugins/orangehrmAttendancePlugin/test/T2Attendance:ro
     entrypoint: ["sleep", "infinity"]
 
 volumes:

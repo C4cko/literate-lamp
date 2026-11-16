@@ -47,7 +47,74 @@
 > A política de senha é **configurável** pelo Admin (chaves `auth.password_policy.*` em `ConfigService`). Os testes usam os valores
 > padrão; antes de executar no servidor de demonstração, conferir se não foram alterados.
 
-> Em andamento: fluxos, exceções, riscos e diagrama entram no próximo commit.
+## 4. Fluxo principal (FP)
+
+1. Admin acessa **PIM › Add Employee**.
+2. O sistema mostra o formulário com Employee Id pré-preenchido (`IDGeneratorService::getNextID(..., false)`).
+3. Admin informa First Name e Last Name (Middle Name é opcional).
+4. Admin clica em **Save**.
+5. O front-end faz `POST /api/v2/pim/employees`.
+6. A API valida, grava o funcionário, incrementa o contador de ID e dispara o evento de criação.
+7. O sistema mostra "Successfully Saved" e abre `/pim/viewPersonalDetails/empNumber/{n}`.
+
+## 5. Fluxos alternativos
+
+- **A1 – Com foto:** no passo 3, Admin anexa a foto. No passo 6 a API grava a foto (`EmployeePictureService::saveEmployeePicture`), e o funcionário é salvo em cascata.
+- **A2 – Com login:** no passo 3, Admin ativa *Create Login Details* e preenche Username, Status, Password e Confirm Password. Após o passo 6, o front-end faz uma **segunda** requisição, `POST /api/v2/admin/users`, com `userRoleId = 2` (ESS).
+- **A3 – ID manual:** no passo 3, Admin substitui o ID sugerido por outro, único e com até 10 caracteres.
+
+## 6. Exceções
+
+| ID | Situação | Resultado esperado |
+|---|---|---|
+| E1 | First Name ou Last Name vazio | "Required" no campo; sem requisição |
+| E2 | Employee Id já existente | "Employee Id already exists"; sem gravação |
+| E3 | Foto com tipo inválido ou > 1 MB | "File type not allowed" / "Attachment Size Exceeded"; sem gravação |
+| E4 | Username já existente | "Username already exists" |
+| E5 | Confirm Password diferente de Password | "Passwords do not match" |
+| E6 | Senha fora da política | mensagem de política (ex.: "Should have at least 8 characters", "Your password must contain minimum 1 upper-case letter", "Your password should not contain spaces", "Your password meets the minimum requirements, but it could be guessable") |
+| E7 | Campo acima do tamanho máximo (30/30/30/10/40/64) | "Should not exceed N characters" |
+| E8 | Username com menos de 5 caracteres | "Should be at least 5 characters" (versões antigas: "Should be least …"; confirmar no servidor) |
+| E9 | Usuário sem permissão chama a API | HTTP 400 "Logged in User Not Allowed to Create an Employee" |
+
+## 7. Pontos de risco observados na leitura do código
+
+Estas observações orientam os casos de teste e serão confirmadas (ou descartadas) na execução.
+
+- **R1 – Criação não atômica (A2).** O funcionário e o usuário são criados em duas requisições separadas
+  (`SaveEmployee.vue`, método `onSave`). Se a segunda falhar no servidor (ex.: username tomado entre a
+  validação e o envio, ou senha recusada pela política do back-end), o funcionário **fica criado sem login**
+  e o formulário não mostra o erro de forma clara.
+- **R2 – Contador de ID não incrementado no fluxo com foto (A1).** Em `EmployeeAPI::create()`, só o ramo
+  *sem* foto chama `EmployeeService::saveNewEmployee()`, que é quem chama `IDGeneratorService::incrementId()`.
+  O ramo com foto chama apenas `EmployeePictureService::saveEmployeePicture()`. **Hipótese:** depois de cadastrar alguém com
+  foto, o próximo formulário sugere de novo o **mesmo** Employee Id, o que provoca E2 para quem não alterar o
+  campo.
+- **R3 – Tamanho da foto validado só no cliente.** O limite de 1 MB está apenas no Vue; a API valida tipo,
+  extensão e nome do arquivo, mas não o tamanho.
+- **R4 – Unicidade só entre registros não expurgados.** Um ID de funcionário expurgado (*purged*) pode ser
+  reutilizado, o que é intencional, mas merece um caso de teste.
+
+## 8. Diagrama do fluxo
+
+```mermaid
+flowchart TD
+    A[PIM > Add Employee] --> B[Formulário com ID sugerido]
+    B --> C{Foto?}
+    C -- sim --> C1[Anexa foto - A1]
+    C -- não --> D
+    C1 --> D{Create Login?}
+    D -- sim --> D1[Username, Status, Senhas - A2]
+    D -- não --> E
+    D1 --> E[Save]
+    E --> V{Validação}
+    V -- inválido --> X[Erros no campo - E1..E8]
+    V -- ok --> P[POST /api/v2/pim/employees]
+    P --> L{Login?}
+    L -- sim --> U[POST /api/v2/admin/users]
+    L -- não --> S
+    U --> S[Successfully Saved > Personal Details]
+```
 
 ## Fontes
 

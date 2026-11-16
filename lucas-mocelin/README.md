@@ -109,3 +109,8 @@ scripts/mutacao.sh /caminho/orangehrm
 Mutação: a suíte da jornada detectou **9 de 9** defeitos injetados; a suíte original do plugin
 detectou **3 de 9**. Foram registradas 4 observações de segurança/usabilidade
 (detalhes em [`docs/03-relatorio-execucao.md`](docs/03-relatorio-execucao.md)).
+
+
+## Uso de IA
+
+Programação e redação assistidas pelo Claude (Anthropic, Claude Opus 5.5), com revisão do autor.

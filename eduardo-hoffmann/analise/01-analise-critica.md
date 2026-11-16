@@ -5,8 +5,8 @@
 > pela turma. Escopo: testes que exercitam o plugin `orangehrmAttendancePlugin` e material de terceiros sobre
 > Attendance. Critérios (os mesmos de #2, #4 e #5): nível, técnica, cobertura, isolamento, oráculo, legibilidade e
 > lacunas.
-> **Situação:** análise estática (leitura do código e dos arquivos YAML). A execução da suíte original ainda não foi
-> feita; ver a seção 6.
+> **Situação:** análise estática (leitura do código e dos arquivos YAML) mais a execução da suíte original (seção 6).
+> Falta explorar o servidor de demonstração (seção 7).
 
 ## 1. Panorama
 
@@ -66,7 +66,7 @@ A jornada de Punch In / Punch Out é coberta nas operações `Create` (punch in)
 - **Problemas observados:**
   - Nas linhas 77 e 78 a mesma asserção está repetida (`getPunchInUserTime()->format('Y-m-d')` contra
     `'2011-05-27'`). Parece que uma delas deveria conferir `getPunchInUtcTime()`, que fica sem verificação. É uma
-    suspeita pela leitura, não confirmada por execução.
+    suspeita pela leitura; a suíte passa com a repetição (seção 6).
   - `testAttendanceSummeryReport` concentra muitas asserções com números "mágicos" (`64800`, `250200`, `217800`),
     difíceis de rastrear até a fixture.
 
@@ -76,8 +76,7 @@ A jornada de Punch In / Punch Out é coberta nas operações `Create` (punch in)
 - **Cobertura:** 1 método que grava um punch in e um punch out e relê os registros.
 - **Problema relevante:** o teste grava os estados `'PUNCH IN'` e `'PUNCH OUT'`, mas as constantes da entidade são
   `STATE_PUNCHED_IN = "PUNCHED IN"` e `STATE_PUNCHED_OUT = "PUNCHED OUT"`. Ou seja, o teste usa valores diferentes
-  dos que as constantes definem. Quanto à entidade aceitar o valor, é o que se espera ao ler o teste, mas
-  **ainda não confirmei executando**. O teste confere apenas as notas, não o estado nem as datas.
+  dos que as constantes definem. A execução confirmou que a entidade aceita esses valores (seção 6). O teste confere apenas as notas, não o estado nem as datas.
 - **Oráculo:** fraco (só `assertEquals` sobre as notas).
 
 ### 2.4 `Api/AttendanceRecordAPITest.php`
@@ -160,16 +159,37 @@ Fonte: <https://github.com/bg-playground/TestingDemo-02> (último push em 06/03/
 O único material automatizado que encontrei e que toca Punch In/Out é o de Natasha Callula, com um único caso (punch
 in seguido de punch out) e oráculo fraco. Isso reforça a lacuna de testes de sistema bem projetados para a jornada.
 
-## 6. O que ainda falta nesta issue (#15)
+## 6. Execução da suíte original (16/11/2026)
 
-- [ ] **Executar** a suíte `Attendance` do código original (71 métodos / 175 cenários) e registrar o resultado.
-      Requer PHP, Composer e banco de testes; ainda não foi feito.
+Ambiente: `eduardo-hoffmann/ambiente/` (Docker), clone no commit `56e23b3`, PHP 8.3.36, MariaDB 10.11.19,
+PHPUnit 9.6.16.
+
+| Comando | Resultado | Tempo |
+|---|---|---|
+| `phpunit --testsuite Attendance` | **226 testes, 525 asserções, 0 falhas**; 10 marcados como *risky* | 1 min 33 s (2ª execução; a 1ª não foi cronometrada) |
+| `phpunit .../test/Entity` | 1 teste, 4 asserções, passou | – |
+| `phpunit .../test/Dao` | 10 testes, 69 asserções, 0 falhas; os 10 *risky* | – |
+
+Os 71 métodos expandem para 226 testes porque os *data providers* geram um teste por cenário do YAML.
+
+Os 10 *risky* são todos de `AttendanceDaoTest` e têm a mesma causa: "This test printed output", por um aviso de
+depreciação do PHP 8.3, `Creation of dynamic property ...AttendanceDaoTest::$fixture` (linha 64). Não são falhas de
+lógica, mas mostram que a classe não declara a propriedade `$fixture`.
+
+**O que a execução confirmou:**
+- `AttendanceRecordTest` passa gravando os estados `'PUNCH IN'`/`'PUNCH OUT'`: a entidade aceita valores diferentes
+  das constantes `PUNCHED IN`/`PUNCHED OUT`, e o teste não percebe.
+- `AttendanceDaoTest` passa com a asserção repetida das linhas 77 e 78, ou seja, a repetição passa despercebida.
+  Que uma delas devesse conferir `getPunchInUtcTime()` continua sendo leitura minha, não algo que a execução prove.
+
+## 7. O que ainda falta nesta issue (#15)
+
 - [ ] **Explorar** Time › Attendance no servidor de demonstração (campos, estados e mensagens), para confirmar as
       mensagens e os limites vistos no código.
-- [ ] Confirmar a suspeita da asserção repetida (`AttendanceDaoTest.php`, linhas 77 e 78) e a do estado `PUNCH IN`
-      ao executar.
+- [ ] Avaliar com mais cuidado a hipótese sobre valores-limite (por exemplo, saída igual à entrada), conferindo os
+      cenários um a um.
 
-## 7. Fontes consultadas
+## 8. Fontes consultadas
 
 - Código original, commit `56e23b3`: `src/plugins/orangehrmAttendancePlugin/` (`test/`, `Service/AttendanceService.php`,
   `entity/AttendanceRecord.php`, `Api/`), `phpunit.xml` e `src/test/phpunit/Util/EndpointIntegrationTestCase.php`.

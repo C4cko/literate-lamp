@@ -14,16 +14,15 @@ login) e salva. O funcionário é criado e, se pedido, também um usuário do si
 
 | Pasta | Conteúdo | Situação |
 |---|---|---|
-| `analise/` | análise crítica dos testes do código original e de projetos de terceiros | em andamento (#2) |
-| `docs/` | jornada de usuário, projeto dos casos de teste, ambiente e defeitos | planejado |
-| `ambiente/` | ambiente local em Docker (OrangeHRM + banco + PHPUnit) | planejado |
-| `unitario/` | testes unitários em PHPUnit | planejado |
+| `analise/` | análise crítica dos testes do código original e de projetos de terceiros | concluído (#2, #4) |
+| `docs/` | jornada de usuário, projeto dos casos de teste, ambiente e defeitos | jornada e casos concluídos (#9); ambiente em andamento (#10) |
+| `ambiente/` | ambiente local em Docker (OrangeHRM + banco + PHPUnit) | em andamento (#10) |
+| `unitario/` | testes unitários em PHPUnit | planejado (#10) |
 | `integracao/` | testes da API REST v2 em Java (JUnit 5 + REST Assured) | planejado |
 | `sistema/` | testes pela interface em Java (JUnit 5 + Playwright) | planejado |
 | `relatorios/` | Relatório do Plano de Testes e Relatório da Execução dos Testes | planejado |
 
-Os testes vão rodar no GitHub Actions. O workflow fica em `.github/workflows/mateus-neubarth-testes.yml`, porque
-o GitHub só executa workflows dessa pasta.
+Os testes rodam localmente com o ambiente Docker de `ambiente/`; o passo a passo está em `docs/ambiente.md`.
 
 ## Uso de IA
 

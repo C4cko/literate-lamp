@@ -1,0 +1,26 @@
+# Instalação não interativa do sistema sob teste (serviço "app"), usada pelos testes de sistema (ST).
+# Adaptado de mateus-neubarth/ambiente/config/cli_install_app.yaml. Credenciais só do ambiente local.
+database:
+  hostName: db
+  hostPort: 3306
+  databaseName: orangehrm_app
+  privilegedDatabaseUser: root
+  privilegedDatabasePassword: root
+  useSameDbUserForOrangeHRM: y
+  orangehrmDatabaseUser: ~
+  orangehrmDatabasePassword: ~
+  isExistingDatabase: n
+  enableDataEncryption: n
+organization:
+  name: T2 VERVAL Attendance
+  country: BR
+admin:
+  adminUserName: Admin
+  adminPassword: Admin@OHRM123
+  adminEmployeeFirstName: Admin
+  adminEmployeeLastName: T2
+  workEmail: admin@example.com
+  contactNumber: ~
+  registrationConsent: false
+license:
+  agree: y

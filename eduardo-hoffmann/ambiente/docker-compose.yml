@@ -23,6 +23,19 @@ services:
     volumes:
       - db-data:/var/lib/mysql
 
+  # OrangeHRM 5.9 (imagem oficial) = sistema sob teste dos testes de sistema (ST), em http://localhost:8201
+  app:
+    image: orangehrm/orangehrm:5.9
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8201:80"
+    volumes:
+      # Volume nomeado: a instalação (lib/confs/Conf.php) sobrevive à recriação do contêiner.
+      - app-html:/var/www/html
+      - ./config/cli_install_app.yaml:/var/www/html/installer/cli_install_config.yaml:ro
+
   phpunit:
     build: ./phpunit
     depends_on:
@@ -45,3 +58,4 @@ services:
 
 volumes:
   db-data:
+  app-html:

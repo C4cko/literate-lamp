@@ -101,7 +101,19 @@ docker compose exec phpunit ./src/vendor/bin/phpunit --group T2ClaimIntegracao -
 docker compose exec phpunit ./src/vendor/bin/phpunit --group defeito-conhecido --filter T2ClaimIntegracao         # quarentena: 1, falha (R2)
 ```
 
-Todos os testes em quarentena dos dois níveis (2, ambos expõem R2):
+### 2.3 Sistema ([`sistema/`](sistema/README.md))
+
+Contra o servidor de demonstração; precisa de Java 17+, Maven e Chrome (não usa o Docker):
+
+```powershell
+cd renan-bertoletti\sistema
+mvn test                     # ST-01 a ST-12, com o Chrome visível
+mvn test "-Dheadless=true"   # sem abrir janela
+```
+
+### 2.4 Quarentena
+
+Todos os testes PHPUnit em quarentena (2, ambos expõem R2):
 
 ```powershell
 docker compose exec phpunit ./src/vendor/bin/phpunit --group defeito-conhecido --filter T2Claim

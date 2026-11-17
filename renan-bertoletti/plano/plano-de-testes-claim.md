@@ -451,6 +451,52 @@ Prioridade: **A** alta, **M** média, **B** baixa. Rastreabilidade: CA (critéri
 | UT-06 | Regra do parâmetro `action` de `ClaimRequestActionAPI` | PE | `SUBMIT`, `APPROVE`, `REJECT`, `PAY`, `CANCEL`, `FOO`, `submit`, vazio | valida com `getValidationRuleForUpdate()` | as 5 ações válidas; `FOO`, minúsculas e vazio inválidos | SP-21 | M |
 | UT-07 | Regra `API_DATE` da despesa | PE/AVL | `2026-02-28`, `2026-02-29`, `2028-02-29`, `17/11/2026`, vazio | valida com as regras de criação de `ClaimExpenseAPI` | válido, inválido, válido, inválido, inválido | V6, I11–I13 | M |
 
+### 6.2 Integração (PHPUnit, API + banco)
+
+**Fixture comum** (YAML próprio): funcionários `ESS` (empNumber 1), `Supervisor` (2, supervisor de 1 em *Report-to*),
+`Admin` (3) e `Outro` (4, sem vínculo); usuários com os papéis correspondentes; evento ativo e inativo; tipo de despesa
+ativo e inativo; moeda `USD`. Transições de `WorkflowStateMachine.yaml` geradas pelo `i:create-test-db` (as mesmas da
+migração). Data fixada com `registerMockDateTimeHelper`.
+
+**Oráculo comum** dos casos de estado: (1) HTTP e corpo da resposta; (2) estado e `submittedDate` **relidos do banco**
+pelo `ClaimDao`; (3) nos casos de erro, banco inalterado.
+
+#### Máquina de estados
+
+| ID | Técnica | Dados / pré-condição | Passos | Resultado esperado | Rastreia | Prio |
+|---|---|---|---|---|---|---|
+| IT-01 | Árvore de transição | reivindicação INITIATED do ESS, com 1 despesa | ESS: CANCEL | 200; CANCELLED; `submittedDate` nulo | TT-01, W2, CA5, A1 | A |
+| IT-02 | idem | idem; data fixa 2026-11-10 | ESS: SUBMIT → CANCEL | SUBMITTED com `submittedDate` 2026-11-10 → CANCELLED com a mesma data | TT-02, W1, W3, CA1, CA5, A2 | A |
+| IT-03 | idem | idem | ESS: SUBMIT → Admin: APPROVE | SUBMITTED → **PAID** (caracteriza R1) | TT-03, W7, A4 | A |
+| IT-04 | idem | idem; SUBMIT em 2026-11-10, ressubmissão em 2026-11-12 | ESS: SUBMIT → Admin: REJECT → ESS: SUBMIT | SUBMITTED → REJECTED → SUBMITTED; `submittedDate` passa a 2026-11-12 | TT-04, W8, W4, CA4, A3 | A |
+| IT-05 | idem | idem | ESS: SUBMIT → Sup.: APPROVE → Admin: REJECT | SUBMITTED → APPROVED → REJECTED | TT-05, W11, W6, A5 | A |
+| IT-06 | idem | idem | ESS: SUBMIT → Sup.: APPROVE → Admin: PAY | SUBMITTED → APPROVED → PAID | TT-06, W9, CA2, CA3, FP | A |
+| IT-07 | idem | idem | ESS: SUBMIT → Sup.: REJECT | SUBMITTED → REJECTED | TT-07, W12, CA4 | A |
+| IT-08 | idem | criada pelo Admin em `POST /claim/employees/1/requests` | Admin: SUBMIT | **PAID** (caracteriza R1) | TT-08a, W5, CA8, A6 | A |
+| IT-09 | idem + risco | criada pelo **ESS** | Admin: SUBMIT | **PAID** (caracteriza R7) | TT-08b, W5, R7 | M |
+| IT-10 | idem | criada pelo supervisor (*Assign Claim*) | Sup.: SUBMIT | APPROVED | TT-09a, W10, CA8, A7 | A |
+| IT-11 | idem + risco | criada pelo **ESS** | Sup.: SUBMIT | APPROVED (caracteriza R7) | TT-09b, W10, R7 | M |
+| IT-12 | Risco | reivindicação do **próprio Admin** (empNumber 3); roda com a fixture padrão e com uma fixture em que as linhas ESS e ADMIN de INITIATED-SUBMIT estão em ordem inversa | Admin (dono): SUBMIT | **SUBMITTED** nas duas ordens; PAID em qualquer uma confirma R8 (defeito-conhecido) | TT-10, R8 | A |
+| IT-13 | *Sneak paths* (data provider) | uma reivindicação levada a cada estado de partida pela fixture | cada linha SP-01 a SP-22 da seção 3.3 | 403 (SP-21: 422); estado e `submittedDate` inalterados no banco | SP-01–SP-22, CA6, E6 | A |
+| IT-14 | Tabela de estados | uma reivindicação em cada um dos 6 estados | GET `/claim/requests/{id}` (ESS) e `/claim/employees/1/requests/{id}` (Sup., Admin) | `meta.allowedActions` igual à seção 2.5, incluindo as células "n. o." | 2.5, CA2, CA3 | M |
+
+#### Entradas (particionamento e valor-limite)
+
+| ID | Técnica | Dados | Passos | Resultado esperado | Rastreia | Prio |
+|---|---|---|---|---|---|---|
+| IT-15 | PE | evento ativo, ausente, inativo, inexistente, `0`; moeda `USD`, ausente, `XYZ` | ESS: `POST /claim/requests` com cada combinação (uma inválida por vez) | 200 só com evento ativo + `USD`; os demais 422; nenhuma linha nova no banco nos casos 422 | V1, V2, I1–I6, E1, E3 | A |
+| IT-16 | AVL | `remarks` ausente, 1, 1000 e 1001 caracteres | ESS: `POST /claim/requests` | 200, 200, 200, 422 | V3, V4, I7, E2 | A |
+| IT-17 | AVL + PE | valor −0,01 · 0 · 0,01 · 1 · 7000,1 · 7000,12 · 7000,123 · 9 999 999 999,99 · 10 000 000 000,00 · `"abc"` · ausente | ESS: `POST /claim/requests/{id}/expenses` em reivindicação INITIATED | 422 · 422 · 200 · 200 · 200 · 200 · 422 · 200 · 422 · 422 · 422; valor gravado igual ao enviado; total da reivindicação = soma das despesas aceitas | V9, I14–I19, CA7, E4 | A |
+| IT-18 | AVL | despesa existente de 10,50; novo valor 0 e 0,01 | ESS: `PUT /claim/requests/{id}/expenses/{expenseId}` | 0 → **422** (esperado; o servidor aceita: R2, defeito-conhecido); 0,01 → 200 | R2, I14 | A |
+| IT-19 | PE | tipo ativo, ausente, inativo, inexistente | ESS: POST de despesa | 200, 422, 422, 422 | V5, I8–I10 | M |
+| IT-20 | PE/AVL | data `2026-02-28`, `2026-02-29`, `2028-02-29`, `17/11/2026`, ausente; data futura (`2027-01-01`); data anterior à criação (`2020-01-01`) | ESS: POST de despesa | 200, 422, 200, 422, 422; futura e anterior: **caracteriza** (o código aceita; não há requisito) | V6–V8, I11–I13 | M |
+| IT-21 | AVL | `note` 1000 e 1001 caracteres | ESS: POST de despesa | 200, 422 | V11, I20, E5 | B |
+| IT-22 | PE (estado) | reivindicação em SUBMITTED, APPROVED, PAID, CANCELLED e REJECTED, cada uma com 1 despesa | ESS: POST, PUT e DELETE de despesa | 403 em SUBMITTED, APPROVED, PAID e CANCELLED; 200 em REJECTED; banco inalterado nos 403 | V14, I22, E7 | A |
+| IT-23 | Risco | reivindicação INITIATED **sem despesas** | ESS: SUBMIT | caracteriza R3: se 200, a exigência de despesa existe só na tela (ver ST-09) | R3 | M |
+| IT-24 | PE | funcionário desligado | Admin: `POST /claim/employees/{n}/requests` | 403; nada criado | E8 | M |
+| IT-25 | AVL | descrição do anexo com 200 e 201 caracteres; arquivo PNG pequeno em base64 | ESS: `POST /claim/requests/{id}/attachments` | 200, 422 | V13, I21 | B |
+| IT-26 | AVL | duas reivindicações criadas em sequência; data fixa 2026-11-17 | ESS: dois `POST /claim/requests` | `referenceId` = `20261117` + id com 7 dígitos; os dois números são diferentes e consecutivos | FP1, R4 | M |
+
 ## Uso de IA
 
 Redação inicial feita com Claude Code (Claude Opus 5.5, Anthropic), a partir do código do OrangeHRM e da

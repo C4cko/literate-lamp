@@ -1,0 +1,48 @@
+# Ambiente local dos testes PHPUnit da jornada Claim (issue #7).
+#
+# Reaproveita a imagem PHP e o script de preparação de Mateus Neubarth (mateus-neubarth/ambiente, issue #10),
+# com outro nome de projeto e outra porta, para poder conviver com o ambiente dele.
+#
+#   db       MariaDB (bancos orangehrm_dev e test_orangehrm_dev)
+#   phpunit  PHP 8.3 CLI com o clone do OrangeHRM montado em /app e os nossos testes dentro do plugin Claim
+#
+# Os testes de sistema (../sistema) rodam contra o servidor de demonstração e não usam este ambiente.
+# Uso: ver ../README.md
+name: t2-claim
+
+services:
+  db:
+    image: mariadb:10.11
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+    ports:
+      - "3308:3306"
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+    volumes:
+      - db-data:/var/lib/mysql
+
+  phpunit:
+    build: ../../mateus-neubarth/ambiente/phpunit
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      HOME: /tmp
+      COMPOSER_HOME: /tmp/composer
+    working_dir: /app
+    volumes:
+      # Clone de orangehrm/orangehrm no commit 56e23b3b. Padrão: ../../../orangehrm (ao lado do repositório da turma).
+      - ${OHRM_SRC:-../../../orangehrm}:/app
+      - ../../mateus-neubarth/ambiente/config/cli_install_dev.yaml:/app/installer/cli_install_config.yaml:ro
+      - ../../mateus-neubarth/ambiente/scripts:/scripts:ro
+      # Nossos testes entram no plugin Claim, onde o autoload (OrangeHRM\Tests\Claim\) e a suíte "Claim" os encontram
+      - ../unitario:/app/src/plugins/orangehrmClaimPlugin/test/T2ClaimUnitario:ro
+      - ../integracao:/app/src/plugins/orangehrmClaimPlugin/test/T2ClaimIntegracao:ro
+    entrypoint: ["sleep", "infinity"]
+
+volumes:
+  db-data:

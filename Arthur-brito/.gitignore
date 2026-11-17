@@ -1,0 +1,11 @@
+node_modules/
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+testes/unitario/sut/
+testes/unitario/phpunit.phar
+testes/unitario/.phpunit.result.cache
+resultados/tmp/
+resultados/*.png
+*.log

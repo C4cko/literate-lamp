@@ -132,6 +132,7 @@ pelo script, porque não serve como teste do jeito que sai do Recorder:
 | texto fixo ("Post") | não dá para saber qual post é desta execução | texto `JM-TS0X-{{ID}}`, com número único |
 | nenhum `waitForElement` | repete os cliques, mas não verifica nada | verificações de "1 Comment", "1 Like", "0 Likes", post removido etc. |
 | não registrou a ida ao menu Buzz | depende da página em que o login termina | clique no link do Buzz |
+| tela de 732×715 (gravei com o DevTools aberto ocupando metade da janela) | a página abre no layout estreito, com o menu lateral recolhido | tela de 1280×900, layout completo |
 
 Por isso as gravações `ts01` a `ts05` foram ajustadas à mão a partir desse formato.
 

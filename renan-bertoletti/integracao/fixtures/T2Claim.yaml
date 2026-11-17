@@ -2,6 +2,7 @@
 # Estrutura baseada em src/plugins/orangehrmClaimPlugin/test/fixtures/ClaimRequestActionAPITest.yaml (OrangeHRM).
 #
 # Usuários (id → funcionário):  1 Admin → emp 3 | 2 ESS → emp 1 | 3 ESS (supervisor de emp 1) → emp 2 | 4 ESS sem vínculo → emp 4
+# Funcionário 5: desligado, sem usuário (IT-24).
 # Reivindicações de emp 1, uma por estado de partida:
 #   1 INITIATED (criada pelo ESS)   2 SUBMITTED   3 APPROVED   4 REJECTED   5 CANCELLED   6 PAID
 #   7 INITIATED criada pelo Admin (Assign Claim)   8 INITIATED criada pelo supervisor (Assign Claim)
@@ -9,11 +10,18 @@
 Config:
   - { name: 'authorize_user_role_manager_class', value: 'BasicUserRoleManager' }
 
+TerminationReason:
+  - { "id": "1", "name": "Other" }
+
+EmployeeTerminationRecord:
+  - { "id": "1", "reason_id": "1", "termination_date": "2026-06-30", "note": "" }
+
 Employee:
   0: { empNumber: 1, firstName: 'Eva', lastName: 'Funcionaria', joinedDate: '2021-10-25' }
   1: { empNumber: 2, firstName: 'Sergio', lastName: 'Supervisor', joinedDate: '2016-10-28' }
   2: { empNumber: 3, firstName: 'Ana', lastName: 'Admin', joinedDate: '2020-01-05' }
   3: { empNumber: 4, firstName: 'Otto', lastName: 'Outro', joinedDate: '2016-12-31' }
+  4: { empNumber: 5, firstName: 'Davi', lastName: 'Desligado', joinedDate: '2019-03-01', termination_id: 1 }
 
 ReportingMethod:
   - { "reporting_method_id": "1", "reporting_method_name": "Direct" }

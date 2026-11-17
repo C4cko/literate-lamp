@@ -15,20 +15,22 @@ Comando executado em `testes/sistema/`:
 ```sh
 npm install
 npx playwright install chromium
-npm test
+npm run test:all
 ```
 
-Resultado: 2 testes descobertos, 2 ignorados. A lista da demo nao apresentou Timesheet pendente acessivel durante essa execucao; por isso a pre-condicao marcou IT-01 e ST-01 como ignorados antes das assercoes funcionais. O comando terminou sem erro de infraestrutura depois da instalacao do Chromium, mas isso nao significa que os casos funcionais passaram.
+Resultado unitario: 4 casos (UT-01 a UT-04), todos passaram.
+
+Resultado de integracao e sistema: 2 casos. IT-01 e ST-01 passaram usando a Timesheet ja existente do empregado 7, periodo iniciado em 2023-01-16. Nenhuma escrita foi feita na demo.
 
 ## Exploracao manual
 
-Em uma navegacao anterior na mesma data, foi possivel consultar uma Timesheet submetida na demo. A tela mostrou `Status: Submitted` e uma entrada `Submitted` na tabela de historico. A verificacao foi somente de leitura. Como a demo e compartilhada e os dados podem mudar, essa observacao nao substitui uma execucao automatizada reproduzivel.
+Durante a exploracao e a execucao automatizada, foi possivel consultar uma Timesheet submetida na demo. A tela mostrou `Status: Submitted`; os endpoints GET retornaram estado `SUBMITTED` e evento `SUBMITTED`. A verificacao foi somente de leitura. O teste permite configurar outro empregado e data com variaveis de ambiente, pois os dados da demo sao compartilhados e podem mudar.
 
 ## Defeitos e limitacoes
 
-Nenhum defeito foi confirmado. Como os testes automatizados foram ignorados, tambem nao ha base para concluir que a funcionalidade esta livre de defeitos. Para executar os casos funcionais, e necessario que o responsavel pelo ambiente disponibilize uma Timesheet submetida acessivel ou uma instalacao local com dados de teste controlados.
+Nenhum defeito foi confirmado nos casos executados. O resultado cobre apenas a consistencia de estado e historico para um registro submetido; nao demonstra ausencia de defeitos em outras jornadas ou estados.
 
-Nao foram implementados nesta contribuicao testes unitarios PHPUnit ou Vue. O caso unitario esta especificado no plano, mas depende de preparar o ambiente de testes do OrangeHRM/cliente. Esta limitacao deve ser considerada na avaliacao da cobertura.
+Os testes unitarios cobrem o oraculo local de consistencia em JavaScript/Node, nao classes de producao do OrangeHRM. Nao foram implementados testes unitarios PHPUnit nem testes Vue do codigo original.
 
 ## Uso de IA
 

@@ -10,7 +10,7 @@ A jornada verifica, sem alterar dados, a consistencia entre o estado de uma Time
 
 - [Analise critica](docs/01-analise-critica.md)
 - [Plano de testes](docs/02-plano-de-testes.md)
-- [Testes automatizados de sistema e integracao](testes/sistema/)
+- [Testes unitarios, de integracao e de sistema](testes/sistema/)
 - [Resultado da execucao](docs/03-resultados.md)
 
 Versao analisada: OrangeHRM OS 5.9, commit `56e23b3b09e7af29317a0943523b825843fff527`.

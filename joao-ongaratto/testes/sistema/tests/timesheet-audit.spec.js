@@ -1,7 +1,10 @@
 const {test, expect} = require('@playwright/test');
+const {hasSubmittedAuditEvent} = require('../src/timesheet-audit');
 
 const username = process.env.ADMIN_USER || 'Admin';
 const password = process.env.ADMIN_PASS || 'admin123';
+const employeeNumber = Number(process.env.TIMESHEET_EMPLOYEE_ID || '7');
+const startDate = process.env.TIMESHEET_START_DATE || '2023-01-16';
 
 async function openSubmittedTimesheet(page) {
   await page.goto('auth/login');
@@ -10,34 +13,18 @@ async function openSubmittedTimesheet(page) {
   await page.getByRole('button', {name: 'Login'}).click();
   await expect(page).toHaveURL(/dashboard/);
 
-  await page.goto('time/viewEmployeeTimesheet');
-  await expect(page.getByRole('heading', {name: 'Timesheets Pending Action'})).toBeVisible();
-
-  const viewButtons = page.getByRole('table').getByRole('button', {name: 'View'});
-  if ((await viewButtons.count()) === 0) {
-    test.skip(true, 'A demo nao tem Timesheet pendente acessivel neste momento.');
-  }
-
-  await viewButtons.first().click();
+  await page.goto(`time/viewTimesheet/employeeId/${employeeNumber}?startDate=${startDate}`);
+  await expect(page.getByRole('heading', {name: /Timesheet for/})).toBeVisible();
   await expect(page.getByText(/^Status:/)).toContainText('Submitted');
-
-  const currentUrl = new URL(page.url());
-  const employeeMatch = currentUrl.pathname.match(/employeeId\/(\d+)/);
-  expect(employeeMatch, 'A URL da Timesheet deve conter o identificador do funcionario.').not.toBeNull();
-
-  return {
-    employeeNumber: Number(employeeMatch[1]),
-    startDate: currentUrl.searchParams.get('startDate'),
-  };
 }
 
 test('IT-01 status e historico REST correspondem a Timesheet submetida', async ({page}) => {
-  const {employeeNumber, startDate} = await openSubmittedTimesheet(page);
-  expect(startDate, 'A URL da Timesheet deve informar a data inicial.').toBeTruthy();
+  await openSubmittedTimesheet(page);
 
   const response = await page.evaluate(async ({employeeNumber, startDate}) => {
+    const apiBase = window.appGlobal.baseUrl;
     const timesheetResponse = await fetch(
-      `/api/v2/time/timesheets/default?date=${encodeURIComponent(startDate)}&empNumber=${employeeNumber}`,
+      `${apiBase}/api/v2/time/timesheets/default?date=${encodeURIComponent(startDate)}&empNumber=${employeeNumber}`,
     );
     const timesheetBody = await timesheetResponse.json();
     if (!timesheetResponse.ok) {
@@ -46,7 +33,7 @@ test('IT-01 status e historico REST correspondem a Timesheet submetida', async (
 
     const timesheetId = timesheetBody.data?.id;
     const historyResponse = await fetch(
-      `/api/v2/time/timesheets/${timesheetId}/action-logs?sortField=date&sortOrder=ASC`,
+      `${apiBase}/api/v2/time/timesheets/${timesheetId}/action-logs`,
     );
     const historyBody = await historyResponse.json();
 
@@ -59,9 +46,8 @@ test('IT-01 status e historico REST correspondem a Timesheet submetida', async (
   }, {employeeNumber, startDate});
 
   expect(response.status).toBe(200);
-  expect(response.timesheet.status.id).toBe('SUBMITTED');
   expect(response.historyStatus).toBe(200);
-  expect(response.history.some((entry) => entry.action?.label === 'Submitted')).toBeTruthy();
+  expect(hasSubmittedAuditEvent(response.timesheet, response.history)).toBe(true);
 });
 
 test('ST-01 interface exibe status e acao de submissao no historico', async ({page}) => {

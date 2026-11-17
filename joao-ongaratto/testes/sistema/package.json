@@ -1,0 +1,13 @@
+{
+  "name": "orangehrm-timesheet-audit-tests",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "playwright test",
+    "test:unit": "node --test tests/unit/*.test.js",
+    "test:all": "npm run test:unit && npm test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0"
+  }
+}

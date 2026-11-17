@@ -81,6 +81,19 @@ O compose monta `unitario/` e `integracao/` dentro do plugin Claim do clone
 
 > Comandos completados à medida que cada nível é implementado.
 
+Os comandos PHPUnit são executados a partir de `renan-bertoletti/ambiente` (com `$env:OHRM_SRC` definido, se o
+clone não estiver no caminho padrão).
+
+Os testes que expõem defeitos ficam em **quarentena** (`@group defeito-conhecido`): fora da execução padrão, que
+deve passar, e rodados à parte, onde se espera que falhem.
+
+### 2.1 Unitários ([`unitario/`](unitario/README.md))
+
+```powershell
+docker compose exec phpunit ./src/vendor/bin/phpunit --group T2ClaimUnitario --exclude-group defeito-conhecido   # padrão: 34, devem passar
+docker compose exec phpunit ./src/vendor/bin/phpunit --group defeito-conhecido --filter T2ClaimUnitario          # quarentena: 1, falha (R2)
+```
+
 ## Uso de IA
 
 Código, configuração e redação inicial feitos com Claude Code (Claude Opus 5.5, Anthropic); execução dos testes,

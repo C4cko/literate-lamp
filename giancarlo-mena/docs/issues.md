@@ -1,11 +1,10 @@
 # Issues do trabalho
 
-Textos para abrir as Issues no GitHub, uma por atividade, todas atribuídas ao autor.
-Ao abrir cada Issue, anote o número e cite-o nos commits seguintes (ex.: `ajusta casos de teste (#12)`).
+Textos das Issues abertas no repositório (#32 a #38), uma por atividade, todas atribuídas ao autor.
 
 ---
 
-## Issue 1 – Análise crítica dos testes do módulo Recruitment
+## Issue #32 – Análise crítica dos testes do módulo Recruitment
 
 **Descrição.** Identificar os testes do código original do OrangeHRM para o módulo Recruitment
 (PHPUnit em `src/plugins/orangehrmRecruitmentPlugin/test`) e pelo menos dois materiais de terceiros, e
@@ -20,7 +19,7 @@ avaliar nível, técnicas de projeto, oráculo, cobertura e manutenção.
 
 ---
 
-## Issue 2 – Jornada de usuário "Recrutador contrata um candidato"
+## Issue #33 – Jornada de usuário "Recrutador contrata um candidato"
 
 **Descrição.** Descrever a jornada com persona, história de usuário, critérios de aceitação, passos e a
 máquina de estados do processo seletivo.
@@ -29,7 +28,7 @@ máquina de estados do processo seletivo.
 
 ---
 
-## Issue 3 – Relatório do Plano de Testes
+## Issue #34 – Relatório do Plano de Testes
 
 **Descrição.** Projeto dos casos de teste unitários, de integração e de sistema da jornada, com as técnicas
 de partição de equivalência, valor-limite, tabela de decisão e transição de estados, mais as hipóteses de
@@ -49,7 +48,7 @@ defeito tiradas do código.
 
 ---
 
-## Issue 4 – Implementar testes unitários (Java 21 + JUnit 5)
+## Issue #35 – Implementar testes unitários (Java 21 + JUnit 5)
 
 **Entrega.** `testes/src/main/.../modelo`, `testes/src/main/.../cliente`, testes em `testes/src/test/.../modelo`
 e `.../cliente`.
@@ -61,7 +60,7 @@ e `.../cliente`.
 
 ---
 
-## Issue 5 – Implementar testes de integração da API
+## Issue #36 – Implementar testes de integração da API
 
 **Entrega.** `testes/src/test/.../integracao`
 
@@ -72,7 +71,7 @@ e `.../cliente`.
 
 ---
 
-## Issue 6 – Implementar testes de sistema (Playwright)
+## Issue #37 – Implementar testes de sistema (Playwright)
 
 **Entrega.** `testes/src/test/.../sistema`
 
@@ -82,7 +81,7 @@ e `.../cliente`.
 
 ---
 
-## Issue 7 – Relatório da Execução dos Testes
+## Issue #38 – Relatório da Execução dos Testes
 
 **Descrição.** Executar os três níveis com `./executar-testes.sh`, guardar a saída em `resultados/` e
 registrar o resultado de cada caso, as hipóteses confirmadas e os defeitos encontrados.

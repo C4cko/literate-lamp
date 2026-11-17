@@ -18,7 +18,7 @@ Maven (`testes/`):
 
 | Nível | Pacote | Ferramentas | Alvo |
 |---|---|---|---|
-| Unitário | `...modelo`, `...cliente` e `FormatoDataTest` (sem tag) | JUnit 5 | modelo da especificação (máquina de estados e regras dos formulários) e cliente HTTP |
+| Unitário | `...modelo`, `...cliente`, `FormatoDataTest` e `TextoExatoTest` (sem tag) | JUnit 5 | modelo da especificação (máquina de estados e regras dos formulários) e cliente HTTP |
 | Integração | `...integracao` (tag `integracao`) | JUnit 5 + `java.net.http.HttpClient` + Jackson | API REST v2 + serviços + banco |
 | Sistema | `...sistema` (tag `sistema`) | JUnit 5 + Playwright for Java | aplicação completa pelo navegador |
 
@@ -95,6 +95,7 @@ tabela. Casos de hipótese (H) que falham são registrados como defeitos no rela
 | U31 | Partição | HTML sem token | `IllegalStateException` |
 | U32 | Tabela | cada ação com id de candidato 7 e entrevista 3 | caminho e método HTTP corretos (`PUT /recruitment/candidates/7/shortlist`...) |
 | U33 | Partição | formatos de data `yyyy-dd-mm`, `yyyy-mm-dd`, `dd-mm-yyyy`, `mm/dd/yyyy` e vazio (`FormatoDataTest`) | data formatada como o campo da tela espera |
+| U34 | Partição | rótulos da tela com e sem caracteres especiais (`TextoExatoTest`); incluído após a 1ª execução, ver relatório de execução | expressão sem `\Q...\E`, casa só o texto exato |
 
 ### 3.2 Integração – API REST (`mvn test -Pintegracao`)
 

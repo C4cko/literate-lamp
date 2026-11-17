@@ -328,6 +328,54 @@ Resultado esperado em todos (salvo SP-21): **HTTP 403**, estado inalterado e `su
 Cobertura de *sneak paths*: 18 de 18 pares (estado, papel), 20 das 78 combinações proibidas. Os casos de 2.6, já
 observados, são repetidos aqui para que façam parte da suíte automatizada.
 
+## 4. Particionamento em classes de equivalência e valor-limite
+
+### 4.1 Regras de entrada (fonte: código)
+
+| Campo | Onde | Regra no servidor |
+|---|---|---|
+| Event (`claimEventId`) | `EmployeeClaimRequestAPI::getCommonParamRuleCollection` | obrigatório, inteiro positivo; o evento precisa existir e estar ativo |
+| Currency (`currencyId`) | idem | obrigatório; a moeda precisa existir |
+| Remarks (`remarks`) | idem | opcional; `LENGTH [null, 1000]` |
+| Expense Type (`expenseTypeId`) | `ClaimExpenseAPI::setClaimExpense` | obrigatório, inteiro positivo; o tipo precisa existir e estar ativo |
+| Date (`date`) | `ClaimExpenseAPI` | obrigatório; `Rules::API_DATE` (formato `AAAA-MM-DD`); **sem limite de período** |
+| Amount (`amount`) | `ClaimExpenseAPI` | criação: `POSITIVE` + `BETWEEN [0, 9999999999.99]`; edição: só `BETWEEN` (R2); nas duas, regex `/^\d+(\.\d{1,2})?$/` |
+| Note (`note`) | `ClaimExpenseAPI` | opcional; `LENGTH [null, 1000]` |
+| Descrição do anexo | `ClaimAttachmentAPI` | opcional; `LENGTH [null, 200]` |
+| Número de referência | `ClaimService::getReferenceId()` | gerado: data `Ymd` do servidor + próximo id com `str_pad(…, 7, '0', STR_PAD_LEFT)` |
+
+### 4.2 Classes de equivalência
+
+| Campo | Classes válidas | Classes inválidas |
+|---|---|---|
+| Event | V1: evento ativo | I1: ausente; I2: evento inativo; I3: id inexistente; I4: id ≤ 0 |
+| Currency | V2: moeda existente (`USD`) | I5: ausente; I6: código inexistente (`XYZ`) |
+| Remarks | V3: ausente/nulo; V4: 1–1000 caracteres | I7: > 1000 caracteres |
+| Expense Type | V5: tipo ativo | I8: ausente; I9: tipo inativo; I10: id inexistente |
+| Date | V6: data válida no formato `AAAA-MM-DD` | I11: ausente; I12: outro formato (`17/11/2026`); I13: data inexistente (`2026-02-30`) |
+| Date (sem regra definida) | V7?: data futura; V8?: data anterior à criação da reivindicação | – (o código aceita; os casos documentam o comportamento) |
+| Amount | V9: 0,01 a 9 999 999 999,99, com 0, 1 ou 2 casas decimais | I14: 0; I15: negativo; I16: > 9 999 999 999,99; I17: 3 ou mais casas decimais; I18: não numérico; I19: ausente |
+| Note | V10: ausente; V11: 1–1000 caracteres | I20: > 1000 caracteres |
+| Descrição do anexo | V12: ausente; V13: 1–200 caracteres | I21: > 200 caracteres |
+| Estado ao alterar despesa | V14: INITIATED ou REJECTED (dono) | I22: SUBMITTED, APPROVED, PAID ou CANCELLED (E7) |
+
+### 4.3 Valores-limite
+
+| Campo | Valores testados | Esperado |
+|---|---|---|
+| Amount (criação) | −0,01 · **0** · 0,01 · 1 · 7000,1 · 7000,12 · 7000,123 · 9 999 999 999,99 · 10 000 000 000,00 | 422 · 422 · ok · ok · ok · ok · 422 · ok · 422 |
+| Amount (edição) | **0** · 0,01 | **422** (esperado, por coerência com a criação; o código aceita: R2) · ok |
+| Remarks | 0 · 1 · 1000 · 1001 caracteres | ok · ok · ok · 422 |
+| Note | 1000 · 1001 caracteres | ok · 422 |
+| Descrição do anexo | 200 · 201 caracteres | ok · 422 |
+| Date | `2026-02-28` · `2026-02-29` (2026 não é bissexto) · `2028-02-29` · `2026-12-31` · `2027-01-01` | ok · 422 · ok · ok · ok |
+| Número de referência (id) | 1 · 9 999 999 · 10 000 000 | `AAAAMMDD0000001` (15 car.) · `AAAAMMDD9999999` (15 car.) · `AAAAMMDD10000000` (**16 car.**, R4) |
+| Número de referência (data) | 23:59:59 e 00:00:00 UTC; 31/12 → 01/01 | a data do prefixo é a do servidor em UTC (R5) |
+
+> **Por que 0 é o limite mais importante:** a regra combina `POSITIVE` (que recusa 0) com `BETWEEN [0, …]` (que
+> aceitaria 0). Na criação, vale a mais restritiva; na edição, só existe a segunda. O mesmo valor de fronteira
+> serve, portanto, para testar os dois caminhos e expor a diferença (R2).
+
 ## Uso de IA
 
 Redação inicial feita com Claude Code (Claude Opus 5.5, Anthropic), a partir do código do OrangeHRM e da

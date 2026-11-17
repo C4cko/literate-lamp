@@ -21,8 +21,16 @@ Todos os comandos são executados dentro desta pasta (`testes/`).
 | Testes de sistema (navegador) | `mvn test -Psistema` | sim |
 | Sistema com o navegador visível | `mvn test -Psistema -Dnavegador.visivel=true` | sim |
 
-Os relatórios do JUnit ficam em `target/surefire-reports/`. O script `../executar-testes.sh` roda os três
-níveis e copia os relatórios para `../resultados/`.
+Os relatórios do JUnit ficam em `target/surefire-reports/`. No Linux e no macOS, o script
+`../executar-testes.sh` roda os três níveis e copia os relatórios para `../resultados/`. No Windows (cmd),
+o equivalente é:
+
+```
+mkdir ..\resultados
+mvn -B test > ..\resultados\unitario-saida.txt 2>&1
+mvn -B test -Pintegracao > ..\resultados\integracao-saida.txt 2>&1
+mvn -B test -Psistema > ..\resultados\sistema-saida.txt 2>&1
+```
 
 ## Ambiente
 
@@ -31,6 +39,7 @@ Por padrão os testes usam o servidor de demonstração
 Para outro servidor (por exemplo, uma instalação local do OrangeHRM em Docker):
 
 ```bash
+# Linux/macOS (no Windows: set ORANGEHRM_URL=...)
 export ORANGEHRM_URL=http://localhost:8200/web/index.php
 export ORANGEHRM_USUARIO=Admin
 export ORANGEHRM_SENHA=sua-senha
@@ -50,7 +59,7 @@ src/test/java/br/edu/pucrs/vv/recrutamento/
   modelo/     testes unitários do modelo                (sem tag)
   cliente/    testes unitários do cliente               (sem tag)
   integracao/ testes da API REST                        (tag integracao; hipóteses com tag hipotese)
-  sistema/    testes pela interface com Playwright      (tag sistema) + teste unitário FormatoDataTest
+  sistema/    testes pela interface com Playwright      (tag sistema) + testes unitários FormatoDataTest e TextoExatoTest
 ```
 
 Cada teste de integração e de sistema cria a própria vaga e candidatos com o sufixo `VV<data><hora><nnn>` e

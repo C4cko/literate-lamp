@@ -7,7 +7,10 @@ o funcionário submete uma reivindicação de despesa e o supervisor ou o admini
 |---|---|---|
 | #5 | Análise crítica dos testes existentes (código original e terceiros) | [`analise/claim-testes-existentes.md`](analise/claim-testes-existentes.md) |
 | #6 | Plano de testes: jornada, máquina de estados, casos UT/IT/ST | [`plano/plano-de-testes-claim.md`](plano/plano-de-testes-claim.md) |
-| #7 | Implementação e execução dos testes | este README e as pastas abaixo |
+| #7 | Implementação e execução dos testes | este README, as pastas abaixo e [`execucao/`](execucao/README.md) (resultado, evidências e [defeitos](execucao/defeitos.md)) |
+
+**Resultado (17/11/2026):** 160 testes nos três níveis, todos passando na execução padrão; 1 defeito (**D1**:
+editar uma despesa aceita valor 0, que a criação recusa), confirmado nos três níveis por 3 testes em quarentena.
 
 ## Estrutura
 
@@ -16,7 +19,7 @@ o funcionário submete uma reivindicação de despesa e o supervisor ou o admini
 | [`ambiente/`](ambiente/) | `docker-compose.yml` com MariaDB e PHP 8.3 | – | Docker | – |
 | `unitario/` | UT-01 a UT-07 | Unitário | PHPUnit 9.6 | clone do OrangeHRM (sem banco) |
 | `integracao/` | IT-01 a IT-26 | Integração | PHPUnit 9.6 + fixtures YAML | clone do OrangeHRM + banco de teste |
-| `sistema/` | ST-01 a ST-12 | Sistema | Java 17+, Selenium WebDriver, JUnit 5 (Maven) | servidor de demonstração |
+| `sistema/` | ST-01 a ST-13 | Sistema | Java 17+, Selenium WebDriver, JUnit 5 (Maven) | servidor de demonstração |
 | [`plano/evidencias/`](plano/evidencias/) | conferência dos estados no servidor (#6) | – | Node 18+ | servidor de demonstração |
 
 ## Pré-requisitos
@@ -109,6 +112,7 @@ Contra o servidor de demonstração; precisa de Java 17+, Maven e Chrome (não u
 cd renan-bertoletti\sistema
 mvn test                     # ST-01 a ST-12, com o Chrome visível
 mvn test "-Dheadless=true"   # sem abrir janela
+mvn test -Pdefeitos          # quarentena: ST-13, falha (D1)
 ```
 
 ### 2.4 Quarentena

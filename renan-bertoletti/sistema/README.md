@@ -12,7 +12,8 @@ na primeira execução.
 
 ```powershell
 cd renan-bertoletti\sistema
-mvn test                                  # ST-01 a ST-12, com o Chrome visível
+mvn test                                  # ST-01 a ST-12 (17 testes), com o Chrome visível
+mvn test -Pdefeitos                       # só a quarentena: ST-13, que expõe o D1
 mvn test "-Dheadless=true"                # sem abrir janela
 mvn test "-Dtest=ClaimJourneySystemTest"  # só uma classe
 ```
@@ -39,7 +40,7 @@ Relatórios: `target/surefire-reports/` (um `.txt` e um `.xml` por classe).
 | `pages/ClaimFormPage.java` | *Submit Claim* e *Assign Claim* (criação) |
 | `pages/ClaimDetailPage.java` | tela de detalhes: status, número de referência, despesas, total e botões de ação |
 | `ClaimJourneySystemTest.java` | ST-01 a ST-07 e ST-12: jornada, fluxos alternativos, botões por papel |
-| `ClaimValidationSystemTest.java` | ST-08 a ST-11: obrigatórios, submissão sem despesa (R3), valor da despesa, limite de Remarks |
+| `ClaimValidationSystemTest.java` | ST-08 a ST-11: obrigatórios, submissão sem despesa (R3), valor da despesa, limite de Remarks; ST-13 (quarentena): edição da despesa para 0 |
 
 ## Cuidados (lições da análise de terceiros, #5)
 
@@ -67,6 +68,25 @@ Os rótulos, rotas e mensagens vêm do código do front-end no commit `56e23b3b`
 As advertências `Unable to find CDP implementation matching 157` são inofensivas: o Chrome instalado é mais novo
 que as ligações DevTools do Selenium 4.27, mas os testes usam só WebDriver.
 
-## Resultado
+## Resultado (17/11/2026, servidor de demonstração, Chrome 157)
 
-> Preenchido após a execução.
+| Execução | Comando | Resultado |
+|---|---|---|
+| Padrão (01:08–01:20) | `mvn test` | **17 testes, todos passaram** (8 de jornada em 509 s; 9 de validação em 221 s) |
+| Quarentena (01:36) | `mvn test -Pdefeitos` | 1 teste, **falha esperada**: ST-13, `expected: <10.5> but was: <0.0>` (**D1**) |
+
+| Caso | O que confirmou pela tela |
+|---|---|
+| ST-01 | jornada completa: *Initiated* → *Submitted* → *Approved* → *Paid*; número de referência com 15 dígitos; nenhum botão no fim |
+| ST-02 | rejeição pelo supervisor; o funcionário vê só *Submit*, inclui despesa e ressubmete |
+| ST-03, ST-05 | Admin aprovando ou submetendo leva direto a *Paid* (R1) |
+| ST-04 | cancelamento antes e depois de submeter |
+| ST-06 | supervisor atribuindo e submetendo leva a *Approved* |
+| ST-07 | botões por papel em SUBMITTED e APPROVED iguais à seção 2.5 do plano; supervisor sem botões em APPROVED (R6) |
+| ST-08, ST-11 | "Required" em Event/Currency; "Should not exceed 1000 characters" em Remarks; nada criado |
+| ST-09 | a tela oferece *Submit* e submete uma reivindicação **sem despesas** (R3 também na interface) |
+| ST-10 | 3 casas → "Should be a valid number (xxx.xx)"; 10 000 000 000,00 → "Should be less than 10,000,000,000"; 0 → enviado pela tela e recusado pelo servidor; 9 999 999 999,99 → aceito |
+| ST-12 | reivindicação atribuída pelo Admin e submetida pelo funcionário vai para *Submitted* |
+| ST-13 | **editar** a despesa para 0 é aceito (D1) |
+
+Evidências: [`../execucao/sistema/`](../execucao/sistema/).

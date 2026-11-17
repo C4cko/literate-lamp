@@ -97,8 +97,14 @@ docker compose exec phpunit ./src/vendor/bin/phpunit --group defeito-conhecido -
 ### 2.2 Integração ([`integracao/`](integracao/README.md))
 
 ```powershell
-docker compose exec phpunit ./src/vendor/bin/phpunit --group T2ClaimIntegracao --exclude-group defeito-conhecido  # padrão: devem passar
-docker compose exec phpunit ./src/vendor/bin/phpunit --group T2ClaimIntegracao --testdox                         # todos, com nomes legíveis
+docker compose exec phpunit ./src/vendor/bin/phpunit --group T2ClaimIntegracao --exclude-group defeito-conhecido  # padrão: 109, devem passar
+docker compose exec phpunit ./src/vendor/bin/phpunit --group defeito-conhecido --filter T2ClaimIntegracao         # quarentena: 1, falha (R2)
+```
+
+Todos os testes em quarentena dos dois níveis (2, ambos expõem R2):
+
+```powershell
+docker compose exec phpunit ./src/vendor/bin/phpunit --group defeito-conhecido --filter T2Claim
 ```
 
 ## Uso de IA

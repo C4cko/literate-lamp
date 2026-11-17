@@ -497,7 +497,92 @@ pelo `ClaimDao`; (3) nos casos de erro, banco inalterado.
 | IT-25 | AVL | descrição do anexo com 200 e 201 caracteres; arquivo PNG pequeno em base64 | ESS: `POST /claim/requests/{id}/attachments` | 200, 422 | V13, I21 | B |
 | IT-26 | AVL | duas reivindicações criadas em sequência; data fixa 2026-11-17 | ESS: dois `POST /claim/requests` | `referenceId` = `20261117` + id com 7 dígitos; os dois números são diferentes e consecutivos | FP1, R4 | M |
 
+### 6.3 Sistema (Java + Selenium + JUnit 5, servidor de demonstração)
+
+**Preparação comum** (`@BeforeAll`): pela API, como Admin, cria os funcionários `VVEss <sufixo>` e
+`VVSup <sufixo>`, os usuários ESS e o vínculo *Report-to* (mesmo procedimento da seção 2.1). Estados de **partida**
+podem ser preparados pela API, para ganhar tempo; a **ação sob teste** e a **verificação** são sempre feitas pela tela,
+com o usuário do papel correspondente.
+
+**Oráculo comum:** coluna *Status* da reivindicação em *My Claims* (ESS) ou *Employee Claims* (gestor), localizada
+pelo número de referência criado no próprio teste, e botões de ação exibidos na tela de detalhes. Esperas explícitas
+(`WebDriverWait`), locators por rótulo e texto, `assert` do JUnit em toda verificação.
+
+| ID | Cenário | Técnica | Pré-condição | Passos | Resultado esperado | Rastreia | Prio |
+|---|---|---|---|---|---|---|---|
+| ST-01 | Jornada completa | Caso de uso (FP) | – | ESS: *Submit Claim* → Event, Currency, Remarks → Create → Add expense (10,50) → Submit; Supervisor: *Employee Claims* → abre → Approve; Admin: abre → Pay | Status *Submitted* → *Approved* → *Paid*; número de referência no formato `AAAAMMDD` + 7 dígitos; total 10,50; no fim, nenhum botão de ação para os três | FP, CA1–CA3, TT-06 | A |
+| ST-02 | Rejeição e ressubmissão | Caso de uso (A3) + estados | SUBMITTED (API) | Supervisor: Reject; ESS: abre → altera a despesa → Submit | *Rejected*; o ESS vê só **Submit**; depois, *Submitted* | A3, CA4, TT-07, W4 | A |
+| ST-03 | Admin aprova direto | Estados + risco | SUBMITTED (API) | Admin: Approve | *Paid*, sem passar por *Approved* (caracteriza R1) | A4, W7, R1 | A |
+| ST-04 | Cancelamento antes e depois de submeter | Caso de uso (A1, A2) | duas reivindicações: INITIATED e SUBMITTED (API) | ESS: Cancel em cada uma | *Cancelled* nas duas; nenhum botão de ação depois | A1, A2, CA5, W2, W3 | A |
+| ST-05 | Atribuição pelo Admin | Caso de uso (A6) | – | Admin: *Assign Claim* → Employee Name `VVEss <sufixo>` → Event, Currency → Create → Add expense → Submit | *Paid* (caracteriza R1) | A6, CA8, W5 | M |
+| ST-06 | Atribuição pelo supervisor | Caso de uso (A7) | – | Supervisor: *Assign Claim* para o subordinado → despesa → Submit | *Approved* | A7, CA8, W10 | M |
+| ST-07 | Botões por papel e estado | Tabela de estados | SUBMITTED e APPROVED (API) | abre cada reivindicação como ESS, Supervisor e Admin | SUBMITTED: ESS só **Cancel**; Sup. e Admin **Approve** e **Reject**. APPROVED: ESS e Sup. **nenhum**; Admin **Reject** e **Pay** (R6) | 2.5, CA6, R6, E6 | A |
+| ST-08 | Campos obrigatórios | PE | – | ESS: *Submit Claim* → Create sem Event; depois sem Currency | "Required" sob o campo vazio; a URL não muda; nada aparece em *My Claims* | E1, I1, I5 | A |
+| ST-09 | Submeter sem despesa | Risco | INITIATED sem despesas (API) | ESS: abre → Submit | caracteriza R3: registra se a tela bloqueia (botão desabilitado ou mensagem) ou se submete; comparar com IT-23 | R3 | M |
+| ST-10 | Valor da despesa | AVL | INITIATED (API) | ESS: Add expense com 0; 7000,123; 10 000 000 000,00; depois 9 999 999 999,99 | os três primeiros: mensagem de validação e despesa não listada; o último: listada e total atualizado | CA7, E4, I14, I16, I17 | A |
+| ST-11 | Limite de Remarks | AVL | – | ESS: *Submit Claim* com Remarks de 1000 e de 1001 caracteres | 1000: criada; 1001: mensagem de limite, nada criado | E2, V4, I7 | M |
+| ST-12 | Atribuída pelo Admin, submetida pelo funcionário | Caso de uso (A8) | criada pelo Admin em *Assign Claim*, sem Submit (API) | ESS: *My Claims* → abre → Submit | *Submitted*; aparece para o supervisor com **Approve** e **Reject** | A8, W1 | B |
+
+## 7. Matriz de rastreabilidade
+
+| Item | Unitário | Integração | Sistema |
+|---|---|---|---|
+| FP | – | IT-06, IT-26 | ST-01 |
+| CA1 Submissão | – | IT-02, IT-04 | ST-01 |
+| CA2 Aprovação pelo supervisor | – | IT-06, IT-14 | ST-01, ST-07 |
+| CA3 Pagamento | – | IT-06, IT-14 | ST-01 |
+| CA4 Rejeição e ressubmissão | – | IT-04, IT-07 | ST-02 |
+| CA5 Cancelamento | – | IT-01, IT-02 | ST-04 |
+| CA6 Ações restritas por papel | UT-06 | IT-13 | ST-07 |
+| CA7 Valor da despesa | UT-03 | IT-17 | ST-10 |
+| CA8 Atribuição pelo gestor | – | IT-08, IT-10 | ST-05, ST-06 |
+| A1 / A2 Cancelamento | – | IT-01 / IT-02 | ST-04 |
+| A3 Rejeição e ressubmissão | – | IT-04 | ST-02 |
+| A4 Admin aprova | – | IT-03 | ST-03 |
+| A5 Admin rejeita aprovada | – | IT-05 | – |
+| A6 / A7 Atribuição | – | IT-08 / IT-10 | ST-05 / ST-06 |
+| A8 Atribuída e submetida pelo ESS | – | – | ST-12 |
+| E1 Obrigatórios | – | IT-15 | ST-08 |
+| E2 Remarks > 1000 | UT-05 | IT-16 | ST-11 |
+| E3 Evento ou moeda inválidos | – | IT-15 | – |
+| E4 Valor inválido | UT-03 | IT-17 | ST-10 |
+| E5 Note > 1000 | UT-05 | IT-21 | – |
+| E6 Ação não permitida | UT-06 | IT-13 | ST-07 |
+| E7 Despesa após submissão | – | IT-22 | – |
+| E8 Funcionário desligado | – | IT-24 | – |
+| R1 Admin → PAID | – | IT-03, IT-08 | ST-03, ST-05 |
+| R2 Edição aceita 0 | UT-04 | IT-18 | – |
+| R3 Submeter sem despesa | – | IT-23 | ST-09 |
+| R4 Referência > 7 dígitos | UT-01 | IT-26 | – |
+| R5 Data em UTC | UT-02 | – | – |
+| R6 Supervisor não rejeita aprovada | – | IT-13 (SP-10) | ST-07 |
+| R7 Gestor submete rascunho alheio | – | IT-09, IT-11 | – |
+| R8 Estado ambíguo com dois papéis | – | IT-12 | – |
+| Transições W1–W12 | – | IT-01–IT-11 (12/12) | ST-01–ST-06, ST-12 (10/12; W6 e W8 só na integração) |
+
+**Totais:** 7 casos unitários, 26 de integração e 12 de sistema (45 casos; com os *data providers*, os
+*sneak paths* SP-01 a SP-22 e os valores-limite expandem a suíte de integração).
+
+## Fontes
+
+- OrangeHRM, https://github.com/orangehrm/orangehrm, commit `56e23b3b09e7af29317a0943523b825843fff527`, em especial:
+  `installer/Migration/V5_5_0/Migration.php` (transições), `src/plugins/orangehrmClaimPlugin/Api/ClaimRequestActionAPI.php`,
+  `Api/EmployeeClaimRequestAPI.php`, `Api/ClaimExpenseAPI.php`, `Api/ClaimAttachmentAPI.php`,
+  `Service/ClaimService.php` e `config/routes.yaml`.
+- Servidor de demonstração, https://opensource-demo.orangehrmlive.com, conferido em 16/11/2026; evidências em
+  [`evidencias/`](evidencias/).
+- BERTOLETTI, Renan. Análise dos testes existentes de Claim, issue #5:
+  [`../analise/claim-testes-existentes.md`](../analise/claim-testes-existentes.md).
+- NEUBARTH, Mateus. Plano de testes de Add Employee e ambiente local:
+  [`mateus-neubarth/docs/casos-de-teste.md`](../../mateus-neubarth/docs/casos-de-teste.md) e
+  [`mateus-neubarth/docs/ambiente.md`](../../mateus-neubarth/docs/ambiente.md) (formato do plano e quarentena
+  `defeito-conhecido`).
+- Técnicas: material da disciplina (teste baseado em estados e árvore de transição, particionamento em equivalência,
+  valor-limite, casos de uso, teste guiado por risco).
+- Ferramentas: PHPUnit 9 (https://docs.phpunit.de/en/9.6/), Selenium WebDriver (https://www.selenium.dev/documentation/),
+  JUnit 5 (https://junit.org/junit5/docs/current/user-guide/).
+
 ## Uso de IA
 
-Redação inicial feita com Claude Code (Claude Opus 5.5, Anthropic), a partir do código do OrangeHRM e da
-conferência no servidor; revisão e ajustes feitos pelo autor.
+Leitura do código, roteiro de conferência no servidor e redação inicial do plano e dos casos feitos com Claude Code
+(Claude Opus 5.5, Anthropic); execução da conferência, revisão, decisões sobre os riscos e ajustes feitos pelo autor.

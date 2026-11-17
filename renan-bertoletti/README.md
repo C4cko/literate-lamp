@@ -94,6 +94,13 @@ docker compose exec phpunit ./src/vendor/bin/phpunit --group T2ClaimUnitario --e
 docker compose exec phpunit ./src/vendor/bin/phpunit --group defeito-conhecido --filter T2ClaimUnitario          # quarentena: 1, falha (R2)
 ```
 
+### 2.2 Integração ([`integracao/`](integracao/README.md))
+
+```powershell
+docker compose exec phpunit ./src/vendor/bin/phpunit --group T2ClaimIntegracao --exclude-group defeito-conhecido  # padrão: devem passar
+docker compose exec phpunit ./src/vendor/bin/phpunit --group T2ClaimIntegracao --testdox                         # todos, com nomes legíveis
+```
+
 ## Uso de IA
 
 Código, configuração e redação inicial feitos com Claude Code (Claude Opus 5.5, Anthropic); execução dos testes,

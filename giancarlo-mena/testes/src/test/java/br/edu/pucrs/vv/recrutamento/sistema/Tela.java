@@ -18,9 +18,17 @@ abstract class Tela {
 
     /** Grupo de campo ({@code .oxd-input-group}) cujo rótulo é exatamente o texto informado. */
     protected Locator grupo(String rotulo) {
-        Locator label = page.locator("label",
-                new Page.LocatorOptions().setHasText(Pattern.compile("^\\s*" + Pattern.quote(rotulo) + "\\s*$")));
+        Locator label = page.locator("label", new Page.LocatorOptions().setHasText(textoExato(rotulo)));
         return page.locator(".oxd-input-group").filter(new Locator.FilterOptions().setHas(label));
+    }
+
+    /**
+     * Expressão para texto exato (ignorando espaços nas pontas). Não usa Pattern.quote: o Playwright
+     * executa a expressão no navegador (JavaScript), que não entende a sintaxe \\Q...\\E do Java.
+     */
+    static Pattern textoExato(String texto) {
+        String escapado = texto.replaceAll("[.*+?^${}()|\\[\\]\\\\/]", "\\\\$0");
+        return Pattern.compile("^\\s*" + escapado + "\\s*$");
     }
 
     protected Locator campo(String rotulo) {

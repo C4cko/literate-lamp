@@ -87,7 +87,7 @@ class TelaCandidato extends Tela {
 
     void clicarAcao(Acao acao) {
         botoesDeAcao().filter(new Locator.FilterOptions()
-                .setHasText(Pattern.compile("^\\s*" + Pattern.quote(acao.rotulo()) + "\\s*$"))).click();
+                .setHasText(textoExato(acao.rotulo()))).click();
         page.waitForURL(Pattern.compile(".*/recruitment/changeCandidateVacancyStatus.*"));
     }
 

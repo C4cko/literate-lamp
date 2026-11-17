@@ -58,8 +58,11 @@ public final class Cenario {
         return id;
     }
 
-    /** Remove os funcionários criados (e, com eles, os usuários). As reivindicações não têm exclusão na API. */
+    /**
+     * Remove os funcionários criados (e, com eles, os usuários). As reivindicações não têm exclusão na API.
+     * Faz login de novo: a sessão aberta no início pode ter expirado durante o teste.
+     */
     public void remover() {
-        admin.deleteEmployees(List.of(essEmp, supEmp));
+        OrangeApi.login(Config.ADMIN_USER, Config.ADMIN_PASSWORD).deleteEmployees(List.of(essEmp, supEmp));
     }
 }

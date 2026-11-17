@@ -1,0 +1,5 @@
+PASSOU  TS-01 publicar, comentar, curtir e excluir um post no Buzz  (10.7 s)
+PASSOU  TS-02 comentário vazio não é enviado pela tela  (8.5 s)
+PASSOU  TS-03 cancelar a exclusão mantém o post no feed  (9.4 s)
+PASSOU  TS-04 curtir e descurtir o post e curtir um comentário  (11.7 s)
+4 de 4 gravações passaram

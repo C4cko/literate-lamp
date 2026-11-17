@@ -1,0 +1,3 @@
+FALHOU  TS-05 comentário vazio enviado pela API não deve aparecer na tela (defeito D1)
+        waitForElement timed out. The element(s) could not be found.
+0 de 1 gravações passaram

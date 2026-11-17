@@ -68,7 +68,7 @@ excluí-lo: *Edit Configurations → Test kind: Tags →* `!defeito`.
 | `TokenCsrfTest` | TU-06 |
 | `BuzzApiTest` | TI-01 a TI-13 |
 
-### 2. Teste do defeito D1 (TI-10)
+### 2. Testes do defeito D1 (TI-10 e TS-05)
 
 ```
 cd testes
@@ -76,6 +76,15 @@ mvn test -Dgroups=defeito -DexcluirTags=none
 ```
 
 Esse teste **falha de propósito** enquanto o defeito existir: `expected: <422> but was: <200>`.
+
+O mesmo defeito visto na tela (TS-05), também falha de propósito:
+
+```
+cd sistema
+npm run defeito                          # ou: HEADLESS=false LENTO=200 npm run defeito
+```
+
+A captura `resultados/ts05-comentario-vazio-pela-api-falha.png` mostra o comentário em branco que aparece no post.
 
 ### 3. Testes de sistema (TS-01 a TS-04)
 
@@ -99,6 +108,7 @@ informe o caminho com a variável `CHROME`.
 | `gravacoes/ts02-comentario-vazio.json` | TS-02 |
 | `gravacoes/ts03-cancelar-exclusao.json` | TS-03 |
 | `gravacoes/ts04-curtidas.json` | TS-04 |
+| `gravacoes/defeito/ts05-comentario-vazio-pela-api.json` | TS-05 (defeito D1, roda com `npm run defeito`) |
 
 ### 4. Reproduzir uma gravação direto no Chrome (sem terminal)
 
@@ -113,5 +123,5 @@ Pelo Recorder o texto do post aparece como `JM-TS01-{{ID}}`, porque quem troca o
 ## Resultado
 
 28 execuções nos três níveis, todas passando. Encontrei 1 defeito (**D1**: a API aceita comentário vazio),
-confirmado pelo teste TI-10, que fica separado com a tag `defeito`. Detalhes no
+confirmado na API pelo TI-10 e na tela pelo TS-05, que ficam separados da execução normal. Detalhes no
 [relatório de execução](docs/03-relatorio-execucao.md).

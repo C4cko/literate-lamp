@@ -106,8 +106,12 @@ no relatório de execução, para ligar cada caso planejado ao teste e ao result
 | TS-02 | `ts02-comentario-vazio.json` | A2: Enter com comentário vazio, continua "0 Comments" |
 | TS-03 | `ts03-cancelar-exclusao.json` | A4: cancelar a exclusão, o post continua |
 | TS-04 | `ts04-curtidas.json` | A5 e A6: curtir e descurtir o post ("1 Like" → "0 Likes") e curtir um comentário |
+| TS-05 | `defeito/ts05-comentario-vazio-pela-api.json` | comentário vazio enviado direto pela API: a tela deve continuar com "0 Comments" e sem comentário (tag `defeito`) |
 
 O A3 é coberto pelo TI-07, o A1 pelo TI-02 e o A7 pelo TI-13.
+
+O TS-05 usa um passo especial (`customStep`) que o script `executar.mjs` executa: envia o comentário pela API com a
+sessão do navegador. É a única gravação que não pode ser reproduzida só pelo Chrome Recorder.
 
 ## 4. Ambiente e critérios
 

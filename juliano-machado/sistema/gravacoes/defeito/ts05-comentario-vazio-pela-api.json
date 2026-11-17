@@ -1,0 +1,224 @@
+{
+  "title": "TS-05 comentário vazio enviado pela API não deve aparecer na tela (defeito D1)",
+  "steps": [
+    {
+      "type": "setViewport",
+      "width": 1280,
+      "height": 900,
+      "deviceScaleFactor": 1,
+      "isMobile": false,
+      "hasTouch": false,
+      "isLandscape": false
+    },
+    {
+      "type": "navigate",
+      "url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
+      "assertedEvents": [
+        {
+          "type": "navigation",
+          "url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
+          "title": "OrangeHRM"
+        }
+      ]
+    },
+    {
+      "type": "click",
+      "selectors": [
+        [
+          "input[name='username']"
+        ]
+      ],
+      "offsetX": 8,
+      "offsetY": 8
+    },
+    {
+      "type": "change",
+      "value": "Admin",
+      "selectors": [
+        [
+          "input[name='username']"
+        ]
+      ]
+    },
+    {
+      "type": "click",
+      "selectors": [
+        [
+          "input[name='password']"
+        ]
+      ],
+      "offsetX": 8,
+      "offsetY": 8
+    },
+    {
+      "type": "change",
+      "value": "admin123",
+      "selectors": [
+        [
+          "input[name='password']"
+        ]
+      ]
+    },
+    {
+      "type": "click",
+      "selectors": [
+        [
+          "button[type='submit']"
+        ]
+      ],
+      "offsetX": 50,
+      "offsetY": 15,
+      "assertedEvents": [
+        {
+          "type": "navigation",
+          "url": "https://opensource-demo.orangehrmlive.com/web/index.php/dashboard/index",
+          "title": "OrangeHRM"
+        }
+      ]
+    },
+    {
+      "type": "click",
+      "selectors": [
+        [
+          "xpath///a[contains(@href, '/buzz/viewBuzz')]"
+        ]
+      ],
+      "offsetX": 8,
+      "offsetY": 8
+    },
+    {
+      "type": "waitForElement",
+      "selectors": [
+        [
+          "textarea.oxd-buzz-post-input"
+        ]
+      ]
+    },
+    {
+      "type": "click",
+      "selectors": [
+        [
+          "textarea.oxd-buzz-post-input"
+        ]
+      ],
+      "offsetX": 8,
+      "offsetY": 8
+    },
+    {
+      "type": "change",
+      "value": "JM-TS05-{{ID}}",
+      "selectors": [
+        [
+          "textarea.oxd-buzz-post-input"
+        ]
+      ]
+    },
+    {
+      "type": "click",
+      "selectors": [
+        [
+          "button[type='submit']"
+        ]
+      ],
+      "offsetX": 50,
+      "offsetY": 15
+    },
+    {
+      "type": "waitForElement",
+      "selectors": [
+        [
+          "xpath///div[contains(concat(' ', normalize-space(@class), ' '), ' orangehrm-buzz ') and .//p[normalize-space()='JM-TS05-{{ID}}']]"
+        ]
+      ]
+    },
+    {
+      "type": "customStep",
+      "name": "comentarPelaApi",
+      "parameters": {
+        "textoDoPost": "JM-TS05-{{ID}}",
+        "comentario": ""
+      }
+    },
+    {
+      "type": "navigate",
+      "url": "https://opensource-demo.orangehrmlive.com/web/index.php/buzz/viewBuzz"
+    },
+    {
+      "type": "waitForElement",
+      "selectors": [
+        [
+          "xpath///div[contains(concat(' ', normalize-space(@class), ' '), ' orangehrm-buzz ') and .//p[normalize-space()='JM-TS05-{{ID}}']]"
+        ]
+      ]
+    },
+    {
+      "type": "click",
+      "selectors": [
+        [
+          "xpath///div[contains(concat(' ', normalize-space(@class), ' '), ' orangehrm-buzz ') and .//p[normalize-space()='JM-TS05-{{ID}}']]//i[contains(@class, 'bi-chat-text-fill')]"
+        ]
+      ],
+      "offsetX": 8,
+      "offsetY": 8
+    },
+    {
+      "type": "waitForElement",
+      "selectors": [
+        [
+          "xpath///div[contains(concat(' ', normalize-space(@class), ' '), ' orangehrm-buzz ') and .//p[normalize-space()='JM-TS05-{{ID}}']]//p[normalize-space()='0 Comments']"
+        ]
+      ],
+      "timeout": 8000
+    },
+    {
+      "type": "waitForElement",
+      "selectors": [
+        [
+          "xpath///div[contains(concat(' ', normalize-space(@class), ' '), ' orangehrm-buzz ') and .//p[normalize-space()='JM-TS05-{{ID}}']]//div[contains(@class, 'orangehrm-comment-wrapper')]"
+        ]
+      ],
+      "count": 0,
+      "operator": "=="
+    },
+    {
+      "type": "click",
+      "selectors": [
+        [
+          "xpath///div[contains(concat(' ', normalize-space(@class), ' '), ' orangehrm-buzz ') and .//p[normalize-space()='JM-TS05-{{ID}}']]//i[contains(@class, 'bi-three-dots')]"
+        ]
+      ],
+      "offsetX": 8,
+      "offsetY": 8
+    },
+    {
+      "type": "click",
+      "selectors": [
+        [
+          "xpath///div[contains(concat(' ', normalize-space(@class), ' '), ' orangehrm-buzz ') and .//p[normalize-space()='JM-TS05-{{ID}}']]//p[normalize-space()='Delete Post']"
+        ]
+      ],
+      "offsetX": 8,
+      "offsetY": 8
+    },
+    {
+      "type": "click",
+      "selectors": [
+        [
+          "xpath///button[normalize-space()='Yes, Delete']"
+        ]
+      ],
+      "offsetX": 8,
+      "offsetY": 8
+    },
+    {
+      "type": "waitForElement",
+      "selectors": [
+        [
+          "xpath///div[contains(concat(' ', normalize-space(@class), ' '), ' orangehrm-buzz ') and .//p[normalize-space()='JM-TS05-{{ID}}']]"
+        ]
+      ],
+      "count": 0,
+      "operator": "=="
+    }
+  ]
+}

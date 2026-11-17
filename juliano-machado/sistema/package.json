@@ -4,7 +4,8 @@
   "private": true,
   "description": "Testes de sistema do Buzz (OrangeHRM) com gravações do Chrome Recorder",
   "scripts": {
-    "test": "node executar.mjs"
+    "test": "node executar.mjs",
+    "defeito": "node executar.mjs --defeito"
   },
   "devDependencies": {
     "@puppeteer/replay": "^3.1.3",

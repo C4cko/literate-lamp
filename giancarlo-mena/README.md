@@ -15,6 +15,8 @@ existentes e testes unitários, de integração e de sistema, em **Java 21**, pa
 
 ## Documentos
 
+**[Relatório unificado](RELATORIO.md)**: introdução, objetivos, casos de teste e resultados.
+
 1. [Análise crítica](analise/01-analise-critica.md)
 2. [Jornada de usuário](docs/01-jornada.md)
 3. [Plano e casos de teste](docs/02-plano-de-testes.md)
@@ -36,7 +38,7 @@ primeiro nome vazio aceito, telefone e e-mail acima do limite aceitos. Detalhes 
 
 Pré-requisitos: JDK 21 e Maven 3.9. Detalhes em [testes/README.md](testes/README.md).
 
-```bash
+```
 cd testes
 mvn test                 # unitários (não precisa de servidor)
 mvn test -Pintegracao    # API REST do servidor de demonstração

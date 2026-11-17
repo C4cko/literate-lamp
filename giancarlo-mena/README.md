@@ -20,6 +20,18 @@ existentes e testes unitários, de integração e de sistema, em **Java 21**, pa
 3. [Plano e casos de teste](docs/02-plano-de-testes.md)
 4. [Relatório de execução](docs/03-relatorio-execucao.md)
 
+## Resultado
+
+| Nível | Execuções | Passaram |
+|---|---|---|
+| Unitário | 184 | 184 |
+| Integração | 51 | 46 (as 5 falhas são defeitos do OrangeHRM) |
+| Sistema | 6 | 6 (na 2ª execução) |
+
+Defeitos encontrados: aprovar a entrevista de outro candidato (gravidade alta), e-mail vazio gera erro 500,
+primeiro nome vazio aceito, telefone e e-mail acima do limite aceitos. Detalhes no
+[relatório de execução](docs/03-relatorio-execucao.md).
+
 ## Como rodar
 
 Pré-requisitos: JDK 21 e Maven 3.9. Detalhes em [testes/README.md](testes/README.md).

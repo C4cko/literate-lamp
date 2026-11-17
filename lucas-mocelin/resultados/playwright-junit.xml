@@ -1,0 +1,48 @@
+<testsuites id="" name="" tests="19" failures="0" skipped="0" errors="0" time="43.844669">
+<testsuite name="01-login.spec.js" timestamp="2026-11-16T13:35:25.399Z" hostname="chromium" tests="10" failures="0" skipped="0" time="13.061" errors="0">
+<testcase name="Login › ST-01 credenciais válidas levam ao Dashboard" classname="01-login.spec.js" time="1.986">
+</testcase>
+<testcase name="Login › ST-02 senha incorreta exibe &quot;Invalid credentials&quot; e permanece no login" classname="01-login.spec.js" time="1.672">
+</testcase>
+<testcase name="Login › ST-03 usuário inexistente exibe a MESMA mensagem (não revela se o usuário existe)" classname="01-login.spec.js" time="1.342">
+</testcase>
+<testcase name="Login › ST-04 usuário e senha vazios: ambos marcados como &quot;Required&quot;" classname="01-login.spec.js" time="0.87">
+</testcase>
+<testcase name="Login › ST-05 apenas usuário preenchido: senha &quot;Required&quot;" classname="01-login.spec.js" time="0.848">
+</testcase>
+<testcase name="Login › ST-06 apenas senha preenchida: usuário &quot;Required&quot;" classname="01-login.spec.js" time="0.803">
+</testcase>
+<testcase name="Login › ST-07 a senha digitada fica mascarada" classname="01-login.spec.js" time="0.742">
+</testcase>
+<testcase name="Login › ST-08 tecla Enter envia o formulário" classname="01-login.spec.js" time="1.681">
+</testcase>
+<testcase name="Login › ST-09 espaços antes/depois do usuário não são removidos (login recusado)" classname="01-login.spec.js" time="1.24">
+</testcase>
+<testcase name="Login › ST-10 nome de usuário não diferencia maiúsculas/minúsculas" classname="01-login.spec.js" time="1.877">
+</testcase>
+</testsuite>
+<testsuite name="02-sessao.spec.js" timestamp="2026-11-16T13:35:25.399Z" hostname="chromium" tests="3" failures="0" skipped="0" time="7.833" errors="0">
+<testcase name="Sessão › ST-11 página protegida sem sessão redireciona para o login" classname="02-sessao.spec.js" time="0.797">
+</testcase>
+<testcase name="Sessão › ST-12 logout encerra a sessão (voltar no navegador e API devolvem ao login / 401)" classname="02-sessao.spec.js" time="4.398">
+</testcase>
+<testcase name="Sessão › ST-13 sessão permanece ativa após recarregar a página" classname="02-sessao.spec.js" time="2.638">
+</testcase>
+</testsuite>
+<testsuite name="03-recuperacao-senha.spec.js" timestamp="2026-11-16T13:35:25.399Z" hostname="chromium" tests="4" failures="0" skipped="0" time="11.224" errors="0">
+<testcase name="Recuperação de senha › ST-14 link &quot;Forgot your password?&quot; abre a tela e &quot;Cancel&quot; volta ao login" classname="03-recuperacao-senha.spec.js" time="1.506">
+</testcase>
+<testcase name="Recuperação de senha › ST-15 usuário em branco na recuperação: &quot;Required&quot;" classname="03-recuperacao-senha.spec.js" time="0.763">
+</testcase>
+<testcase name="Recuperação de senha › ST-16 usuário inexistente recebe a mesma resposta de sucesso (sem enumeração de usuários)" classname="03-recuperacao-senha.spec.js" time="1.134">
+</testcase>
+<testcase name="Recuperação de senha › ST-17 redefinição ponta a ponta: e-mail -&gt; nova senha -&gt; login -&gt; senha antiga recusada" classname="03-recuperacao-senha.spec.js" time="7.821">
+</testcase>
+</testsuite>
+<testsuite name="04-seguranca.spec.js" timestamp="2026-11-16T13:35:25.399Z" hostname="chromium" tests="2" failures="0" skipped="0" time="10.677" errors="0">
+<testcase name="Segurança do login › ST-18 POST de login sem token CSRF é rejeitado" classname="04-seguranca.spec.js" time="0.752">
+</testcase>
+<testcase name="Segurança do login › ST-19 [observação] tentativas inválidas seguidas não bloqueiam a conta" classname="04-seguranca.spec.js" time="9.925">
+</testcase>
+</testsuite>
+</testsuites>

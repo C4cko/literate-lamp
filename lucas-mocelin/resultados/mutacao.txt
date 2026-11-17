@@ -1,0 +1,10 @@
+ID   | Mutação                                        | Original   | Jornada   
+M1   | conta desabilitada deixa de ser bloqueada        | MORTO      | MORTO     
+M2   | funcionário desligado deixa de ser bloqueado    | MORTO      | MORTO     
+M3   | limite mínimo de comprimento deslocado (< para <=) | MORTO      | MORTO     
+M4   | limite máximo de comprimento deslocado (> para >=) | sobrevive  | MORTO     
+M5   | regra de espaços invertida                      | sobrevive  | MORTO     
+M6   | login com hash legado (MD5) deixa de funcionar   | sobrevive  | MORTO     
+M7   | política de senha forte no login ignorada       | sobrevive  | MORTO     
+M8   | usuário excluído volta a conseguir logar       | sobrevive  | MORTO     
+M9   | conta desabilitada retorna false em vez de exceção | sobrevive  | MORTO     

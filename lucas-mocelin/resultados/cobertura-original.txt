@@ -1,0 +1,21 @@
+  Methods:  ( 0/ 0)   Lines:  (  0/  0)
+OrangeHRM\Authentication\Auth\AuthProviderChain
+  Methods: 100.00% ( 2/ 2)   Lines: 100.00% ( 15/ 15)
+OrangeHRM\Authentication\Auth\LocalAuthProvider
+  Methods:   0.00% ( 0/ 3)   Lines:   0.00% (  0/ 23)
+--
+  Methods: 100.00% ( 6/ 6)   Lines: 100.00% ( 22/ 22)
+OrangeHRM\Authentication\Service\AuthenticationService
+  Methods: 100.00% ( 3/ 3)   Lines: 100.00% ( 21/ 21)
+--
+  Methods: 100.00% ( 3/ 3)   Lines: 100.00% ( 18/ 18)
+OrangeHRM\Authentication\Service\PasswordStrengthService
+  Methods:  61.54% (16/26)   Lines:  85.81% (127/148)
+--
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  1/  1)
+OrangeHRM\Authentication\Utility\PasswordStrengthValidation
+  Methods:  50.00% ( 1/ 2)   Lines:  85.71% ( 12/ 14)
+--
+  Methods:   0.00% ( 0/ 6)   Lines:   0.00% (  0/  6)
+OrangeHRM\OpenidAuthentication\Service\SocialMediaAuthenticationService
+  Methods:   0.00% ( 0/10)   Lines:   0.00% (  0/ 43)

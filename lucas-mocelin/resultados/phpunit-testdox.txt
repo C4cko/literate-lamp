@@ -1,0 +1,60 @@
+PHPUnit 9.6.16 by Sebastian Bergmann and contributors.
+
+Login Integration (OrangeHRM\Tests\Authentication\JornadaLogin\Integration\LoginIntegration)
+ ✔ Login valido grava identidade na sessao
+ ✔ Senha incorreta nao autentica
+ ✔ Usuario inexistente nao autentica
+ ✔ Senha sensivel a maiusculas
+ ✔ Nome de usuario nao sensivel a maiusculas
+ ✔ Conta desabilitada eh bloqueada
+ ✔ Funcionario desligado eh bloqueado
+ ✔ Usuario sem funcionario eh bloqueado
+ ✔ Usuario excluido nao autentica
+ ✔ Hash legado eh migrado no login
+ ✔ Politica ligada com senha fraca exige troca
+ ✔ Politica ligada com senha forte autentica
+ ✔ Politica desligada com senha fraca autentica
+ ✔ Sql injection nao autentica
+ ✔ Credenciais vazias nao autenticam
+
+Authentication Service Decision Table (OrangeHRM\Tests\Authentication\JornadaLogin\Unit\AuthenticationServiceDecisionTable)
+ ✔ Usuario inexistente retorna false
+ ✔ Usuario excluido retorna false
+ ✔ Usuario desabilitado lanca excecao
+ ✔ Usuario sem funcionario lanca excecao
+ ✔ Funcionario desligado lanca excecao
+ ✔ Usuario valido retorna true e grava atributos
+ ✔ Precedencia conta desabilitada sobre demais regras
+
+Password Policy Boundary (OrangeHRM\Tests\Authentication\JornadaLogin\Unit\PasswordPolicyBoundary)
+ ✔ Limites de comprimento with data set "UT-PW-01 7 caracteres (min-1) inválido"
+ ✔ Limites de comprimento with data set "UT-PW-02 8 caracteres (min) válido"
+ ✔ Limites de comprimento with data set "UT-PW-03 9 caracteres (min+1) válido"
+ ✔ Limites de comprimento with data set "UT-PW-04 63 caracteres (max-1) válido"
+ ✔ Limites de comprimento with data set "UT-PW-05 64 caracteres (max) válido"
+ ✔ Limites de comprimento with data set "UT-PW-06 65 caracteres (max+1) inválido"
+ ✔ Limites de comprimento with data set "UT-PW-07 vazia inválida"
+ ✔ Classes de equivalencia with data set "UT-PW-08 classe válida (todas as regras)"
+ ✔ Classes de equivalencia with data set "UT-PW-09 sem maiúscula"
+ ✔ Classes de equivalencia with data set "UT-PW-10 sem minúscula"
+ ✔ Classes de equivalencia with data set "UT-PW-11 sem número"
+ ✔ Classes de equivalencia with data set "UT-PW-12 sem caractere especial"
+ ✔ Classes de equivalencia with data set "UT-PW-13 com espaço (proibido)"
+ ✔ Classes de equivalencia with data set "UT-PW-14 caracteres acentuados não contam como especiais"
+ ✔ Limite de forca with data set "UT-PW-15 força 2 (abaixo do limite)"
+ ✔ Limite de forca with data set "UT-PW-16 força 3 (no limite)"
+ ✔ Limite de forca with data set "UT-PW-17 força 4 (acima do limite)"
+ ✔ Espacos permitidos por configuracao
+ ✔ Minimos negativos sao tratados como zero
+ ✔ Forca minima very weak aceita qualquer pontuacao
+
+Password Strength Validation (OrangeHRM\Tests\Authentication\JornadaLogin\Unit\PasswordStrengthValidation)
+ ✔ Senha vazia eh muito fraca
+ ✔ Senha de dicionario eh muito fraca
+ ✔ Senha da demo eh fraca
+ ✔ Frase senha longa eh fortissima
+ ✔ Senha nula retorna muito fraca sem erro
+
+Time: 00:01.854, Memory: 30.00 MB
+
+OK (47 tests, 70 assertions)

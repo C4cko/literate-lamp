@@ -1,12 +1,18 @@
 # Ambiente local — testes originais de contatos de emergência
 
-O ambiente usa um projeto Docker Compose exclusivo (`t2-suzan-emergency-contacts`), MariaDB 10.11 e PHP 7.4, versão mínima declarada pelos projetos Composer da revisão analisada. PHP e banco rodam em contêineres; não é necessário instalar PHP no Windows. O banco não publica portas no host e usa um volume exclusivo.
+O ambiente de testes usa MariaDB 10.11 e PHP 7.4, versão mínima declarada pelos projetos Composer da revisão analisada. A execução principal é no GitHub Actions: PHP roda no executor Linux e o banco é um serviço temporário do job. Não é necessário preparar Docker ou PHP no computador da autora.
 
 O propósito é executar os testes PHP originais de serviço, DAO e entidade. Não é um servidor web para os testes de sistema. A configuração se baseia no fluxo do CI oficial (instalação Composer, instalador CLI, criação do banco de testes e PHPUnit) e na organização do ambiente compartilhado de Mateus, adaptada para um projeto isolado e PHP 7.4.
 
-## Preparação
+## Execução no GitHub Actions
 
-Requer Git, Docker Desktop com motor Linux ativo e Docker Compose v2. O clone de OrangeHRM deve ser exclusivo deste ambiente, pois o instalador gera configurações e o preparo cria o banco de testes.
+O workflow [suzan-emergency-contacts.yml](../../.github/workflows/suzan-emergency-contacts.yml) faz checkout da contribuição e do código oficial na revisão fixada, prepara PHP com `shivammathur/setup-php`, instala as dependências, cria o banco de testes e executa os três arquivos originais selecionados. O token do workflow tem somente leitura de conteúdo; não utiliza segredos externos. O banco é acessado em `127.0.0.1:3306` somente no executor temporário.
+
+Os relatórios e logs são publicados como artefato por 30 dias, inclusive quando uma etapa falha. O resumo da execução mostra a saída final do PHPUnit. Os resultados selecionados para o relatório também são preservados no repositório para não depender da retenção temporária dos artefatos.
+
+## Reprodução local opcional
+
+Esta alternativa opcional usa o projeto Compose exclusivo `t2-suzan-emergency-contacts`, sem publicar portas do banco no host. Requer Git, Docker Desktop com motor Linux ativo e Docker Compose v2. O clone de OrangeHRM deve ser exclusivo deste ambiente, pois o instalador gera configurações e o preparo cria o banco de testes.
 
 ```powershell
 git clone https://github.com/orangehrm/orangehrm.git orangehrm

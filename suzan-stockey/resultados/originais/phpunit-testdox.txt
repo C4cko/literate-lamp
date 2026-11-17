@@ -1,0 +1,27 @@
+PHPUnit 9.6.16 by Sebastian Bergmann and contributors.
+
+Emp Emergency Contact Dao (OrangeHRM\Tests\Pim\Dao\EmpEmergencyContactDao)
+ ✔ Save employee emergency contact
+ ✔ Save employee emergency contact with seq no
+ ✔ Save employee emergency contact with invalid seq no
+ ✔ Get employee emergency contact list
+ ✔ Get employee emergency contact
+ ✔ Delete employee emergency contacts
+ ✔ Search employee emergency contacts
+ ✔ Search employee emergency contacts with limit
+ ✔ Get search employee emergency contacts count
+
+Emp Emergency Contact (OrangeHRM\Tests\Pim\Entity\EmpEmergencyContact)
+ ✔ Emp emergency contact entity
+
+Emp Emergency Contact Service (OrangeHRM\Tests\Pim\Service\EmpEmergencyContactService)
+ ✔ Get employee emergency contact list
+ ✔ Get employee emergency contact
+ ✔ Save emp emergency contact
+ ✔ Delete employee emergency contacts
+ ✔ Search employee emergency contacts
+ ✔ Get search employee emergency contacts count
+
+Time: 00:00.137, Memory: 26.00 MB
+
+OK (16 tests, 56 assertions)

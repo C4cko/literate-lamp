@@ -8,7 +8,6 @@ Contribuição individual para o relatório unificado da turma.
 | Análise crítica dos testes existentes | [`docs/01-analise-critica.md`](docs/01-analise-critica.md) |
 | Objetivos, jornada de usuário e casos de teste (**Issue: Plano de Testes**) | [`docs/02-plano-de-testes.md`](docs/02-plano-de-testes.md) |
 | Resultado dos testes (**Issue: Execução dos Testes**) | [`docs/03-relatorio-execucao.md`](docs/03-relatorio-execucao.md) |
-| Textos prontos das Issues e sequência de commits | [`docs/issues.md`](docs/issues.md) |
 | Testes unitários e de integração (PHPUnit) | [`testes/php/`](testes/php) |
 | Testes de sistema (Playwright) | [`testes/sistema/`](testes/sistema) |
 | Evidências de execução | [`resultados/`](resultados) |
@@ -84,11 +83,23 @@ php src/vendor/bin/phpunit src/plugins/orangehrmAuthenticationPlugin/test/Jornad
 cd testes/sistema
 npm install
 npx playwright install chromium
-npm run test:demo                       # contra o servidor de demonstração público
-# ou contra a instalação local (habilita também o ST-17, que lê o e-mail):
+npx playwright test                     # contra o servidor de demonstração público (padrão)
+npx playwright show-report              # relatório HTML
+```
+
+Para rodar contra a instalação local, que habilita também o ST-17 (lê o e-mail de recuperação),
+defina as variáveis antes de `npx playwright test`:
+
+```bash
+# Linux/macOS
 ORANGEHRM_URL=http://127.0.0.1:8080/web/index.php ADMIN_PASS='Ohrm@1423' \
 MAILBOX_DIR=/tmp/orangehrm-mail npx playwright test
-npx playwright show-report              # relatório HTML
+```
+
+```powershell
+# Windows (PowerShell)
+$env:ORANGEHRM_URL="http://127.0.0.1:8080/web/index.php"; $env:ADMIN_PASS="Ohrm@1423"
+$env:MAILBOX_DIR="C:\orangehrm-mail"; npx playwright test
 ```
 
 **Análise de mutação** (compara a suíte original com a da jornada):
@@ -103,7 +114,8 @@ scripts/mutacao.sh /caminho/orangehrm
 |---|---|---|---|
 | Unitário | PHPUnit 9.6 | 32 | 32 passaram |
 | Integração | PHPUnit 9.6 + MariaDB | 15 | 15 passaram |
-| Sistema | Playwright + Chromium | 19 | 19 passaram |
+| Sistema (local) | Playwright + Chromium | 19 | 19 passaram |
+| Sistema (demo pública) | Playwright + Chromium | 19 | 18 passaram, 1 não se aplica (ST-17) |
 | **Total** | | **66** | **66 passaram, 0 defeitos funcionais** |
 
 Mutação: a suíte da jornada detectou **9 de 9** defeitos injetados; a suíte original do plugin

@@ -5,7 +5,6 @@
   "description": "Testes de sistema (E2E) da jornada de autenticação do OrangeHRM - Trabalho 2",
   "scripts": {
     "test": "playwright test",
-    "test:demo": "ORANGEHRM_URL=https://opensource-demo.orangehrmlive.com/web/index.php ADMIN_PASS=admin123 playwright test",
     "report": "playwright show-report"
   },
   "devDependencies": {

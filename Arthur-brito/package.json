@@ -1,0 +1,14 @@
+{
+  "name": "arthur-brito-orangehrm-buzz",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test:unitario": "powershell -NoProfile -File ./executar-unitario.ps1",
+    "test:integracao": "node --test --test-concurrency=1 testes/integracao/jornada-api.test.js",
+    "test:defeitos": "node --test --test-concurrency=1 testes/integracao/defeitos.test.js",
+    "test:sistema": "node --test --test-concurrency=1 --test-timeout=120000 testes/sistema/jornada-buzz.test.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.49.1"
+  }
+}

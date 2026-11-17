@@ -1,0 +1,18 @@
+▶ API Buzz — jornada publicar, comentar e apagar
+  ✔ IT-01 o feed autenticado responde 200 (1036.5711ms)
+  ✔ IT-02 estados da jornada: publicar, comentar, apagar comentário, apagar post (4073.8991ms)
+  ✔ IT-03 texto vazio e só espaços são rejeitados na postagem (1179.7468ms)
+  ✔ IT-04 o texto '0' é uma postagem válida (1178.1015ms)
+  ✔ IT-05 limites 65530 e 65531 na postagem (3155.6427ms)
+  ✔ IT-06 tabela de decisão do tipo de post na API (2130.8893ms)
+  ✔ IT-07 validação de link de vídeo (1144.4731ms)
+  ✔ IT-08 comentário só com espaços é rejeitado; comentário curto é gravado (1993.0748ms)
+✔ API Buzz — jornada publicar, comentar e apagar (17438.4652ms)
+ℹ tests 8
+ℹ suites 1
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 17514.4215

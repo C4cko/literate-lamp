@@ -1,0 +1,90 @@
+▶ defeitos observados na API do Buzz
+  ✖ D1 criar comentário com texto vazio deve ser recusado (4197.6204ms)
+  ✖ D1 editar comentário para texto vazio deve ser recusado (3537.5426ms)
+  ✖ D3 vídeo sem link deve ser recusado com 422, não com erro interno (1594.5314ms)
+  ✖ D2 o parâmetro documentado link deveria validar o vídeo (1443.2452ms)
+✖ defeitos observados na API do Buzz (10774.3455ms)
+ℹ tests 4
+ℹ suites 1
+ℹ pass 0
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10866.4972
+
+✖ failing tests:
+
+test at testes\integracao\defeitos.test.js:12:3
+✖ D1 criar comentário com texto vazio deve ser recusado (4197.6204ms)
+  AssertionError [ERR_ASSERTION]: a API aceitou comentário vazio: HTTP 200 {"data":{"comment":{"id":13,"createdDate":"2026-11-17","createdTime":"19:24"},"share":{"id":29},"employee":{"empNumber":7,"lastName":"Chase","firstName":"Dominic","middleName":"akh
+  
+  200 !== 422
+  
+      at TestContext.<anonymous> (file:///C:/Users/arthu/OneDrive/Desktop/verival/literate-lamp/Arthur-brito/testes/integracao/defeitos.test.js:19:14)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Promise.all (index 0)
+      at async Suite.run (node:internal/test_runner/test:1533:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 422,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at testes\integracao\defeitos.test.js:29:3
+✖ D1 editar comentário para texto vazio deve ser recusado (3537.5426ms)
+  AssertionError [ERR_ASSERTION]: {"data":{"comment":{"id":14,"createdDate":"2026-11-17","createdTime":"19:24"},"share":{"id":30},"employee":{"empNumber":7,"lastName":"Chase","firstName":"Dominic","middleName":"akh
+  
+  200 !== 422
+  
+      at TestContext.<anonymous> (file:///C:/Users/arthu/OneDrive/Desktop/verival/literate-lamp/Arthur-brito/testes/integracao/defeitos.test.js:41:14)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 422,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at testes\integracao\defeitos.test.js:47:3
+✖ D3 vídeo sem link deve ser recusado com 422, não com erro interno (1594.5314ms)
+  AssertionError [ERR_ASSERTION]: HTTP 500 {"error":{"status":"500","message":"Unexpected Error Occurred"}}
+  
+  500 !== 422
+  
+      at TestContext.<anonymous> (file:///C:/Users/arthu/OneDrive/Desktop/verival/literate-lamp/Arthur-brito/testes/integracao/defeitos.test.js:53:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 500,
+    expected: 422,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at testes\integracao\defeitos.test.js:60:3
+✖ D2 o parâmetro documentado link deveria validar o vídeo (1443.2452ms)
+  AssertionError [ERR_ASSERTION]: {"error":{"status":"501","message":"Not Implemented"}}
+  
+  501 !== 200
+  
+      at TestContext.<anonymous> (file:///C:/Users/arthu/OneDrive/Desktop/verival/literate-lamp/Arthur-brito/testes/integracao/defeitos.test.js:66:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 501,
+    expected: 200,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

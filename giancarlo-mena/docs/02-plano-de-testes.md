@@ -18,7 +18,7 @@ Maven (`testes/`):
 
 | Nível | Pacote | Ferramentas | Alvo |
 |---|---|---|---|
-| Unitário | `...recrutamento` (src/test, sem tag) | JUnit 5 | modelo da especificação (máquina de estados e regras dos formulários) e cliente HTTP |
+| Unitário | `...modelo`, `...cliente` e `FormatoDataTest` (sem tag) | JUnit 5 | modelo da especificação (máquina de estados e regras dos formulários) e cliente HTTP |
 | Integração | `...integracao` (tag `integracao`) | JUnit 5 + `java.net.http.HttpClient` + Jackson | API REST v2 + serviços + banco |
 | Sistema | `...sistema` (tag `sistema`) | JUnit 5 + Playwright for Java | aplicação completa pelo navegador |
 
@@ -73,9 +73,9 @@ tabela. Casos de hipótese (H) que falham são registrados como defeitos no rela
 | U11 | Tabela de decisão | 8 combinações de primeiro nome / sobrenome / e-mail presentes ou ausentes | erro exatamente nos campos ausentes |
 | U12 | Valor-limite | primeiro nome com 1, 29, 30 e 31 caracteres | 31 inválido, demais válidos |
 | U13 | Valor-limite | sobrenome e nome do meio com 30 e 31 | 31 inválido |
-| U14 | Partição | e-mail: `ana@empresa.com`, `ana.souza+rh@sub.empresa.com.br` (válidos); `ana`, `ana@`, `@empresa.com`, `ana@empresa`, `ana empresa@x.com` (inválidos) | conforme a classe |
+| U14 | Partição e valor-limite | e-mail: `ana@empresa.com`, `ana.souza+rh@sub.empresa.com.br`, `a_b-c@x1.io` (válidos); `ana`, `ana@`, `@empresa.com`, `ana@empresa`, `ana empresa@x.com`, `ana@-x.com` (inválidos); 50 e 51 caracteres | conforme a classe; 51 inválido |
 | U15 | Partição | nome só com espaços | inválido (obrigatório) |
-| U16 | Partição | telefone: `51 3320-3500`, `+55 (51) 99999-0000` (válidos); `abc123`, `51#3320` (inválidos); vazio (válido, campo opcional) | conforme a classe |
+| U16 | Partição e valor-limite | telefone: `51 3320-3500`, `+55 (51) 99999-0000`, `3320/3500` (válidos); `abc123`, `51#3320`, `ramal 12` (inválidos); vazio ou ausente (válido, campo opcional); 25 e 26 dígitos | conforme a classe; 26 inválido |
 | U17 | Valor-limite | palavras-chave e comentário com 250 e 251 caracteres | 251 inválido |
 
 **Entrevista – `RegrasEntrevistaTest`**
@@ -94,8 +94,9 @@ tabela. Casos de hipótese (H) que falham são registrados como defeitos no rela
 | U30 | Partição | HTML da página de login com o atributo `:token` | token extraído sem as entidades `&quot;` |
 | U31 | Partição | HTML sem token | `IllegalStateException` |
 | U32 | Tabela | cada ação com id de candidato 7 e entrevista 3 | caminho e método HTTP corretos (`PUT /recruitment/candidates/7/shortlist`...) |
+| U33 | Partição | formatos de data `yyyy-dd-mm`, `yyyy-mm-dd`, `dd-mm-yyyy`, `mm/dd/yyyy` e vazio (`FormatoDataTest`) | data formatada como o campo da tela espera |
 
-### 3.2 Integração – API REST (`mvn verify -Pintegracao`)
+### 3.2 Integração – API REST (`mvn test -Pintegracao`)
 
 Pré-condição comum: sessão de Admin; vaga ativa criada pelo teste com o primeiro cargo (job title) e o
 primeiro funcionário do servidor como gerente de contratação.
@@ -107,7 +108,7 @@ primeiro funcionário do servidor como gerente de contratação.
 | I03 | Partição / valor-limite (inválidas) | sem primeiro nome; sem sobrenome; e-mail `ana@`; primeiro nome com 31; telefone `abc` | 422 em todos |
 | I04 | Transição de estados (caminho principal) | shortlist → schedule → pass → offer → hire | 200 em cada passo; status e ações permitidas (`GET .../actions/allowed`) iguais ao modelo após cada passo |
 | I05 | Efeito colateral | após I04, `GET /pim/employees?nameOrId=<sobrenome>` | 1 funcionário com mesmo primeiro nome e sobrenome |
-| I06 | Histórico | após I04, `GET /recruitment/candidates/{id}/history` | ações registradas na ordem, incluindo *Hired* |
+| I06 | Histórico | após I04, `GET /recruitment/candidates/{id}/history` | todas as ações da jornada registradas, incluindo *Hired* |
 | I07 | Transição de estados (inválidas) | candidatos em *Application Initiated*, *Shortlisted*, *Interview Failed*, *Hired* e *Rejected*; tentar cada ação proibida pelo modelo | 403 e status inalterado |
 | I08 | Valor-limite | 1ª e 2ª entrevista; 3ª entrevista | 200, 200, 400; "Schedule Interview" some das ações permitidas |
 | I09 | Valor-limite | entrevista com 0 e 6 entrevistadores | 422 |
@@ -115,7 +116,7 @@ primeiro funcionário do servidor como gerente de contratação.
 | I11 | Caminho alternativo | vaga fechada (`status: false`) e shortlist | 403; lista de ações permitidas vazia |
 | I12 | Caminho alternativo | offer → decline → reject | status *Offer Declined* e depois *Rejected* |
 
-### 3.3 Sistema – interface (`mvn verify -Psistema`)
+### 3.3 Sistema – interface (`mvn test -Psistema`)
 
 Pré-condição comum: vaga ativa criada pela API; navegador Chromium headless (Playwright).
 
@@ -148,7 +149,7 @@ falhar, a hipótese se confirma e o defeito vai para o relatório.
 | CA1 | U10–U17, I01–I03, S02–S05, H1–H4 |
 | CA2 | I01, S01 |
 | CA3 | U01–U03, U06–U07, I04, I07, I12, S06 |
-| CA4 | U04–U05, U20–U23, I08–I10, H5 |
+| CA4 | U04–U05, U20–U23, U33, I08–I10, H5 |
 | CA5 | I05, S01 |
 | CA6 | I11 |
 | CA7 | I06 |

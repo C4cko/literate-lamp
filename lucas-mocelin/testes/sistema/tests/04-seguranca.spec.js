@@ -21,12 +21,17 @@ test.describe('Segurança do login', () => {
   test('ST-19 [observação] tentativas inválidas seguidas não bloqueiam a conta', async ({ page }) => {
     // Este caso DOCUMENTA o comportamento atual: o OrangeHRM não possui bloqueio
     // de conta nem limitação de tentativas (rate limiting). Ver relatório, OBS-01.
+    // São 11 envios de formulário; na demo pública cada um leva ~5 s, por isso o limite maior.
+    test.setTimeout(180_000);
     const login = new LoginPage(page);
-    await login.goto();
     for (let i = 1; i <= 10; i++) {
+      // recarrega a tela a cada tentativa: preencher enquanto a página ainda
+      // recarrega após o erro anterior apagava o usuário (falha vista na demo)
+      await login.goto();
       await login.login(ADMIN.username, `Errada@${i}`);
       await expect(login.alert).toHaveText('Invalid credentials');
     }
+    await login.goto();
     await login.login(ADMIN.username, ADMIN.password);
     await new DashboardPage(page).expectLoaded();
   });

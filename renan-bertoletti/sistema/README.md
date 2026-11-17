@@ -62,6 +62,8 @@ Os rótulos, rotas e mensagens vêm do código do front-end no commit `56e23b3b`
 | 17/11/2026 00:43 | 4 testes que trocam de usuário no mesmo navegador ficaram presos na tela de login | o teste apagava os cookies com o dashboard ainda carregando; uma requisição em andamento devolvia o cookie da sessão antiga e o token CSRF da nova página de login deixava de valer (falha intermitente) | troca de usuário por `/auth/logout`, que encerra a sessão no servidor |
 | 17/11/2026 00:58 | 7 erros em sequência: login do ESS recém-criado recusado, `401 Session expired` na API do Admin, funcionário ausente no autocompletar | **reinício do servidor de demonstração** durante a execução: uma consulta logo depois mostrou que os funcionários e usuários criados no início já não existiam, embora a limpeza tivesse falhado | dados criados **por teste** (e não por classe), com sessão nova de Admin; a limpeza faz login de novo. Um reinício passa a afetar só o teste em andamento |
 
+| 17/11/2026 01:28 (`-Pdefeitos`) | ST-13 parou ao abrir a tela de detalhes, depois de 311 s | servidor de demonstração lento (a página de login levava de 3 a 11 s para responder, contra menos de 1 s antes); a página ficou presa até o limite padrão de 300 s do ChromeDriver | limite de carregamento de página de 90 s, para a falha aparecer logo; execução repetida |
+
 As advertências `Unable to find CDP implementation matching 157` são inofensivas: o Chrome instalado é mais novo
 que as ligações DevTools do Selenium 4.27, mas os testes usam só WebDriver.
 

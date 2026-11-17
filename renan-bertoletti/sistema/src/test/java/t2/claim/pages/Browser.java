@@ -25,6 +25,9 @@ public final class Browser implements AutoCloseable {
             options.addArguments("--headless=new");
         }
         driver = new ChromeDriver(options);
+        // o padrão do ChromeDriver é 300 s; com o servidor de demonstração lento, uma página presa travava o teste
+        // por 5 minutos (execução de 17/11/2026, 01:28). 90 s ainda tolera a lentidão normal da demo.
+        driver.manage().timeouts().pageLoadTimeout(java.time.Duration.ofSeconds(90));
         wait = new WebDriverWait(driver, Config.TIMEOUT);
         wait.ignoring(StaleElementReferenceException.class);
     }

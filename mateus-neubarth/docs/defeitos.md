@@ -1,5 +1,8 @@
 # Defeitos encontrados: PIM › Add Employee
 
+Issue #22. Os dois defeitos foram detectados nos três níveis de teste; os testes que os expõem ficam em
+quarentena (`defeito-conhecido`) e rodam à parte (ver `ambiente.md`, seção 6.1).
+
 | ID | Título | Severidade | Status | Origem |
 |---|---|---|---|---|
 | D1 | Cadastro com foto não avança o Employee Id sugerido | Média | Confirmado nos 3 níveis: UT-05, IT-12 e ST-12 falham | Risco R2 |
@@ -59,9 +62,10 @@ O caso `with all details and emp picture` de `EmployeeAPITestCases.yml` executa 
 cobertura de linhas de `EmployeeAPI` é 99,66%. Mas o oráculo compara só o JSON de resposta e nunca o contador
 de IDs (ver `analise/codigo-original.md`).
 
-### Testes que vão automatizar a verificação
+### Testes que automatizam a verificação
 
-Os três falham, como esperado, e cada um tem um caso de controle sem foto que passa:
+Os três falham, como esperado, e ficam em quarentena (`defeito-conhecido`, ver `docs/ambiente.md`, seção 6.1);
+cada um tem um caso de controle sem foto que passa:
 
 | Nível | Teste |
 |---|---|
@@ -114,4 +118,4 @@ quando a força exigida for `strong`, ou ajustar o padrão de `min_password_leng
 UT-08 (`unitario/T2AddEmployee/PasswordPolicyTest.php::testUT08SenhaDe8CaracteresQueCumpreAsRegrasEhAceita`:
 **falha**, como esperado); `integracao/.../CreateLoginApiTest.java::it10_senhaDe8Caracteres` (422) e
 `sistema/.../AddEmployeeValidationE2ETest.java::st10_senhaDe8Caracteres` (mensagem "could be guessable"), ambos
-falhando. Nos três níveis, a senha de 9 caracteres passa.
+falhando e em quarentena (`defeito-conhecido`). Nos três níveis, a senha de 9 caracteres passa.

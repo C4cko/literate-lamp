@@ -1,0 +1,76 @@
+name: Suzan - testes originais de contatos de emergencia
+
+on:
+  push:
+    branches: [codex/emergency-contacts-exploracao]
+    paths:
+      - '.github/workflows/suzan-emergency-contacts.yml'
+      - 'suzan-stockey/ambiente/**'
+  pull_request:
+    paths:
+      - '.github/workflows/suzan-emergency-contacts.yml'
+      - 'suzan-stockey/ambiente/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: suzan-emergency-contacts-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  originais:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      OHRM_SRC: ${{ github.workspace }}/orangehrm-original
+    defaults:
+      run:
+        working-directory: suzan-stockey/ambiente
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: orangehrm/orangehrm
+          ref: 56e23b3b09e7af29317a0943523b825843fff527
+          path: orangehrm-original
+          persist-credentials: false
+      - name: Validar e iniciar ambiente
+        run: |
+          set -euo pipefail
+          mkdir -p ../resultados/originais
+          docker compose config --quiet
+          docker compose up -d --build db phpunit 2>&1 | tee ../resultados/originais/build-ci.txt
+      - name: Preparar dependencias e banco de testes
+        run: |
+          set -euo pipefail
+          docker compose exec -T phpunit bash /scripts/preparar.sh 2>&1 | tee ../resultados/originais/preparacao-ci.txt
+      - name: Executar testes originais
+        run: docker compose exec -T phpunit bash /scripts/executar-originais.sh
+      - name: Registrar resultado no resumo
+        if: always()
+        run: |
+          {
+            echo '## Testes originais de contatos de emergência — #26'
+            echo 'Código OrangeHRM: 56e23b3b09e7af29317a0943523b825843fff527'
+            echo '```text'
+            if [ -f ../resultados/originais/phpunit-testdox.txt ]; then
+              tail -n 30 ../resultados/originais/phpunit-testdox.txt
+            else
+              echo 'A execução não chegou ao PHPUnit; consulte os logs de preparação.'
+            fi
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Publicar logs e relatorios
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: suzan-emergency-contacts-originais-${{ github.run_id }}
+          path: suzan-stockey/resultados/originais/
+          retention-days: 30
+          if-no-files-found: error
+      - name: Parar ambiente do executor
+        if: always()
+        run: docker compose down

@@ -29,4 +29,15 @@ public final class Feed {
     public static int comentarios(JsonNode share) {
         return share.path("stats").path("numOfComments").asInt();
     }
+
+    /** Aba "Most Liked Posts": cada post tem que ter curtidas maiores ou iguais às do próximo. */
+    public static boolean ordenadoPorCurtidas(JsonNode respostaFeed) {
+        JsonNode lista = respostaFeed.path("data");
+        for (int i = 1; i < lista.size(); i++) {
+            if (curtidas(lista.get(i - 1)) < curtidas(lista.get(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

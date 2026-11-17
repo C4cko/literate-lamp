@@ -1,0 +1,282 @@
+{
+  "title": "TS-04 curtir e descurtir o post e curtir um comentário",
+  "steps": [
+    {
+      "type": "setViewport",
+      "width": 1280,
+      "height": 900,
+      "deviceScaleFactor": 1,
+      "isMobile": false,
+      "hasTouch": false,
+      "isLandscape": false
+    },
+    {
+      "type": "navigate",
+      "url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
+      "assertedEvents": [
+        {
+          "type": "navigation",
+          "url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
+          "title": "OrangeHRM"
+        }
+      ]
+    },
+    {
+      "type": "click",
+      "selectors": [
+        [
+          "input[name='username']"
+        ]
+      ],
+      "offsetX": 8,
+      "offsetY": 8
+    },
+    {
+      "type": "change",
+      "value": "Admin",
+      "selectors": [
+        [
+          "input[name='username']"
+        ]
+      ]
+    },
+    {
+      "type": "click",
+      "selectors": [
+        [
+          "input[name='password']"
+        ]
+      ],
+      "offsetX": 8,
+      "offsetY": 8
+    },
+    {
+      "type": "change",
+      "value": "admin123",
+      "selectors": [
+        [
+          "input[name='password']"
+        ]
+      ]
+    },
+    {
+      "type": "click",
+      "selectors": [
+        [
+          "button[type='submit']"
+        ]
+      ],
+      "offsetX": 50,
+      "offsetY": 15,
+      "assertedEvents": [
+        {
+          "type": "navigation",
+          "url": "https://opensource-demo.orangehrmlive.com/web/index.php/dashboard/index",
+          "title": "OrangeHRM"
+        }
+      ]
+    },
+    {
+      "type": "click",
+      "selectors": [
+        [
+          "xpath///a[contains(@href, '/buzz/viewBuzz')]"
+        ]
+      ],
+      "offsetX": 8,
+      "offsetY": 8
+    },
+    {
+      "type": "waitForElement",
+      "selectors": [
+        [
+          "textarea.oxd-buzz-post-input"
+        ]
+      ]
+    },
+    {
+      "type": "click",
+      "selectors": [
+        [
+          "textarea.oxd-buzz-post-input"
+        ]
+      ],
+      "offsetX": 8,
+      "offsetY": 8
+    },
+    {
+      "type": "change",
+      "value": "JM-TS04-{{ID}}",
+      "selectors": [
+        [
+          "textarea.oxd-buzz-post-input"
+        ]
+      ]
+    },
+    {
+      "type": "click",
+      "selectors": [
+        [
+          "button[type='submit']"
+        ]
+      ],
+      "offsetX": 50,
+      "offsetY": 15
+    },
+    {
+      "type": "waitForElement",
+      "selectors": [
+        [
+          "xpath///div[contains(concat(' ', normalize-space(@class), ' '), ' orangehrm-buzz ') and .//p[normalize-space()='JM-TS04-{{ID}}']]"
+        ]
+      ]
+    },
+    {
+      "type": "click",
+      "selectors": [
+        [
+          "xpath///div[contains(concat(' ', normalize-space(@class), ' '), ' orangehrm-buzz ') and .//p[normalize-space()='JM-TS04-{{ID}}']]//*[name()='svg' and @id='heart-svg']"
+        ]
+      ],
+      "offsetX": 8,
+      "offsetY": 8
+    },
+    {
+      "type": "waitForElement",
+      "selectors": [
+        [
+          "xpath///div[contains(concat(' ', normalize-space(@class), ' '), ' orangehrm-buzz ') and .//p[normalize-space()='JM-TS04-{{ID}}']]//p[normalize-space()='1 Like']"
+        ]
+      ]
+    },
+    {
+      "type": "click",
+      "selectors": [
+        [
+          "xpath///div[contains(concat(' ', normalize-space(@class), ' '), ' orangehrm-buzz ') and .//p[normalize-space()='JM-TS04-{{ID}}']]//*[name()='svg' and @id='heart-svg']"
+        ]
+      ],
+      "offsetX": 8,
+      "offsetY": 8
+    },
+    {
+      "type": "waitForElement",
+      "selectors": [
+        [
+          "xpath///div[contains(concat(' ', normalize-space(@class), ' '), ' orangehrm-buzz ') and .//p[normalize-space()='JM-TS04-{{ID}}']]//p[normalize-space()='0 Likes']"
+        ]
+      ]
+    },
+    {
+      "type": "click",
+      "selectors": [
+        [
+          "xpath///div[contains(concat(' ', normalize-space(@class), ' '), ' orangehrm-buzz ') and .//p[normalize-space()='JM-TS04-{{ID}}']]//i[contains(@class, 'bi-chat-text-fill')]"
+        ]
+      ],
+      "offsetX": 8,
+      "offsetY": 8
+    },
+    {
+      "type": "click",
+      "selectors": [
+        [
+          "xpath///div[contains(concat(' ', normalize-space(@class), ' '), ' orangehrm-buzz ') and .//p[normalize-space()='JM-TS04-{{ID}}']]//input[@placeholder='Write your comment...']"
+        ]
+      ],
+      "offsetX": 8,
+      "offsetY": 8
+    },
+    {
+      "type": "change",
+      "value": "Comentário do TS-04",
+      "selectors": [
+        [
+          "xpath///div[contains(concat(' ', normalize-space(@class), ' '), ' orangehrm-buzz ') and .//p[normalize-space()='JM-TS04-{{ID}}']]//input[@placeholder='Write your comment...']"
+        ]
+      ]
+    },
+    {
+      "type": "keyDown",
+      "key": "Enter"
+    },
+    {
+      "type": "keyUp",
+      "key": "Enter"
+    },
+    {
+      "type": "waitForElement",
+      "selectors": [
+        [
+          "xpath///div[contains(concat(' ', normalize-space(@class), ' '), ' orangehrm-buzz ') and .//p[normalize-space()='JM-TS04-{{ID}}']]//span[normalize-space()='Comentário do TS-04']"
+        ]
+      ]
+    },
+    {
+      "type": "click",
+      "selectors": [
+        [
+          "xpath///div[contains(concat(' ', normalize-space(@class), ' '), ' orangehrm-buzz ') and .//p[normalize-space()='JM-TS04-{{ID}}']]//p[contains(@class, 'orangehrm-post-comment-action') and normalize-space()='Like']"
+        ]
+      ],
+      "offsetX": 8,
+      "offsetY": 8
+    },
+    {
+      "type": "waitForElement",
+      "selectors": [
+        [
+          "xpath///div[contains(concat(' ', normalize-space(@class), ' '), ' orangehrm-buzz ') and .//p[normalize-space()='JM-TS04-{{ID}}']]//p[contains(@class, 'orangehrm-post-comment-action') and contains(@class, '--liked')]"
+        ]
+      ]
+    },
+    {
+      "type": "waitForElement",
+      "selectors": [
+        [
+          "xpath///div[contains(concat(' ', normalize-space(@class), ' '), ' orangehrm-buzz ') and .//p[normalize-space()='JM-TS04-{{ID}}']]//p[contains(@class, 'orangehrm-post-comment-stats-text') and normalize-space()='1']"
+        ]
+      ]
+    },
+    {
+      "type": "click",
+      "selectors": [
+        [
+          "xpath///div[contains(concat(' ', normalize-space(@class), ' '), ' orangehrm-buzz ') and .//p[normalize-space()='JM-TS04-{{ID}}']]//i[contains(@class, 'bi-three-dots')]"
+        ]
+      ],
+      "offsetX": 8,
+      "offsetY": 8
+    },
+    {
+      "type": "click",
+      "selectors": [
+        [
+          "xpath///div[contains(concat(' ', normalize-space(@class), ' '), ' orangehrm-buzz ') and .//p[normalize-space()='JM-TS04-{{ID}}']]//p[normalize-space()='Delete Post']"
+        ]
+      ],
+      "offsetX": 8,
+      "offsetY": 8
+    },
+    {
+      "type": "click",
+      "selectors": [
+        [
+          "xpath///button[normalize-space()='Yes, Delete']"
+        ]
+      ],
+      "offsetX": 8,
+      "offsetY": 8
+    },
+    {
+      "type": "waitForElement",
+      "selectors": [
+        [
+          "xpath///div[contains(concat(' ', normalize-space(@class), ' '), ' orangehrm-buzz ') and .//p[normalize-space()='JM-TS04-{{ID}}']]"
+        ]
+      ],
+      "count": 0,
+      "operator": "=="
+    }
+  ]
+}

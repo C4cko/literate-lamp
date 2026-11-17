@@ -73,6 +73,23 @@ public class ClienteBuzz {
         return enviar("POST", "/api/v2/buzz/shares/" + shareId + "/likes", null);
     }
 
+    public Resposta descurtir(int shareId) throws IOException, InterruptedException {
+        return enviar("DELETE", "/api/v2/buzz/shares/" + shareId + "/likes", null);
+    }
+
+    public Resposta curtirComentario(int commentId) throws IOException, InterruptedException {
+        return enviar("POST", "/api/v2/buzz/comments/" + commentId + "/likes", null);
+    }
+
+    public Resposta comentarios(int shareId) throws IOException, InterruptedException {
+        return enviar("GET", "/api/v2/buzz/shares/" + shareId + "/comments?model=detailed", null);
+    }
+
+    /** Mesma consulta da aba "Most Liked Posts". */
+    public Resposta feedMaisCurtidos() throws IOException, InterruptedException {
+        return enviar("GET", "/api/v2/buzz/feed?limit=50&offset=0&sortOrder=DESC&sortField=share.numOfLikes", null);
+    }
+
     public Resposta excluir(int shareId) throws IOException, InterruptedException {
         return enviar("DELETE", "/api/v2/buzz/shares/" + shareId, null);
     }

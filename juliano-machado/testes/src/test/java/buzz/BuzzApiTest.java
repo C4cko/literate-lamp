@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * TI-01 a TI-10: integração com a API REST v2 do Buzz no servidor de demonstração.
+ * TI-01 a TI-13: integração com a API REST v2 do Buzz no servidor de demonstração.
  * Cada teste cria os próprios posts com o prefixo "JM-" e um número único,
  * e todos são excluídos no final, para não depender nem interferir em dados de outras pessoas.
  */
@@ -149,6 +149,65 @@ class BuzzApiTest {
         ClienteBuzz.Resposta r = api.comentar(id, "");
         assertFalse(RegraTexto.comentarioValido(""));
         assertEquals(422, r.status(), "a API aceitou comentário vazio");
+    }
+
+    // TI-11: descurtir volta o contador para 0; descurtir de novo é recusado
+    @Test
+    @DisplayName("TI-11 descurtir volta o contador; descurtir de novo é recusado")
+    void descurtir() throws Exception {
+        int id = criarPost("TI11");
+        assertEquals(200, api.curtir(id).status());
+        assertEquals(200, api.descurtir(id).status());
+
+        JsonNode share = buscarNoFeedPorId(id);
+        assertEquals(0, Feed.curtidas(share));
+        assertFalse(share.path("liked").asBoolean());
+
+        ClienteBuzz.Resposta segunda = api.descurtir(id);
+        assertEquals(400, segunda.status());
+        assertEquals("Not previously liked", segunda.corpo().path("error").path("message").asText());
+    }
+
+    // TI-12: curtir um comentário; curtir o mesmo comentário de novo é recusado
+    @Test
+    @DisplayName("TI-12 curtir comentário; curtir de novo é recusado")
+    void curtirComentario() throws Exception {
+        int id = criarPost("TI12");
+        int comentario = api.comentar(id, "comentário do teste TI12").corpo()
+                .path("data").path("comment").path("id").asInt();
+
+        assertEquals(200, api.curtirComentario(comentario).status());
+        assertEquals(400, api.curtirComentario(comentario).status());
+
+        JsonNode c = api.comentarios(id).corpo().path("data").path(0).path("comment");
+        assertEquals(comentario, c.path("id").asInt());
+        assertEquals(1, c.path("numOfLikes").asInt());
+        assertTrue(c.path("liked").asBoolean());
+    }
+
+    // TI-13: aba Most Liked: feed em ordem decrescente de curtidas, post curtido antes do não curtido
+    @Test
+    @DisplayName("TI-13 Most Liked ordena por curtidas")
+    void maisCurtidos() throws Exception {
+        int semCurtida = criarPost("TI13a");
+        int comCurtida = criarPost("TI13b");
+        api.curtir(comCurtida);
+
+        JsonNode feed = api.feedMaisCurtidos().corpo();
+        assertTrue(Feed.ordenadoPorCurtidas(feed));
+
+        int posCom = -1;
+        int posSem = -1;
+        for (int i = 0; i < feed.path("data").size(); i++) {
+            int atual = feed.path("data").get(i).path("id").asInt();
+            if (atual == comCurtida) {
+                posCom = i;
+            } else if (atual == semCurtida) {
+                posSem = i;
+            }
+        }
+        assertTrue(posCom >= 0, "post curtido não está entre os 50 mais curtidos");
+        assertTrue(posSem < 0 || posCom < posSem, "post curtido deveria vir antes do não curtido");
     }
 
     // ---------------------------------------------------------------

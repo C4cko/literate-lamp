@@ -8,9 +8,10 @@ import org.junit.jupiter.api.Test;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/** TU-04 e TU-05: leitura do feed com uma resposta fixa (sem servidor). */
+/** TU-04, TU-05 e TU-07: leitura do feed com uma resposta fixa (sem servidor). */
 class FeedTest {
 
     // resposta no mesmo formato que o servidor devolve, reduzida
@@ -42,6 +43,29 @@ class FeedTest {
         assertTrue(Feed.buscarPorTexto(feed, "nao existe").isEmpty());
         assertTrue(Feed.buscarPorTexto(feed, "JM").isEmpty());
         assertTrue(Feed.buscarPorTexto(lerJson("{\"data\":[]}"), "JM teste").isEmpty());
+    }
+
+    // TU-07: ordem da aba Most Liked (decrescente, com empate, vazia e fora de ordem)
+    @Test
+    @DisplayName("TU-07 verifica a ordem por curtidas da aba Most Liked")
+    void ordemPorCurtidas() {
+        assertTrue(Feed.ordenadoPorCurtidas(feedComCurtidas(3, 1, 0)));
+        assertTrue(Feed.ordenadoPorCurtidas(feedComCurtidas(2, 2, 0)));
+        assertTrue(Feed.ordenadoPorCurtidas(feedComCurtidas()));
+        assertTrue(Feed.ordenadoPorCurtidas(feedComCurtidas(5)));
+        assertFalse(Feed.ordenadoPorCurtidas(feedComCurtidas(1, 0, 2)));
+        assertFalse(Feed.ordenadoPorCurtidas(feedComCurtidas(0, 1)));
+    }
+
+    private static JsonNode feedComCurtidas(int... curtidas) {
+        StringBuilder sb = new StringBuilder("{\"data\":[");
+        for (int i = 0; i < curtidas.length; i++) {
+            if (i > 0) {
+                sb.append(',');
+            }
+            sb.append("{\"id\":").append(i).append(",\"stats\":{\"numOfLikes\":").append(curtidas[i]).append("}}");
+        }
+        return lerJson(sb.append("]}").toString());
     }
 
     private static JsonNode lerJson(String s) {

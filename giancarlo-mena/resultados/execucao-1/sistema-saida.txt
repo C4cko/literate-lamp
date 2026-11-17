@@ -1,0 +1,336 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -----------< br.edu.pucrs.vv:orangehrm-recrutamento-testes >------------
+[INFO] Building Testes da jornada de recrutamento do OrangeHRM 1.0.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] Loaded 24527 auto-discovered prefixes for remote repository central (prefixes-central.txt)
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ orangehrm-recrutamento-testes ---
+[INFO] skip non existing resourceDirectory C:\Users\gianc\Downloads\literate-lamp\giancarlo-mena\testes\src\main\resources
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ orangehrm-recrutamento-testes ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ orangehrm-recrutamento-testes ---
+[INFO] skip non existing resourceDirectory C:\Users\gianc\Downloads\literate-lamp\giancarlo-mena\testes\src\test\resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ orangehrm-recrutamento-testes ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.2:test (default-test) @ orangehrm-recrutamento-testes ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running br.edu.pucrs.vv.recrutamento.sistema.FormularioCandidatoUiTest
+[ERROR] Tests run: 4, Failures: 1, Errors: 2, Skipped: 0, Time elapsed: 117.9 s <<< FAILURE! -- in br.edu.pucrs.vv.recrutamento.sistema.FormularioCandidatoUiTest
+[ERROR] br.edu.pucrs.vv.recrutamento.sistema.FormularioCandidatoUiTest.emailInvalido -- Time elapsed: 35.19 s <<< ERROR!
+com.microsoft.playwright.TimeoutError: 
+Error {
+  message='Timeout 30000ms exceeded.
+  name='TimeoutError
+  stack='TimeoutError: Timeout 30000ms exceeded.
+    at ProgressController.run (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\progress.js:75:26)
+    at Frame.fill (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\frames.js:1072:23)
+    at FrameDispatcher.fill (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\dispatchers\frameDispatcher.js:170:30)
+    at FrameDispatcher._handleCommand (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\dispatchers\dispatcher.js:94:40)
+    at DispatcherConnection.dispatch (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\dispatchers\dispatcher.js:361:39)
+}
+Call log:
+-   - waiting for locator(".oxd-input-group").filter(new Locator.FilterOptions().setHas(locator("label").filter(new Locator.FilterOptions().setHasText(Pattern.compile("^\\s*\\QEmail\\E\\s*$"))))).locator("input, textarea").first()
+
+	at com.microsoft.playwright.impl.WaitableResult.get(WaitableResult.java:52)
+	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:132)
+	at com.microsoft.playwright.impl.Connection.sendMessage(Connection.java:130)
+	at com.microsoft.playwright.impl.ChannelOwner.sendMessage(ChannelOwner.java:118)
+	at com.microsoft.playwright.impl.FrameImpl.fillImpl(FrameImpl.java:335)
+	at com.microsoft.playwright.impl.FrameImpl.lambda$fill$14(FrameImpl.java:325)
+	at com.microsoft.playwright.impl.LoggingSupport.lambda$withLogging$0(LoggingSupport.java:36)
+	at com.microsoft.playwright.impl.LoggingSupport.withLogging(LoggingSupport.java:47)
+	at com.microsoft.playwright.impl.ChannelOwner.withLogging(ChannelOwner.java:97)
+	at com.microsoft.playwright.impl.LoggingSupport.withLogging(LoggingSupport.java:35)
+	at com.microsoft.playwright.impl.FrameImpl.fill(FrameImpl.java:325)
+	at com.microsoft.playwright.impl.LocatorImpl.fill(LocatorImpl.java:250)
+	at com.microsoft.playwright.Locator.fill(Locator.java:3075)
+	at br.edu.pucrs.vv.recrutamento.sistema.TelaCandidato.digitarEmail(TelaCandidato.java:55)
+	at br.edu.pucrs.vv.recrutamento.sistema.FormularioCandidatoUiTest.emailInvalido(FormularioCandidatoUiTest.java:29)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+Caused by: com.microsoft.playwright.TimeoutError: Error {
+  message='Timeout 30000ms exceeded.
+  name='TimeoutError
+  stack='TimeoutError: Timeout 30000ms exceeded.
+    at ProgressController.run (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\progress.js:75:26)
+    at Frame.fill (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\frames.js:1072:23)
+    at FrameDispatcher.fill (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\dispatchers\frameDispatcher.js:170:30)
+    at FrameDispatcher._handleCommand (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\dispatchers\dispatcher.js:94:40)
+    at DispatcherConnection.dispatch (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\dispatchers\dispatcher.js:361:39)
+}
+Call log:
+-   - waiting for locator(".oxd-input-group").filter(new Locator.FilterOptions().setHas(locator("label").filter(new Locator.FilterOptions().setHasText(Pattern.compile("^\\s*\\QEmail\\E\\s*$"))))).locator("input, textarea").first()
+
+	at com.microsoft.playwright.impl.Connection.dispatch(Connection.java:254)
+	at com.microsoft.playwright.impl.Connection.processOneMessage(Connection.java:211)
+	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:130)
+	... 16 more
+
+[ERROR] br.edu.pucrs.vv.recrutamento.sistema.FormularioCandidatoUiTest.telefoneComLetras -- Time elapsed: 34.84 s <<< ERROR!
+com.microsoft.playwright.TimeoutError: 
+Error {
+  message='Timeout 30000ms exceeded.
+  name='TimeoutError
+  stack='TimeoutError: Timeout 30000ms exceeded.
+    at ProgressController.run (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\progress.js:75:26)
+    at Frame.fill (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\frames.js:1072:23)
+    at FrameDispatcher.fill (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\dispatchers\frameDispatcher.js:170:30)
+    at FrameDispatcher._handleCommand (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\dispatchers\dispatcher.js:94:40)
+    at DispatcherConnection.dispatch (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\dispatchers\dispatcher.js:361:39)
+}
+Call log:
+-   - waiting for locator(".oxd-input-group").filter(new Locator.FilterOptions().setHas(locator("label").filter(new Locator.FilterOptions().setHasText(Pattern.compile("^\\s*\\QContact Number\\E\\s*$"))))).locator("input, textarea").first()
+
+	at com.microsoft.playwright.impl.WaitableResult.get(WaitableResult.java:52)
+	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:132)
+	at com.microsoft.playwright.impl.Connection.sendMessage(Connection.java:130)
+	at com.microsoft.playwright.impl.ChannelOwner.sendMessage(ChannelOwner.java:118)
+	at com.microsoft.playwright.impl.FrameImpl.fillImpl(FrameImpl.java:335)
+	at com.microsoft.playwright.impl.FrameImpl.lambda$fill$14(FrameImpl.java:325)
+	at com.microsoft.playwright.impl.LoggingSupport.lambda$withLogging$0(LoggingSupport.java:36)
+	at com.microsoft.playwright.impl.LoggingSupport.withLogging(LoggingSupport.java:47)
+	at com.microsoft.playwright.impl.ChannelOwner.withLogging(ChannelOwner.java:97)
+	at com.microsoft.playwright.impl.LoggingSupport.withLogging(LoggingSupport.java:35)
+	at com.microsoft.playwright.impl.FrameImpl.fill(FrameImpl.java:325)
+	at com.microsoft.playwright.impl.LocatorImpl.fill(LocatorImpl.java:250)
+	at com.microsoft.playwright.Locator.fill(Locator.java:3075)
+	at br.edu.pucrs.vv.recrutamento.sistema.TelaCandidato.digitarTelefone(TelaCandidato.java:60)
+	at br.edu.pucrs.vv.recrutamento.sistema.FormularioCandidatoUiTest.telefoneComLetras(FormularioCandidatoUiTest.java:49)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+Caused by: com.microsoft.playwright.TimeoutError: Error {
+  message='Timeout 30000ms exceeded.
+  name='TimeoutError
+  stack='TimeoutError: Timeout 30000ms exceeded.
+    at ProgressController.run (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\progress.js:75:26)
+    at Frame.fill (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\frames.js:1072:23)
+    at FrameDispatcher.fill (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\dispatchers\frameDispatcher.js:170:30)
+    at FrameDispatcher._handleCommand (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\dispatchers\dispatcher.js:94:40)
+    at DispatcherConnection.dispatch (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\dispatchers\dispatcher.js:361:39)
+}
+Call log:
+-   - waiting for locator(".oxd-input-group").filter(new Locator.FilterOptions().setHas(locator("label").filter(new Locator.FilterOptions().setHasText(Pattern.compile("^\\s*\\QContact Number\\E\\s*$"))))).locator("input, textarea").first()
+
+	at com.microsoft.playwright.impl.Connection.dispatch(Connection.java:254)
+	at com.microsoft.playwright.impl.Connection.processOneMessage(Connection.java:211)
+	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:130)
+	... 16 more
+
+[ERROR] br.edu.pucrs.vv.recrutamento.sistema.FormularioCandidatoUiTest.formularioVazio -- Time elapsed: 9.638 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: 
+Locator expected to have text: Required
+Received: <element(s) not found>
+
+Call log:
+  - Locator.expect with timeout 5000ms
+  - waiting for locator(".oxd-input-group").filter(new Locator.FilterOptions().setHas(locator("label").filter(new Locator.FilterOptions().setHasText(Pattern.compile("^\\s*\\QEmail\\E\\s*$"))))).locator(".oxd-input-field-error-message")
+	at com.microsoft.playwright.impl.AssertionsBase.expectImpl(AssertionsBase.java:74)
+	at com.microsoft.playwright.impl.AssertionsBase.expectImpl(AssertionsBase.java:51)
+	at com.microsoft.playwright.impl.AssertionsBase.expectImpl(AssertionsBase.java:42)
+	at com.microsoft.playwright.impl.LocatorAssertionsImpl.hasText(LocatorAssertionsImpl.java:254)
+	at com.microsoft.playwright.assertions.LocatorAssertions.hasText(LocatorAssertions.java:1741)
+	at br.edu.pucrs.vv.recrutamento.sistema.FormularioCandidatoUiTest.formularioVazio(FormularioCandidatoUiTest.java:23)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+[INFO] Running br.edu.pucrs.vv.recrutamento.sistema.JornadaContratacaoUiTest
+[ERROR] Tests run: 2, Failures: 0, Errors: 2, Skipped: 0, Time elapsed: 74.72 s <<< FAILURE! -- in br.edu.pucrs.vv.recrutamento.sistema.JornadaContratacaoUiTest
+[ERROR] br.edu.pucrs.vv.recrutamento.sistema.JornadaContratacaoUiTest.jornadaCompleta -- Time elapsed: 35.39 s <<< ERROR!
+com.microsoft.playwright.TimeoutError: 
+Error {
+  message='Timeout 30000ms exceeded.
+  name='TimeoutError
+  stack='TimeoutError: Timeout 30000ms exceeded.
+    at ProgressController.run (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\progress.js:75:26)
+    at Frame.click (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\frames.js:1022:23)
+    at FrameDispatcher.click (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\dispatchers\frameDispatcher.js:158:30)
+    at FrameDispatcher._handleCommand (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\dispatchers\dispatcher.js:94:40)
+    at DispatcherConnection.dispatch (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\dispatchers\dispatcher.js:361:39)
+}
+Call log:
+-   - waiting for locator(".oxd-input-group").filter(new Locator.FilterOptions().setHas(locator("label").filter(new Locator.FilterOptions().setHasText(Pattern.compile("^\\s*\\QVacancy\\E\\s*$"))))).locator(".oxd-select-text")
+
+	at com.microsoft.playwright.impl.WaitableResult.get(WaitableResult.java:52)
+	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:132)
+	at com.microsoft.playwright.impl.Connection.sendMessage(Connection.java:130)
+	at com.microsoft.playwright.impl.ChannelOwner.sendMessage(ChannelOwner.java:118)
+	at com.microsoft.playwright.impl.FrameImpl.clickImpl(FrameImpl.java:252)
+	at com.microsoft.playwright.impl.FrameImpl.lambda$click$8(FrameImpl.java:243)
+	at com.microsoft.playwright.impl.LoggingSupport.lambda$withLogging$0(LoggingSupport.java:36)
+	at com.microsoft.playwright.impl.LoggingSupport.withLogging(LoggingSupport.java:47)
+	at com.microsoft.playwright.impl.ChannelOwner.withLogging(ChannelOwner.java:97)
+	at com.microsoft.playwright.impl.LoggingSupport.withLogging(LoggingSupport.java:35)
+	at com.microsoft.playwright.impl.FrameImpl.click(FrameImpl.java:243)
+	at com.microsoft.playwright.impl.LocatorImpl.click(LocatorImpl.java:175)
+	at com.microsoft.playwright.Locator.click(Locator.java:2493)
+	at br.edu.pucrs.vv.recrutamento.sistema.TelaCandidato.preencher(TelaCandidato.java:41)
+	at br.edu.pucrs.vv.recrutamento.sistema.JornadaContratacaoUiTest.jornadaCompleta(JornadaContratacaoUiTest.java:25)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+Caused by: com.microsoft.playwright.TimeoutError: Error {
+  message='Timeout 30000ms exceeded.
+  name='TimeoutError
+  stack='TimeoutError: Timeout 30000ms exceeded.
+    at ProgressController.run (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\progress.js:75:26)
+    at Frame.click (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\frames.js:1022:23)
+    at FrameDispatcher.click (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\dispatchers\frameDispatcher.js:158:30)
+    at FrameDispatcher._handleCommand (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\dispatchers\dispatcher.js:94:40)
+    at DispatcherConnection.dispatch (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\dispatchers\dispatcher.js:361:39)
+}
+Call log:
+-   - waiting for locator(".oxd-input-group").filter(new Locator.FilterOptions().setHas(locator("label").filter(new Locator.FilterOptions().setHasText(Pattern.compile("^\\s*\\QVacancy\\E\\s*$"))))).locator(".oxd-select-text")
+
+	at com.microsoft.playwright.impl.Connection.dispatch(Connection.java:254)
+	at com.microsoft.playwright.impl.Connection.processOneMessage(Connection.java:211)
+	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:130)
+	... 16 more
+
+[ERROR] br.edu.pucrs.vv.recrutamento.sistema.JornadaContratacaoUiTest.rejeitarEncerraProcesso -- Time elapsed: 35.07 s <<< ERROR!
+com.microsoft.playwright.TimeoutError: 
+Error {
+  message='Timeout 30000ms exceeded.
+  name='TimeoutError
+  stack='TimeoutError: Timeout 30000ms exceeded.
+    at ProgressController.run (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\progress.js:75:26)
+    at Frame.click (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\frames.js:1022:23)
+    at FrameDispatcher.click (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\dispatchers\frameDispatcher.js:158:30)
+    at FrameDispatcher._handleCommand (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\dispatchers\dispatcher.js:94:40)
+    at DispatcherConnection.dispatch (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\dispatchers\dispatcher.js:361:39)
+}
+Call log:
+-   - waiting for locator(".oxd-input-group").filter(new Locator.FilterOptions().setHas(locator("label").filter(new Locator.FilterOptions().setHasText(Pattern.compile("^\\s*\\QVacancy\\E\\s*$"))))).locator(".oxd-select-text")
+
+	at com.microsoft.playwright.impl.WaitableResult.get(WaitableResult.java:52)
+	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:132)
+	at com.microsoft.playwright.impl.Connection.sendMessage(Connection.java:130)
+	at com.microsoft.playwright.impl.ChannelOwner.sendMessage(ChannelOwner.java:118)
+	at com.microsoft.playwright.impl.FrameImpl.clickImpl(FrameImpl.java:252)
+	at com.microsoft.playwright.impl.FrameImpl.lambda$click$8(FrameImpl.java:243)
+	at com.microsoft.playwright.impl.LoggingSupport.lambda$withLogging$0(LoggingSupport.java:36)
+	at com.microsoft.playwright.impl.LoggingSupport.withLogging(LoggingSupport.java:47)
+	at com.microsoft.playwright.impl.ChannelOwner.withLogging(ChannelOwner.java:97)
+	at com.microsoft.playwright.impl.LoggingSupport.withLogging(LoggingSupport.java:35)
+	at com.microsoft.playwright.impl.FrameImpl.click(FrameImpl.java:243)
+	at com.microsoft.playwright.impl.LocatorImpl.click(LocatorImpl.java:175)
+	at com.microsoft.playwright.Locator.click(Locator.java:2493)
+	at br.edu.pucrs.vv.recrutamento.sistema.TelaCandidato.preencher(TelaCandidato.java:41)
+	at br.edu.pucrs.vv.recrutamento.sistema.JornadaContratacaoUiTest.rejeitarEncerraProcesso(JornadaContratacaoUiTest.java:60)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+Caused by: com.microsoft.playwright.TimeoutError: Error {
+  message='Timeout 30000ms exceeded.
+  name='TimeoutError
+  stack='TimeoutError: Timeout 30000ms exceeded.
+    at ProgressController.run (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\progress.js:75:26)
+    at Frame.click (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\frames.js:1022:23)
+    at FrameDispatcher.click (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\dispatchers\frameDispatcher.js:158:30)
+    at FrameDispatcher._handleCommand (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\dispatchers\dispatcher.js:94:40)
+    at DispatcherConnection.dispatch (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\dispatchers\dispatcher.js:361:39)
+}
+Call log:
+-   - waiting for locator(".oxd-input-group").filter(new Locator.FilterOptions().setHas(locator("label").filter(new Locator.FilterOptions().setHasText(Pattern.compile("^\\s*\\QVacancy\\E\\s*$"))))).locator(".oxd-select-text")
+
+	at com.microsoft.playwright.impl.Connection.dispatch(Connection.java:254)
+	at com.microsoft.playwright.impl.Connection.processOneMessage(Connection.java:211)
+	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:130)
+	... 16 more
+
+[INFO] 
+[INFO] Results:
+[INFO] 
+[ERROR] Failures: 
+[ERROR]   FormularioCandidatoUiTest.formularioVazio:23 Locator expected to have text: Required
+Received: <element(s) not found>
+
+Call log:
+  - Locator.expect with timeout 5000ms
+  - waiting for locator(".oxd-input-group").filter(new Locator.FilterOptions().setHas(locator("label").filter(new Locator.FilterOptions().setHasText(Pattern.compile("^\\s*\\QEmail\\E\\s*$"))))).locator(".oxd-input-field-error-message")
+[ERROR] Errors: 
+[ERROR]   FormularioCandidatoUiTest.emailInvalido:29 � Timeout Error {
+  message='Timeout 30000ms exceeded.
+  name='TimeoutError
+  stack='TimeoutError: Timeout 30000ms exceeded.
+    at ProgressController.run (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\progress.js:75:26)
+    at Frame.fill (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\frames.js:1072:23)
+    at FrameDispatcher.fill (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\dispatchers\frameDispatcher.js:170:30)
+    at FrameDispatcher._handleCommand (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\dispatchers\dispatcher.js:94:40)
+    at DispatcherConnection.dispatch (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\dispatchers\dispatcher.js:361:39)
+}
+Call log:
+-   - waiting for locator(".oxd-input-group").filter(new Locator.FilterOptions().setHas(locator("label").filter(new Locator.FilterOptions().setHasText(Pattern.compile("^\\s*\\QEmail\\E\\s*$"))))).locator("input, textarea").first()
+
+[ERROR]   FormularioCandidatoUiTest.telefoneComLetras:49 � Timeout Error {
+  message='Timeout 30000ms exceeded.
+  name='TimeoutError
+  stack='TimeoutError: Timeout 30000ms exceeded.
+    at ProgressController.run (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\progress.js:75:26)
+    at Frame.fill (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\frames.js:1072:23)
+    at FrameDispatcher.fill (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\dispatchers\frameDispatcher.js:170:30)
+    at FrameDispatcher._handleCommand (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\dispatchers\dispatcher.js:94:40)
+    at DispatcherConnection.dispatch (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\dispatchers\dispatcher.js:361:39)
+}
+Call log:
+-   - waiting for locator(".oxd-input-group").filter(new Locator.FilterOptions().setHas(locator("label").filter(new Locator.FilterOptions().setHasText(Pattern.compile("^\\s*\\QContact Number\\E\\s*$"))))).locator("input, textarea").first()
+
+[ERROR]   JornadaContratacaoUiTest.jornadaCompleta:25 � Timeout Error {
+  message='Timeout 30000ms exceeded.
+  name='TimeoutError
+  stack='TimeoutError: Timeout 30000ms exceeded.
+    at ProgressController.run (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\progress.js:75:26)
+    at Frame.click (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\frames.js:1022:23)
+    at FrameDispatcher.click (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\dispatchers\frameDispatcher.js:158:30)
+    at FrameDispatcher._handleCommand (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\dispatchers\dispatcher.js:94:40)
+    at DispatcherConnection.dispatch (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\dispatchers\dispatcher.js:361:39)
+}
+Call log:
+-   - waiting for locator(".oxd-input-group").filter(new Locator.FilterOptions().setHas(locator("label").filter(new Locator.FilterOptions().setHasText(Pattern.compile("^\\s*\\QVacancy\\E\\s*$"))))).locator(".oxd-select-text")
+
+[ERROR]   JornadaContratacaoUiTest.rejeitarEncerraProcesso:60 � Timeout Error {
+  message='Timeout 30000ms exceeded.
+  name='TimeoutError
+  stack='TimeoutError: Timeout 30000ms exceeded.
+    at ProgressController.run (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\progress.js:75:26)
+    at Frame.click (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\frames.js:1022:23)
+    at FrameDispatcher.click (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\dispatchers\frameDispatcher.js:158:30)
+    at FrameDispatcher._handleCommand (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\dispatchers\dispatcher.js:94:40)
+    at DispatcherConnection.dispatch (C:\Users\gianc\AppData\Local\Temp\playwright-java-2474597083765354284\package\lib\server\dispatchers\dispatcher.js:361:39)
+}
+Call log:
+-   - waiting for locator(".oxd-input-group").filter(new Locator.FilterOptions().setHas(locator("label").filter(new Locator.FilterOptions().setHasText(Pattern.compile("^\\s*\\QVacancy\\E\\s*$"))))).locator(".oxd-select-text")
+
+[INFO] 
+[ERROR] Tests run: 6, Failures: 1, Errors: 4, Skipped: 0
+[INFO] 
+[WARNING] Corrupted channel by directly writing to native stream in forked JVM 1. See FAQ web page and the dump file C:\Users\gianc\Downloads\literate-lamp\giancarlo-mena\testes\target\surefire-reports\2026-11-17T15-32-11_130-jvmRun1.dumpstream
+[INFO] ------------------------------------------------------------------------
+[ERROR] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  03:15 min
+[INFO] Finished at: 2026-11-17T15:35:25-03:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-surefire-plugin:3.5.2:test (default-test) on project orangehrm-recrutamento-testes: There are test failures.
+[ERROR] 
+[ERROR] See C:\Users\gianc\Downloads\literate-lamp\giancarlo-mena\testes\target\surefire-reports for the individual test results.
+[ERROR] See dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException

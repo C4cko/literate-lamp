@@ -1,0 +1,174 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -----------< br.edu.pucrs.vv:orangehrm-recrutamento-testes >------------
+[INFO] Building Testes da jornada de recrutamento do OrangeHRM 1.0.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] Loaded 24527 auto-discovered prefixes for remote repository central (prefixes-central.txt)
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ orangehrm-recrutamento-testes ---
+[INFO] skip non existing resourceDirectory C:\Users\gianc\Downloads\literate-lamp\giancarlo-mena\testes\src\main\resources
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ orangehrm-recrutamento-testes ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ orangehrm-recrutamento-testes ---
+[INFO] skip non existing resourceDirectory C:\Users\gianc\Downloads\literate-lamp\giancarlo-mena\testes\src\test\resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ orangehrm-recrutamento-testes ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.2:test (default-test) @ orangehrm-recrutamento-testes ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running br.edu.pucrs.vv.recrutamento.integracao.CadastroCandidatoApiTest
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 7.049 s -- in br.edu.pucrs.vv.recrutamento.integracao.CadastroCandidatoApiTest
+[INFO] Running br.edu.pucrs.vv.recrutamento.integracao.EntrevistasApiTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 11.53 s -- in br.edu.pucrs.vv.recrutamento.integracao.EntrevistasApiTest
+[INFO] Running br.edu.pucrs.vv.recrutamento.integracao.FluxoContratacaoApiTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 14.80 s -- in br.edu.pucrs.vv.recrutamento.integracao.FluxoContratacaoApiTest
+[INFO] Running br.edu.pucrs.vv.recrutamento.integracao.HipotesesDefeitoApiTest
+[ERROR] Tests run: 6, Failures: 5, Errors: 0, Skipped: 0, Time elapsed: 7.150 s <<< FAILURE! -- in br.edu.pucrs.vv.recrutamento.integracao.HipotesesDefeitoApiTest
+[ERROR] br.edu.pucrs.vv.recrutamento.integracao.HipotesesDefeitoApiTest.emailMaiorQueAColuna -- Time elapsed: 0.334 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: esperado 422 para email; HTTP 200 {"data":{"id":89,"firstName":"Ana","middleName":null,"lastName":"TesteVV261117153124925","email":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@exemplo.com"},"meta":[],"rels":[]} ==> expected: <422> but was: <200>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:197)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:150)
+	at org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:563)
+	at br.edu.pucrs.vv.recrutamento.integracao.HipotesesDefeitoApiTest.esperaRecusa(HipotesesDefeitoApiTest.java:35)
+	at br.edu.pucrs.vv.recrutamento.integracao.HipotesesDefeitoApiTest.emailMaiorQueAColuna(HipotesesDefeitoApiTest.java:63)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+[ERROR] br.edu.pucrs.vv.recrutamento.integracao.HipotesesDefeitoApiTest.primeiroNomeEmBranco(String)[1] -- Time elapsed: 0.336 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: esperado 422 para firstName; HTTP 200 {"data":{"id":90,"firstName":"","middleName":null,"lastName":"TesteVV261117153125882","email":"ana.vv261117153125882@exemplo.com"},"meta":[],"rels":[]} ==> expected: <422> but was: <200>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:197)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:150)
+	at org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:563)
+	at br.edu.pucrs.vv.recrutamento.integracao.HipotesesDefeitoApiTest.esperaRecusa(HipotesesDefeitoApiTest.java:35)
+	at br.edu.pucrs.vv.recrutamento.integracao.HipotesesDefeitoApiTest.primeiroNomeEmBranco(HipotesesDefeitoApiTest.java:48)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.Spliterators$ArraySpliterator.forEachRemaining(Spliterators.java:1024)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.base/java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:596)
+	at java.base/java.util.stream.ReferencePipeline$7$1.accept(ReferencePipeline.java:276)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.base/java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:596)
+	at java.base/java.util.stream.ReferencePipeline$7$1.accept(ReferencePipeline.java:276)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.base/java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:596)
+	at java.base/java.util.stream.ReferencePipeline$7$1.accept(ReferencePipeline.java:276)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.base/java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+[ERROR] br.edu.pucrs.vv.recrutamento.integracao.HipotesesDefeitoApiTest.telefoneMaiorQueAColuna -- Time elapsed: 0.333 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: esperado 422 para contactNumber; HTTP 200 {"data":{"id":91,"firstName":"Ana","middleName":null,"lastName":"TesteVV261117153125903","email":"ana.vv261117153125903@exemplo.com"},"meta":[],"rels":[]} ==> expected: <422> but was: <200>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:197)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:150)
+	at org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:563)
+	at br.edu.pucrs.vv.recrutamento.integracao.HipotesesDefeitoApiTest.esperaRecusa(HipotesesDefeitoApiTest.java:35)
+	at br.edu.pucrs.vv.recrutamento.integracao.HipotesesDefeitoApiTest.telefoneMaiorQueAColuna(HipotesesDefeitoApiTest.java:54)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+[ERROR] br.edu.pucrs.vv.recrutamento.integracao.HipotesesDefeitoApiTest.emailVazio -- Time elapsed: 0.325 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: esperado 422 para email; HTTP 500 {"error":{"status":"500","message":"Unexpected Error Occurred"}} ==> expected: <422> but was: <500>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:197)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:150)
+	at org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:563)
+	at br.edu.pucrs.vv.recrutamento.integracao.HipotesesDefeitoApiTest.esperaRecusa(HipotesesDefeitoApiTest.java:35)
+	at br.edu.pucrs.vv.recrutamento.integracao.HipotesesDefeitoApiTest.emailVazio(HipotesesDefeitoApiTest.java:41)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+[ERROR] br.edu.pucrs.vv.recrutamento.integracao.HipotesesDefeitoApiTest.aprovarEntrevistaDeOutroCandidato -- Time elapsed: 2.386 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: entrevista 13 � do candidato 93, n�o de 92; HTTP 200 {"data":{"id":272,"candidate":{"id":92,"firstName":"Ana","middleName":null,"lastName":"TesteVV261117153126763"},"vacancy":{"id":32,"name":"Vaga VV VV261117153124555","hiringManager":{"empNumber":104,"firstName":"A8DCo","middleName":"4Ys","lastName":"010Z","terminationId":null}},"note":"Executado pel... ==> expected: <true> but was: <false>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at org.junit.jupiter.api.AssertTrue.failNotTrue(AssertTrue.java:63)
+	at org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:36)
+	at org.junit.jupiter.api.Assertions.assertTrue(Assertions.java:214)
+	at br.edu.pucrs.vv.recrutamento.integracao.HipotesesDefeitoApiTest.aprovarEntrevistaDeOutroCandidato(HipotesesDefeitoApiTest.java:75)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+[INFO] Running br.edu.pucrs.vv.recrutamento.integracao.TransicoesInvalidasApiTest
+[INFO] Tests run: 29, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 29.19 s -- in br.edu.pucrs.vv.recrutamento.integracao.TransicoesInvalidasApiTest
+[INFO] Running br.edu.pucrs.vv.recrutamento.integracao.VagaFechadaApiTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.221 s -- in br.edu.pucrs.vv.recrutamento.integracao.VagaFechadaApiTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[ERROR] Failures: 
+[ERROR]   HipotesesDefeitoApiTest.aprovarEntrevistaDeOutroCandidato:75 entrevista 13 � do candidato 93, n�o de 92; HTTP 200 {"data":{"id":272,"candidate":{"id":92,"firstName":"Ana","middleName":null,"lastName":"TesteVV261117153126763"},"vacancy":{"id":32,"name":"Vaga VV VV261117153124555","hiringManager":{"empNumber":104,"firstName":"A8DCo","middleName":"4Ys","lastName":"010Z","terminationId":null}},"note":"Executado pel... ==> expected: <true> but was: <false>
+[ERROR]   HipotesesDefeitoApiTest.emailMaiorQueAColuna:63->esperaRecusa:35 esperado 422 para email; HTTP 200 {"data":{"id":89,"firstName":"Ana","middleName":null,"lastName":"TesteVV261117153124925","email":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@exemplo.com"},"meta":[],"rels":[]} ==> expected: <422> but was: <200>
+[ERROR]   HipotesesDefeitoApiTest.emailVazio:41->esperaRecusa:35 esperado 422 para email; HTTP 500 {"error":{"status":"500","message":"Unexpected Error Occurred"}} ==> expected: <422> but was: <500>
+[ERROR]   HipotesesDefeitoApiTest.primeiroNomeEmBranco:48->esperaRecusa:35 esperado 422 para firstName; HTTP 200 {"data":{"id":90,"firstName":"","middleName":null,"lastName":"TesteVV261117153125882","email":"ana.vv261117153125882@exemplo.com"},"meta":[],"rels":[]} ==> expected: <422> but was: <200>
+[ERROR]   HipotesesDefeitoApiTest.telefoneMaiorQueAColuna:54->esperaRecusa:35 esperado 422 para contactNumber; HTTP 200 {"data":{"id":91,"firstName":"Ana","middleName":null,"lastName":"TesteVV261117153125903","email":"ana.vv261117153125903@exemplo.com"},"meta":[],"rels":[]} ==> expected: <422> but was: <200>
+[INFO] 
+[ERROR] Tests run: 51, Failures: 5, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[ERROR] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  01:17 min
+[INFO] Finished at: 2026-11-17T15:32:04-03:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-surefire-plugin:3.5.2:test (default-test) on project orangehrm-recrutamento-testes: There are test failures.
+[ERROR] 
+[ERROR] See C:\Users\gianc\Downloads\literate-lamp\giancarlo-mena\testes\target\surefire-reports for the individual test results.
+[ERROR] See dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException

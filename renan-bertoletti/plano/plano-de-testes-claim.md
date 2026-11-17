@@ -238,7 +238,7 @@ combinação não observada, com a expectativa derivada da migração entre par�
 | R5 | **Data em UTC.** Às 23h de 16/11 (horário de Brasília), o servidor gerou `20261117…` e `submittedDate` 2026-11-17. Um teste que compare com a data local falha entre 21h e 0h. | Servidor | Oráculo de data calculado em UTC (ou data fixada no teste unitário). |
 | R6 | **Supervisor não rejeita depois de aprovar.** Em APPROVED, o supervisor não tem ação; só o Admin pode rejeitar (W6). | Servidor | Transição proibida "Supervisor REJECT em APPROVED". |
 | R7 | **Gestor submete o rascunho do funcionário.** Admin e supervisor têm SUBMIT em INITIATED mesmo quando a reivindicação foi criada pelo funcionário, que ainda pode estar adicionando despesas; com o Admin, ela vai direto para PAID. | Migração + teste original (#5) | Caminhos TT-08b e TT-09b da árvore de transição (seção 3). |
-| R8 | **Estado resultante ambíguo para quem tem dois papéis.** `ClaimRequestActionAPI::getResultingState()` consulta as transições sem excluir papéis e devolve a **primeira** que casa com a ação. Quando o Admin submete a **própria** reivindicação, casam a linha ESS (→ SUBMITTED) e a linha ADMIN (→ PAID); o resultado depende da ordem das linhas em `ohrm_workflow_state_machine`. | Código | Caminho TT-10 (seção 3). |
+| R8 | **Estado resultante ambíguo para quem tem dois papéis.** `ClaimRequestActionAPI::getResultingState()` consulta as transições sem excluir papéis e devolve a **primeira** que casa com a ação. Quando o Admin submete a **própria** reivindicação, casam a linha ESS (→ SUBMITTED) e a linha ADMIN (→ PAID); o resultado depende da ordem das linhas em `ohrm_workflow_state_machine`. **Atualização (#7): descartado.** O empate é resolvido pela coluna `priority` (ESS = 10, ADMIN = 0) em `BasicUserRoleManager::getUniqueActionsBasedOnPriority()`; IT-12 deu SUBMITTED nas duas ordens. | Código | Caminho TT-10 (seção 3). |
 
 ## 3. Casos derivados da máquina de estados
 
@@ -522,6 +522,7 @@ pelo número de referência criado no próprio teste, e botões de ação exibid
 | ST-10 | Valor da despesa | AVL | INITIATED (API) | ESS: Add expense com 0; 7000,123; 10 000 000 000,00; depois 9 999 999 999,99 | os três primeiros: mensagem de validação e despesa não listada; o último: listada e total atualizado | CA7, E4, I14, I16, I17 | A |
 | ST-11 | Limite de Remarks | AVL | – | ESS: *Submit Claim* com Remarks de 1000 e de 1001 caracteres | 1000: criada; 1001: mensagem de limite, nada criado | E2, V4, I7 | M |
 | ST-12 | Atribuída pelo Admin, submetida pelo funcionário | Caso de uso (A8) | criada pelo Admin em *Assign Claim*, sem Submit (API) | ESS: *My Claims* → abre → Submit | *Submitted*; aparece para o supervisor com **Approve** e **Reject** | A8, W1 | B |
+| ST-13 | Editar a despesa para valor 0 (acrescentado na #7) | AVL + risco | INITIATED com despesa de 10,50 (API) | ESS: ícone de edição da despesa → Amount `0` → Save | despesa recusada, valor continua 10,50 (o servidor aceita: R2, defeito-conhecido) | R2, I14 | A |
 
 ## 7. Matriz de rastreabilidade
 
@@ -551,7 +552,7 @@ pelo número de referência criado no próprio teste, e botões de ação exibid
 | E7 Despesa após submissão | – | IT-22 | – |
 | E8 Funcionário desligado | – | IT-24 | – |
 | R1 Admin → PAID | – | IT-03, IT-08 | ST-03, ST-05 |
-| R2 Edição aceita 0 | UT-04 | IT-18 | – |
+| R2 Edição aceita 0 | UT-04 | IT-18 | ST-13 |
 | R3 Submeter sem despesa | – | IT-23 | ST-09 |
 | R4 Referência > 7 dígitos | UT-01 | IT-26 | – |
 | R5 Data em UTC | UT-02 | – | – |
@@ -560,8 +561,9 @@ pelo número de referência criado no próprio teste, e botões de ação exibid
 | R8 Estado ambíguo com dois papéis | – | IT-12 | – |
 | Transições W1–W12 | – | IT-01–IT-11 (12/12) | ST-01–ST-06, ST-12 (10/12; W6 e W8 só na integração) |
 
-**Totais:** 7 casos unitários, 26 de integração e 12 de sistema (45 casos; com os *data providers*, os
-*sneak paths* SP-01 a SP-22 e os valores-limite expandem a suíte de integração).
+**Totais:** 7 casos unitários, 26 de integração e 13 de sistema (46 casos, contando o ST-13 acrescentado na #7;
+com os *data providers*, os *sneak paths* SP-01 a SP-22 e os valores-limite expandem a suíte de integração).
+Resultado da execução: [`../execucao/README.md`](../execucao/README.md).
 
 ## Fontes
 

@@ -1,11 +1,6 @@
 name: Suzan - testes originais de contatos de emergencia
 
 on:
-  push:
-    branches: [codex/emergency-contacts-exploracao]
-    paths:
-      - '.github/workflows/suzan-emergency-contacts.yml'
-      - 'suzan-stockey/ambiente/**'
   pull_request:
     paths:
       - '.github/workflows/suzan-emergency-contacts.yml'
@@ -23,11 +18,19 @@ jobs:
   originais:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
-    env:
-      OHRM_SRC: ${{ github.workspace }}/orangehrm-original
+    services:
+      db:
+        image: mariadb:10.11
+        env:
+          MARIADB_ROOT_PASSWORD: root
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=5s --health-timeout=5s --health-retries=30
     defaults:
       run:
-        working-directory: suzan-stockey/ambiente
+        working-directory: orangehrm-original
         shell: bash
     steps:
       - uses: actions/checkout@v4
@@ -37,18 +40,48 @@ jobs:
           ref: 56e23b3b09e7af29317a0943523b825843fff527
           path: orangehrm-original
           persist-credentials: false
-      - name: Validar e iniciar ambiente
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          extensions: pdo_mysql, curl, mbstring, zip, dom, xml, simplexml, gd, ldap, intl
+          tools: composer:2.8
+          coverage: none
+      - name: Preparar cliente do banco e configuracao
         run: |
           set -euo pipefail
-          mkdir -p ../resultados/originais
-          docker compose config --quiet
-          docker compose up -d --build db phpunit 2>&1 | tee ../resultados/originais/build-ci.txt
+          mkdir -p ../suzan-stockey/resultados/originais
+          sudo apt-get update -qq
+          sudo apt-get install -y mariadb-client
+          sed 's/hostName: db/hostName: 127.0.0.1/' ../suzan-stockey/ambiente/cli_install_config.yaml > installer/cli_install_config.yaml
       - name: Preparar dependencias e banco de testes
         run: |
           set -euo pipefail
-          docker compose exec -T phpunit bash /scripts/preparar.sh 2>&1 | tee ../resultados/originais/preparacao-ci.txt
+          {
+            composer install -d src --no-interaction --no-progress
+            composer install -d devTools/core --no-interaction --no-progress
+            php installer/cli_install.php
+            php devTools/core/console.php i:create-test-db -p root --dump-options=--ssl=0
+          } 2>&1 | tee ../suzan-stockey/resultados/originais/preparacao-ci.txt
       - name: Executar testes originais
-        run: docker compose exec -T phpunit bash /scripts/executar-originais.sh
+        run: |
+          set -euo pipefail
+          results=../suzan-stockey/resultados/originais
+          {
+            date -u '+%Y-%m-%dT%H:%M:%SZ'
+            git rev-parse HEAD
+            php --version
+            composer --version
+            ./src/vendor/bin/phpunit --version
+            php -r '$p=new PDO("mysql:host=127.0.0.1;dbname=suzan_emergency_dev", "root", "root"); echo "Banco: ".$p->query("SELECT VERSION()")->fetchColumn().PHP_EOL;'
+          } > "$results/ambiente.txt" 2>&1
+          set +e
+          ./src/vendor/bin/phpunit --colors=never --testdox \
+            --filter '(EmpEmergencyContactDaoTest|EmpEmergencyContactServiceTest|EmpEmergencyContactTest)' \
+            --log-junit "$results/phpunit-junit.xml" src/plugins/orangehrmPimPlugin/test \
+            2>&1 | tee "$results/phpunit-testdox.txt"
+          status=${PIPESTATUS[0]}
+          printf '%s\n' "$status" > "$results/exit-code.txt"
+          exit "$status"
       - name: Registrar resultado no resumo
         if: always()
         run: |
@@ -56,8 +89,8 @@ jobs:
             echo '## Testes originais de contatos de emergência — #26'
             echo 'Código OrangeHRM: 56e23b3b09e7af29317a0943523b825843fff527'
             echo '```text'
-            if [ -f ../resultados/originais/phpunit-testdox.txt ]; then
-              tail -n 30 ../resultados/originais/phpunit-testdox.txt
+            if [ -f ../suzan-stockey/resultados/originais/phpunit-testdox.txt ]; then
+              tail -n 30 ../suzan-stockey/resultados/originais/phpunit-testdox.txt
             else
               echo 'A execução não chegou ao PHPUnit; consulte os logs de preparação.'
             fi
@@ -71,6 +104,3 @@ jobs:
           path: suzan-stockey/resultados/originais/
           retention-days: 30
           if-no-files-found: error
-      - name: Parar ambiente do executor
-        if: always()
-        run: docker compose down

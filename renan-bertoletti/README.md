@@ -35,24 +35,43 @@ O ambiente reaproveita a imagem PHP e o script de preparação de Mateus Neubart
 ([`../mateus-neubarth/docs/ambiente.md`](../mateus-neubarth/docs/ambiente.md)), com outro nome de projeto
 (`t2-claim`) e outra porta (3308), para não colidir com o ambiente dele.
 
-Clone o OrangeHRM **fora** do repositório da turma, ao lado dele (é o caminho padrão do compose):
+### 1.1 Clonar o OrangeHRM no commit analisado
+
+O clone fica **fora** do repositório da turma. O caminho padrão do compose é ao lado dele (`../../../orangehrm`,
+como fez Mateus); no Windows, se o repositório estiver dentro do OneDrive, prefira uma pasta fora dele, porque o
+`composer install` cria dezenas de milhares de arquivos que o OneDrive tentaria sincronizar.
+
+Só o commit analisado é baixado (`--depth 1`), e sem conversão de fim de linha para CRLF (`core.autocrlf false`),
+porque os arquivos são usados dentro de um contêiner Linux:
 
 ```powershell
-cd ..\..            # pasta que contém literate-lamp
-git clone https://github.com/orangehrm/orangehrm.git
-cd orangehrm
-git checkout 56e23b3b09e7af29317a0943523b825843fff527
+mkdir C:\Users\<usuario>\orangehrm
+cd C:\Users\<usuario>\orangehrm
+git init
+git config core.autocrlf false
+git remote add origin https://github.com/orangehrm/orangehrm.git
+git fetch --depth 1 origin 56e23b3b09e7af29317a0943523b825843fff527
+git checkout FETCH_HEAD
+git log -1 --format=%H     # deve mostrar 56e23b3b09e7af29317a0943523b825843fff527
 ```
 
-Para outro caminho, defina `OHRM_SRC` antes dos comandos do compose (PowerShell: `$env:OHRM_SRC = "C:\caminho"`).
+### 1.2 Subir os contêineres e preparar o clone
 
-Suba os contêineres e prepare o clone (dependências, instalação e banco de testes):
+`OHRM_SRC` diz ao compose onde está o clone; defina-o em cada terminal novo (dispensável se o clone estiver no
+caminho padrão):
 
 ```powershell
-cd literate-lamp\renan-bertoletti\ambiente
+cd <caminho>\literate-lamp\renan-bertoletti\ambiente
+$env:OHRM_SRC = "C:\Users\<usuario>\orangehrm"
 docker compose up -d --build db phpunit
-docker compose exec phpunit bash /scripts/preparar-phpunit.sh
+docker compose exec phpunit bash -c "tr -d '\r' < /scripts/preparar-phpunit.sh | bash"
 ```
+
+O `tr -d '\r'` remove o CR que o Git para Windows (`core.autocrlf true`) acrescenta ao script ao fazer checkout
+do repositório da turma; sem ele, o `bash` do contêiner falha na primeira linha.
+
+A preparação (`composer install`, instalação no banco `orangehrm_dev` e criação do banco de testes) leva alguns
+minutos na primeira vez e termina com `>> pronto.`
 
 O compose monta `unitario/` e `integracao/` dentro do plugin Claim do clone
 (`src/plugins/orangehrmClaimPlugin/test/T2ClaimUnitario` e `T2ClaimIntegracao`), em modo somente leitura; nada

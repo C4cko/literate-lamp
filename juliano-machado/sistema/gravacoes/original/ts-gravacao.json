@@ -1,0 +1,326 @@
+{
+    "title": "ts-gravacao",
+    "steps": [
+        {
+            "type": "setViewport",
+            "width": 732,
+            "height": 715,
+            "deviceScaleFactor": 1,
+            "isMobile": false,
+            "hasTouch": false,
+            "isLandscape": false
+        },
+        {
+            "type": "navigate",
+            "url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
+            "assertedEvents": [
+                {
+                    "type": "navigation",
+                    "url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
+                    "title": "OrangeHRM"
+                }
+            ]
+        },
+        {
+            "type": "change",
+            "value": "A",
+            "selectors": [
+                [
+                    "aria/Username"
+                ],
+                [
+                    "form > div:nth-of-type(1) input"
+                ],
+                [
+                    "xpath///*[@id=\"app\"]/div[1]/div/div[1]/div/div[2]/div[2]/form/div[1]/div/div[2]/input"
+                ],
+                [
+                    "pierce/form > div:nth-of-type(1) input"
+                ]
+            ],
+            "target": "main"
+        },
+        {
+            "type": "keyUp",
+            "key": "a",
+            "target": "main"
+        },
+        {
+            "type": "change",
+            "value": "Admin",
+            "selectors": [
+                [
+                    "aria/Username"
+                ],
+                [
+                    "form > div:nth-of-type(1) input"
+                ],
+                [
+                    "xpath///*[@id=\"app\"]/div[1]/div/div[1]/div/div[2]/div[2]/form/div[1]/div/div[2]/input"
+                ],
+                [
+                    "pierce/form > div:nth-of-type(1) input"
+                ]
+            ],
+            "target": "main"
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/Password"
+                ],
+                [
+                    "form > div:nth-of-type(2) input"
+                ],
+                [
+                    "xpath///*[@id=\"app\"]/div[1]/div/div[1]/div/div[2]/div[2]/form/div[2]/div/div[2]/input"
+                ],
+                [
+                    "pierce/form > div:nth-of-type(2) input"
+                ]
+            ],
+            "offsetY": 17.5,
+            "offsetX": 187.203125
+        },
+        {
+            "type": "change",
+            "value": "admin123",
+            "selectors": [
+                [
+                    "aria/Password"
+                ],
+                [
+                    "form > div:nth-of-type(2) input"
+                ],
+                [
+                    "xpath///*[@id=\"app\"]/div[1]/div/div[1]/div/div[2]/div[2]/form/div[2]/div/div[2]/input"
+                ],
+                [
+                    "pierce/form > div:nth-of-type(2) input"
+                ]
+            ],
+            "target": "main"
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/Login[role=\"button\"]"
+                ],
+                [
+                    "button"
+                ],
+                [
+                    "xpath///*[@id=\"app\"]/div[1]/div/div[1]/div/div[2]/div[2]/form/div[3]/button"
+                ],
+                [
+                    "pierce/button"
+                ]
+            ],
+            "offsetY": 20.5,
+            "offsetX": 363.203125,
+            "assertedEvents": [
+                {
+                    "type": "navigation",
+                    "url": "https://opensource-demo.orangehrmlive.com/web/index.php/dashboard/index",
+                    "title": "OrangeHRM"
+                }
+            ]
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/What's on your mind?"
+                ],
+                [
+                    "textarea"
+                ],
+                [
+                    "xpath///*[@id=\"app\"]/div[1]/div[2]/div[2]/div/div[1]/div/div[1]/div[1]/div[2]/form/div/textarea"
+                ],
+                [
+                    "pierce/textarea"
+                ]
+            ],
+            "offsetY": 26.90625,
+            "offsetX": 84.40625
+        },
+        {
+            "type": "keyDown",
+            "target": "main",
+            "key": "Shift"
+        },
+        {
+            "type": "keyUp",
+            "key": "Shift",
+            "target": "main"
+        },
+        {
+            "type": "change",
+            "value": "Post",
+            "selectors": [
+                [
+                    "aria/What's on your mind?"
+                ],
+                [
+                    "textarea"
+                ],
+                [
+                    "xpath///*[@id=\"app\"]/div[1]/div[2]/div[2]/div/div[1]/div/div[1]/div[1]/div[2]/form/div/textarea"
+                ],
+                [
+                    "pierce/textarea"
+                ]
+            ],
+            "target": "main"
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/Post"
+                ],
+                [
+                    "div.orangehrm-buzz-create-post-header button"
+                ],
+                [
+                    "xpath///*[@id=\"app\"]/div[1]/div[2]/div[2]/div/div[1]/div/div[1]/div[1]/div[2]/form/div/div/button"
+                ],
+                [
+                    "pierce/div.orangehrm-buzz-create-post-header button"
+                ]
+            ],
+            "offsetY": 15.71875,
+            "offsetX": 67.09375
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "div.oxd-grid-1 > div:nth-of-type(1) div.orangehrm-buzz-post-footer button:nth-of-type(1) > i"
+                ],
+                [
+                    "xpath///*[@id=\"app\"]/div[1]/div[2]/div[2]/div/div[1]/div/div[3]/div[1]/div/div[3]/div[1]/button[1]/i"
+                ],
+                [
+                    "pierce/div.oxd-grid-1 > div:nth-of-type(1) div.orangehrm-buzz-post-footer button:nth-of-type(1) > i"
+                ]
+            ],
+            "offsetY": 3.75,
+            "offsetX": 4
+        },
+        {
+            "type": "change",
+            "value": "ts",
+            "selectors": [
+                [
+                    "aria/Write your comment..."
+                ],
+                [
+                    "div.oxd-layout-container input"
+                ],
+                [
+                    "xpath///*[@id=\"app\"]/div[1]/div[2]/div[2]/div/div[1]/div/div[3]/div[1]/div/div[4]/div/form/div/div[2]/input"
+                ],
+                [
+                    "pierce/div.oxd-layout-container input"
+                ]
+            ],
+            "target": "main"
+        },
+        {
+            "type": "keyDown",
+            "target": "main",
+            "key": "Enter"
+        },
+        {
+            "type": "keyUp",
+            "key": "Enter",
+            "target": "main"
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "div.oxd-grid-1 > div:nth-of-type(1) path"
+                ],
+                [
+                    "xpath///*[@id=\"heart\"]"
+                ],
+                [
+                    "pierce/div.oxd-grid-1 > div:nth-of-type(1) path"
+                ]
+            ],
+            "offsetY": 7.00946044921875,
+            "offsetX": 1.68927001953125
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "div.oxd-grid-1 > div:nth-of-type(1) div.orangehrm-buzz-post i"
+                ],
+                [
+                    "xpath///*[@id=\"app\"]/div[1]/div[2]/div[2]/div/div[1]/div/div[3]/div[1]/div/div[1]/div/div[2]/li/button/i"
+                ],
+                [
+                    "pierce/div.oxd-grid-1 > div:nth-of-type(1) div.orangehrm-buzz-post i"
+                ]
+            ],
+            "offsetY": 6.75,
+            "offsetX": 8.5
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "li:nth-of-type(1) > p"
+                ],
+                [
+                    "xpath///*[@id=\"app\"]/div[1]/div[2]/div[2]/div/div[1]/div/div[3]/div[1]/div/div[1]/div/div[2]/li/ul/li[1]/p"
+                ],
+                [
+                    "pierce/li:nth-of-type(1) > p"
+                ],
+                [
+                    "text/Delete Post"
+                ]
+            ],
+            "offsetY": 1.25,
+            "offsetX": 36.2578125
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/ Yes, Delete"
+                ],
+                [
+                    "button.oxd-button--label-danger"
+                ],
+                [
+                    "xpath///*[@id=\"app\"]/div[3]/div/div/div/div[3]/button[2]"
+                ],
+                [
+                    "pierce/button.oxd-button--label-danger"
+                ],
+                [
+                    "text/Yes, Delete"
+                ]
+            ],
+            "offsetY": 14.71875,
+            "offsetX": 54.3203125
+        }
+    ]
+}

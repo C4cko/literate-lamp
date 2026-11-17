@@ -120,6 +120,21 @@ informe o caminho com a variável `CHROME`.
 Pelo Recorder o texto do post aparece como `JM-TS01-{{ID}}`, porque quem troca o `{{ID}}` por um número
 único é o `executar.mjs`. A própria gravação exclui o post no final.
 
+### 5. Gravação original e ajustes
+
+A jornada foi gravada no Chrome Recorder e exportada em JSON:
+[`sistema/gravacoes/original/ts-gravacao.json`](sistema/gravacoes/original/ts-gravacao.json). Ela não é executada
+pelo script, porque não serve como teste do jeito que sai do Recorder:
+
+| Na gravação original | Problema | Nas gravações `ts0X` |
+|---|---|---|
+| comentário, curtida e menu pelo seletor `div.oxd-grid-1 > div:nth-of-type(1)` (o primeiro post do feed) | na demo compartilhada o primeiro post pode ser de outra pessoa | XPath que acha o card pelo texto do post |
+| texto fixo ("Post") | não dá para saber qual post é desta execução | texto `JM-TS0X-{{ID}}`, com número único |
+| nenhum `waitForElement` | repete os cliques, mas não verifica nada | verificações de "1 Comment", "1 Like", "0 Likes", post removido etc. |
+| não registrou a ida ao menu Buzz | depende da página em que o login termina | clique no link do Buzz |
+
+Por isso as gravações `ts01` a `ts05` foram ajustadas à mão a partir desse formato.
+
 ## Resultado
 
 28 execuções nos três níveis, todas passando. Encontrei 1 defeito (**D1**: a API aceita comentário vazio),

@@ -1,0 +1,49 @@
+# Massa de dados da jornada "Autenticação (Login)" - testes de integração.
+# Senhas em texto puro (apenas para o teste):
+#   ana   -> Ana@Segura#2026    (Admin, ativa)
+#   bruno -> Bruno@Segura#2026  (ESS, conta desabilitada)
+#   carla -> Carla@Segura#2026  (ESS, funcionária desligada)
+#   diego -> Diego@Segura#2026  (ESS, sem funcionário vinculado)
+#   eva   -> Eva@Segura#2026    (ESS, usuário excluído)
+#   fabio -> fabio123           (ESS, ativo, senha fraca)
+#   gil   -> Gil@Legado#2020    (ESS, ativo, hash MD5 legado)
+Config:
+  - { name: 'authorize_user_role_manager_class', value: 'BasicUserRoleManager' }
+  - { name: 'auth.password_policy.enforce_password_strength', value: 'off' }
+  - { name: 'auth.password_policy.min_password_length', value: '8' }
+  - { name: 'auth.password_policy.min_uppercase_letters', value: '1' }
+  - { name: 'auth.password_policy.min_lowercase_letters', value: '1' }
+  - { name: 'auth.password_policy.min_numbers_in_password', value: '1' }
+  - { name: 'auth.password_policy.min_special_characters', value: '1' }
+  - { name: 'auth.password_policy.default_required_password_strength', value: 'strong' }
+  - { name: 'auth.password_policy.is_spaces_allowed', value: 'false' }
+
+I18NLanguage:
+  - { id: 4, name: 'English (United States)', code: 'en_US', enabled: 1, added: 1, modified_at: null }
+
+TerminationReason:
+  - { id: 1, name: 'Resigned' }
+
+EmployeeTerminationRecord:
+  - { id: 1, reason_id: 1, termination_date: '2025-01-31', note: null }
+
+Employee:
+  - { emp_number: 1, employee_id: '0001', emp_firstname: 'Ana', emp_lastname: 'Souza' }
+  - { emp_number: 2, employee_id: '0002', emp_firstname: 'Bruno', emp_lastname: 'Lima' }
+  - { emp_number: 3, employee_id: '0003', emp_firstname: 'Carla', emp_lastname: 'Dias', termination_id: 1 }
+  - { emp_number: 5, employee_id: '0005', emp_firstname: 'Eva', emp_lastname: 'Rocha' }
+  - { emp_number: 6, employee_id: '0006', emp_firstname: 'Fabio', emp_lastname: 'Melo' }
+  - { emp_number: 7, employee_id: '0007', emp_firstname: 'Gil', emp_lastname: 'Prado' }
+
+UserRole:
+  - { id: 1, name: Admin, display_name: Admin, is_assignable: 1, is_predefined: 1 }
+  - { id: 2, name: ESS, display_name: ESS, is_assignable: 1, is_predefined: 1 }
+
+User:
+  - { id: 1, user_role_id: 1, emp_number: 1, user_name: 'ana', user_password: '$2y$10$.3qCGgom5XBpo.kKu1AqSO2OMIiTqZgxUU2G87m/lF1WmpeQYq0Hq', deleted: 0, status: 1 }
+  - { id: 2, user_role_id: 2, emp_number: 2, user_name: 'bruno', user_password: '$2y$10$1mPnPx7wDNJZfNK8LeYgPuJ.aXBhVjM5QbPwFsqVLXoonEwyimZBG', deleted: 0, status: 0 }
+  - { id: 3, user_role_id: 2, emp_number: 3, user_name: 'carla', user_password: '$2y$10$oxxALkGb5InbFhu5wh7oK.eFfRdEiak.N993YOPmvn/bpxHfr1Yd.', deleted: 0, status: 1 }
+  - { id: 4, user_role_id: 2, emp_number: null, user_name: 'diego', user_password: '$2y$10$5wiw/THMG5N0zyuQiU5ypOdxT3bJitrv6.B4yiPs5z5RVi38ZolqO', deleted: 0, status: 1 }
+  - { id: 5, user_role_id: 2, emp_number: 5, user_name: 'eva', user_password: '$2y$10$2UPNjUYXmKTrCLNSf6hnyuuW.zd4UTa.OcQUduFg23pB2SGf5tryG', deleted: 1, status: 1 }
+  - { id: 6, user_role_id: 2, emp_number: 6, user_name: 'fabio', user_password: '$2y$10$YXIKB.LWq42Qa430oISl..AhMuSGfx3EpfXN2ouSEh3qw7Owri44i', deleted: 0, status: 1 }
+  - { id: 7, user_role_id: 2, emp_number: 7, user_name: 'gil', user_password: '95d7bd7a0c4a5030f553b5fee044164a', deleted: 0, status: 1 }

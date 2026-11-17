@@ -1,6 +1,7 @@
 package t2.claim;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -96,6 +97,25 @@ class ClaimValidationSystemTest extends SystemTestBase {
         ClaimDetailPage.asOwner(browser, id)
                 .addExpense(Config.EXPENSE_TYPE, DATA_DA_DESPESA, "9999999999.99", "9,999,999,999.99");
         assertEquals(1, cenario.ess().expenses(id).size());
+    }
+
+    /**
+     * D1 (risco R2) pela tela: a criação recusa valor 0 (ST-10), mas a edição só tem BETWEEN [0, ...] na API, e o
+     * modal de edição também não recusa 0. O esperado é a mesma regra nos dois caminhos.
+     */
+    @Test
+    @Tag("defeito-conhecido")
+    @DisplayName("ST-13 editar a despesa para valor 0 deve ser recusado, como na criação (D1)")
+    void st13EdicaoParaZero() {
+        int id = cenario.reivindicacaoDoEss(); // INITIATED, com uma despesa de 10,50
+
+        entrarComoEss();
+        ClaimDetailPage ess = ClaimDetailPage.asOwner(browser, id);
+        ess.editFirstExpenseAmount("0").saveExpense();
+        ess.waitSaveAttemptFinished();
+
+        assertEquals(10.5, cenario.ess().expenses(id).get(0).get("amount").asDouble(), 0.001,
+                "o valor da despesa não pode ter sido trocado para 0");
     }
 
     @Test

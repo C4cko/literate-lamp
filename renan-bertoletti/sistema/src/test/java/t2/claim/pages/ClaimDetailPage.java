@@ -1,6 +1,7 @@
 package t2.claim.pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
@@ -79,6 +80,17 @@ public final class ClaimDetailPage {
         String pattern = dateInput.getAttribute("placeholder").replace("mm", "MM");
         dateInput.sendKeys(date.format(DateTimeFormatter.ofPattern(pattern)));
         b.input("Amount").sendKeys(amount);
+        return this;
+    }
+
+    /** Abre o modal Edit Expense da primeira despesa (ícone de lápis) e troca o valor; não salva. */
+    public ClaimDetailPage editFirstExpenseAmount(String amount) {
+        b.click(By.xpath("(//button[.//i[contains(@class,'bi-pencil-fill')]])[1]"));
+        b.visible(By.xpath(DIALOG));
+        WebElement amountInput = b.input("Amount");
+        b.wait.until(d -> !amountInput.getAttribute("value").isEmpty()); // modal preenchido com a despesa atual
+        amountInput.sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
+        amountInput.sendKeys(amount);
         return this;
     }
 

@@ -1,0 +1,25 @@
+# Credenciais exclusivas do banco local descartável; nenhuma porta é publicada.
+database:
+  hostName: db
+  hostPort: 3306
+  databaseName: suzan_emergency_dev
+  privilegedDatabaseUser: root
+  privilegedDatabasePassword: root
+  useSameDbUserForOrangeHRM: y
+  orangehrmDatabaseUser: ~
+  orangehrmDatabasePassword: ~
+  isExistingDatabase: n
+  enableDataEncryption: n
+organization:
+  name: T2 Emergency Contacts
+  country: BR
+admin:
+  adminUserName: Admin
+  adminPassword: Ohrm@1423
+  adminEmployeeFirstName: Teste
+  adminEmployeeLastName: T2
+  workEmail: admin@example.com
+  contactNumber: ~
+  registrationConsent: false
+license:
+  agree: y

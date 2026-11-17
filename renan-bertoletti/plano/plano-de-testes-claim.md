@@ -376,6 +376,81 @@ observados, são repetidos aqui para que façam parte da suíte automatizada.
 > aceitaria 0). Na criação, vale a mais restritiva; na edição, só existe a segunda. O mesmo valor de fronteira
 > serve, portanto, para testar os dois caminhos e expor a diferença (R2).
 
+## 5. Estratégia
+
+### 5.1 Objetivo e escopo
+
+Verificar se a jornada da seção 1 segue as regras da máquina de estados (seção 2) e as regras de entrada (seção 4),
+cobrindo a metade "gestor" (aprovar, rejeitar, pagar), que não tem nenhum caso de sucesso nos testes existentes (#5).
+
+- **Dentro:** criação de reivindicação (*Submit Claim* e *Assign Claim*), despesas, descrição do anexo, as 5 ações
+  (`PUT /api/v2/claim/requests/{id}/action`), ações disponíveis por papel e número de referência.
+- **Fora:** cadastros de eventos e tipos de despesa (só usados como pré-condição), conteúdo do arquivo anexado,
+  relatórios e filtros de busca.
+
+### 5.2 Níveis, ferramentas e ambiente
+
+| Nível | Alvo | Ferramenta | Ambiente |
+|---|---|---|---|
+| Unitário | classes PHP isoladas: `ClaimService`, regras de validação das APIs | **PHPUnit 9** (infra do OrangeHRM), com *mocks* do DAO e do `DateTimeHelper`, sem banco | OrangeHRM local via Docker ([`mateus-neubarth/docs/ambiente.md`](../../mateus-neubarth/docs/ambiente.md)) |
+| Integração | APIs do `orangehrmClaimPlugin` com kernel, `UserRoleManager` e banco de teste reais | **PHPUnit 9**, `EndpointIntegrationTestCase` / `KernelTestCase` e fixtures YAML próprias | idem |
+| Sistema | jornada pelas telas, com três usuários (ESS, supervisor, Admin) | **Java 17 + Selenium WebDriver + JUnit 5** (Maven), padrão *Page Object* | servidor de demonstração |
+
+Os testes unitários e de integração ficam em `renan-bertoletti/unitario/` e `renan-bertoletti/integracao/` e são
+copiados para `src/plugins/orangehrmClaimPlugin/test/` do OrangeHRM para rodar; os de sistema ficam em
+`renan-bertoletti/sistema/`.
+
+### 5.3 Técnicas
+
+| Técnica | Onde | Seção |
+|---|---|---|
+| Teste baseado em estados: árvore de transição (cobertura de estados e de transições) e *sneak paths* | integração e sistema | 3 |
+| Particionamento em classes de equivalência | unitário e integração | 4.2 |
+| Análise de valor-limite | unitário e integração | 4.3 |
+| Teste baseado em casos de uso (fluxo principal, alternativos e exceções) | sistema | 1.4–1.6 |
+| Teste guiado por risco | todos | 2.7 (R1–R8) |
+
+### 5.4 Critérios
+
+- **Entrada:** ambiente local de pé com o commit `56e23b3b`; servidor de demonstração acessível com Admin / admin123;
+  pelo menos um evento e um tipo de despesa ativos.
+- **Saída:** todos os casos de prioridade A executados; cobertura de 12/12 transições e 18/18 pares (estado, papel)
+  de *sneak paths*; todo defeito registrado com evidência.
+- **Oráculo:** regras do código (seções 2.4 e 4.1) e comportamento conferido no servidor (seção 2). Onde não há
+  requisito (R1, R7, V7/V8), o caso **caracteriza** o comportamento e diz isso explicitamente, em vez de tratar o
+  resultado atual como correto.
+- **Defeito conhecido:** caso que falha por expor um risco confirmado fica em quarentena (grupo PHPUnit
+  `defeito-conhecido` / tag JUnit `defeito-conhecido`), para que a execução padrão continue verde e a falha continue
+  visível, como fez Mateus Neubarth em #14.
+
+### 5.5 Isolamento e dados
+
+- **Unitário:** nenhum acesso a banco ou rede; datas e ids vêm de *mocks*.
+- **Integração:** fixtures próprias recarregadas a cada caso (`populateFixtures`); data fixada com
+  `registerMockDateTimeHelper`; o oráculo confere a resposta **e** o banco (releitura pelo `ClaimDao`), lacuna
+  apontada em #5.
+- **Sistema:** cada execução cria os próprios funcionários, usuários e vínculo *Report-to* com sufixo único (como
+  o roteiro da seção 2.1), sem usar dados de outras pessoas. Cada teste cria a própria reivindicação; nenhum teste
+  depende de outro ou da ordem de execução. Sem `Thread.sleep` (só esperas explícitas), sem XPath absoluto (locators
+  por rótulo e texto), sem `catch` que engula exceção e com `assert` em toda verificação.
+
+## 6. Casos de teste
+
+Prioridade: **A** alta, **M** média, **B** baixa. Rastreabilidade: CA (critério de aceitação, 1.7), A/E (fluxos,
+1.5–1.6), W (transição, 2.4), R (risco, 2.7), TT/SP (seção 3), V/I (classes, 4.2).
+
+### 6.1 Unitários (PHPUnit)
+
+| ID | Alvo | Técnica | Dados | Passos | Resultado esperado | Rastreia | Prio |
+|---|---|---|---|---|---|---|---|
+| UT-01 | `ClaimService::getReferenceId()` | AVL | `getNextId()` → 1, 9 999 999, 10 000 000; data fixa 2026-11-17 | *mock* do `ClaimDao` e do `DateTimeHelper`; chama o método | `202611170000001` e `202611179999999` (15 caracteres); `2026111710000000` (16 caracteres): caracteriza R4 | R4 | A |
+| UT-02 | `ClaimService::getReferenceId()` | AVL | `getNextId()` → 7; data 2026-12-31 23:59:59 e 2027-01-01 00:00:00 | idem, trocando a data do *mock* | prefixos `20261231` e `20270101`: o prefixo segue a data do `DateTimeHelper`, e não do relógio local | R5 | M |
+| UT-03 | Regras de `ClaimExpenseAPI::getValidationRuleForCreate()` (valor) | AVL | −0,01 · 0 · 0,01 · 9 999 999 999,99 · 10 000 000 000,00 | valida cada valor com o `Validator` do OrangeHRM | inválido · **inválido** · válido · válido · inválido | V9, I14–I16, CA7 | A |
+| UT-04 | Regras de `ClaimExpenseAPI::getValidationRuleForUpdate()` (valor) | AVL | −0,01 · 0 · 0,01 | idem, com as regras de edição | inválido · **inválido** (esperado; o código aceita: R2, defeito-conhecido) · válido | R2, I14 | A |
+| UT-05 | Regras de tamanho: `remarks`, `note` e descrição do anexo | AVL | 1000/1001 (`remarks`, `note`); 200/201 (descrição) | valida cada texto com as regras de criação das três APIs | válido/inválido em cada par | V4, I7, V11, I20, V13, I21 | M |
+| UT-06 | Regra do parâmetro `action` de `ClaimRequestActionAPI` | PE | `SUBMIT`, `APPROVE`, `REJECT`, `PAY`, `CANCEL`, `FOO`, `submit`, vazio | valida com `getValidationRuleForUpdate()` | as 5 ações válidas; `FOO`, minúsculas e vazio inválidos | SP-21 | M |
+| UT-07 | Regra `API_DATE` da despesa | PE/AVL | `2026-02-28`, `2026-02-29`, `2028-02-29`, `17/11/2026`, vazio | valida com as regras de criação de `ClaimExpenseAPI` | válido, inválido, válido, inválido, inválido | V6, I11–I13 | M |
+
 ## Uso de IA
 
 Redação inicial feita com Claude Code (Claude Opus 5.5, Anthropic), a partir do código do OrangeHRM e da

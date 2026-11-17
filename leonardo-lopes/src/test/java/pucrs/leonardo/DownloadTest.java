@@ -1,6 +1,11 @@
 package pucrs.leonardo;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +16,7 @@ import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -21,10 +27,25 @@ class DownloadEmployeeDataTest {
 
     private WebDriver driver;
     private WebDriverWait wait;
+    private Path pastaDownload;
 
     @BeforeEach
-    void abrirNavegador() {
-        driver = new ChromeDriver();
+    void abrirNavegador() throws IOException {
+        pastaDownload = Files.createTempDirectory("orangehrm-downloads");
+
+        Map<String, Object> prefs = new HashMap<>();
+        prefs.put("download.default_directory", pastaDownload.toString());
+        prefs.put("download.prompt_for_download", false);
+        prefs.put("download.directory_upgrade", true);
+        prefs.put("safebrowsing.enabled", true);
+
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--no-sandbox");
+        options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--remote-allow-origins=*");
+        options.setExperimentalOption("prefs", prefs);
+
+        driver = new ChromeDriver(options);
         wait = new WebDriverWait(driver, Duration.ofSeconds(20));
     }
 
@@ -45,20 +66,31 @@ class DownloadEmployeeDataTest {
 
         By campoEmployeeName = By.xpath("//div[contains(@class,'oxd-autocomplete-text-input')]//input");
         WebElement inputName = wait.until(ExpectedConditions.visibilityOfElementLocated(campoEmployeeName));
-        inputName.sendKeys("John William Doe");
 
-        By opcaoValida = By.xpath("//div[@role='listbox']//div[@role='option' and not(contains(., 'Searching'))][1]");
-        WebElement itemSelecionado = wait.until(ExpectedConditions.elementToBeClickable(opcaoValida));
-        itemSelecionado.click();
+        inputName.click();
+        inputName.clear();
+        inputName.sendKeys("John");
+
+        By opcaoValida = By.xpath(
+                "//div[@role='listbox']//div[@role='option']//span[not(contains(text(), 'Searching'))]");
+        clicarComSeguranca(opcaoValida);
 
         By botaoSearch = By.xpath("//button[@type='submit' and normalize-space()='Search']");
         clicarComSeguranca(botaoSearch);
 
-        By botaoDownloadJson = By.xpath("//button[normalize-space()='Download'] | //i[contains(@class, 'bi-download')]");
-        WebElement btnDownload = wait.until(ExpectedConditions.elementToBeClickable(botaoDownloadJson));
-        btnDownload.click();
+        By labelEmployeeId = By.xpath("//label[normalize-space()='Employee Id']");
+        wait.until(ExpectedConditions.visibilityOfElementLocated(labelEmployeeId));
 
-        assertTrue(btnDownload.isDisplayed(), "O botão de download de dados do empregado foi acionado com sucesso.");
+        By botaoDownload = By.xpath("//button[normalize-space()='Download']");
+        clicarComSeguranca(botaoDownload);
+
+        boolean baixou = new WebDriverWait(driver, Duration.ofSeconds(30)).until(d -> {
+            String[] arquivos = pastaDownload.toFile().list(
+                    (dir, nome) -> !nome.endsWith(".crdownload") && !nome.endsWith(".tmp"));
+            return arquivos != null && arquivos.length > 0;
+        });
+
+        assertTrue(baixou, "O arquivo com os dados do empregado deveria ter sido baixado.");
     }
 
     @Test
@@ -104,7 +136,8 @@ class DownloadEmployeeDataTest {
     }
 
     private void clicarComSeguranca(By localizador) {
-        wait.ignoring(StaleElementReferenceException.class)
+        new WebDriverWait(driver, Duration.ofSeconds(20))
+                .ignoring(StaleElementReferenceException.class)
                 .ignoring(ElementClickInterceptedException.class)
                 .until(navegador -> {
                     for (WebElement camada : navegador.findElements(By.cssSelector(".oxd-form-loader"))) {
@@ -113,12 +146,12 @@ class DownloadEmployeeDataTest {
                         }
                     }
 
-                    WebElement botao = navegador.findElement(localizador);
-                    if (!botao.isDisplayed() || !botao.isEnabled()) {
+                    WebElement elemento = navegador.findElement(localizador);
+                    if (!elemento.isDisplayed() || !elemento.isEnabled()) {
                         return false;
                     }
 
-                    botao.click();
+                    elemento.click();
                     return true;
                 });
     }

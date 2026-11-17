@@ -203,7 +203,7 @@ combinação não observada, com a expectativa derivada da migração entre par�
 
 | Estado | ESS (dono) | Supervisor | Admin |
 |---|---|---|---|
-| INITIATED (criada pelo ESS) | SUBMIT, CANCEL | n. o. (–) | n. o. (–) |
+| INITIATED (criada pelo ESS) | SUBMIT, CANCEL | n. o. (SUBMIT) | n. o. (SUBMIT) |
 | INITIATED (atribuída pelo gestor) | SUBMIT, CANCEL | SUBMIT | SUBMIT |
 | SUBMITTED | CANCEL | APPROVE, REJECT | APPROVE, REJECT |
 | APPROVED | – | – | REJECT, PAY |
@@ -211,9 +211,10 @@ combinação não observada, com a expectativa derivada da migração entre par�
 | CANCELLED | – | n. o. (–) | n. o. (–) |
 | PAID | n. o. (–) | n. o. (–) | – |
 
-> As linhas "INITIATED" não contradizem a migração: o gestor só vê SUBMIT quando foi ele quem criou a reivindicação
-> pela tela *Assign Claim*; para a reivindicação criada pelo próprio funcionário, o servidor não foi consultado e a
-> expectativa vem do código. Esses "n. o." serão verificados nos casos de transição proibida (seção 3).
+> A migração dá SUBMIT ao Admin e ao supervisor em **qualquer** reivindicação INITIATED, e não só nas criadas por
+> eles em *Assign Claim*. O caso original "Admin SUBMIT ESS INITIATED" (#5) confirma isso para o Admin: a
+> reivindicação que o funcionário ainda está editando vai para PAID (risco R7). As combinações "n. o." serão
+> verificadas pelos casos da seção 3.
 
 ### 2.6 Transições proibidas observadas
 
@@ -236,6 +237,96 @@ combinação não observada, com a expectativa derivada da migração entre par�
 | R4 | **Número de referência com mais de 7 dígitos de id.** `ClaimService::getReferenceId()` usa `str_pad(…, 7, '0')`; a partir do id 10 000 000, o número passa a ter 16 caracteres. | Código (#5) | Teste unitário com ids 9 999 999 e 10 000 000. |
 | R5 | **Data em UTC.** Às 23h de 16/11 (horário de Brasília), o servidor gerou `20261117…` e `submittedDate` 2026-11-17. Um teste que compare com a data local falha entre 21h e 0h. | Servidor | Oráculo de data calculado em UTC (ou data fixada no teste unitário). |
 | R6 | **Supervisor não rejeita depois de aprovar.** Em APPROVED, o supervisor não tem ação; só o Admin pode rejeitar (W6). | Servidor | Transição proibida "Supervisor REJECT em APPROVED". |
+| R7 | **Gestor submete o rascunho do funcionário.** Admin e supervisor têm SUBMIT em INITIATED mesmo quando a reivindicação foi criada pelo funcionário, que ainda pode estar adicionando despesas; com o Admin, ela vai direto para PAID. | Migração + teste original (#5) | Caminhos TT-08b e TT-09b da árvore de transição (seção 3). |
+| R8 | **Estado resultante ambíguo para quem tem dois papéis.** `ClaimRequestActionAPI::getResultingState()` consulta as transições sem excluir papéis e devolve a **primeira** que casa com a ação. Quando o Admin submete a **própria** reivindicação, casam a linha ESS (→ SUBMITTED) e a linha ADMIN (→ PAID); o resultado depende da ordem das linhas em `ohrm_workflow_state_machine`. | Código | Caminho TT-10 (seção 3). |
+
+## 3. Casos derivados da máquina de estados
+
+### 3.1 Árvore de transição
+
+A árvore parte do estado inicial (INITIATED) e expande cada transição da seção 2.4. Um nó vira folha quando o estado
+é final (CANCELLED, PAID) ou quando já apareceu antes no mesmo caminho ou em outro ramo já expandido (marcado com ↺).
+Cada caminho da raiz até uma folha é um caso de teste.
+
+```text
+INITIATED
+├── W2  ESS CANCEL ───────────────▶ CANCELLED                       TT-01
+├── W1  ESS SUBMIT ───────────────▶ SUBMITTED
+│   ├── W3  ESS CANCEL ───────────▶ CANCELLED                       TT-02
+│   ├── W7  Admin APPROVE ────────▶ PAID                            TT-03
+│   ├── W8  Admin REJECT ─────────▶ REJECTED
+│   │   └── W4  ESS SUBMIT ───────▶ SUBMITTED ↺                     TT-04
+│   ├── W11 Supervisor APPROVE ───▶ APPROVED
+│   │   ├── W6  Admin REJECT ─────▶ REJECTED ↺                      TT-05
+│   │   └── W9  Admin PAY ────────▶ PAID                            TT-06
+│   └── W12 Supervisor REJECT ────▶ REJECTED ↺                      TT-07
+├── W5  Admin SUBMIT ─────────────▶ PAID                            TT-08a / TT-08b
+└── W10 Supervisor SUBMIT ────────▶ APPROVED ↺                      TT-09a / TT-09b
+```
+
+### 3.2 Caminhos (casos de transição)
+
+Oráculo comum a todos: depois de cada ação, (1) a resposta tem o estado esperado; (2) o estado **lido de novo**
+(banco na integração, tela *Employee Claims* no sistema) é o mesmo; (3) as ações disponíveis para cada papel
+batem com a seção 2.5.
+
+| ID | Pré-condição | Caminho | Transições | Estados visitados | Verificação extra |
+|---|---|---|---|---|---|
+| TT-01 | Criada pelo ESS | CANCEL (ESS) | W2 | INITIATED, CANCELLED | `submittedDate` continua vazio |
+| TT-02 | Criada pelo ESS | SUBMIT (ESS) → CANCEL (ESS) | W1, W3 | INITIATED, SUBMITTED, CANCELLED | `submittedDate` preservado após o cancelamento |
+| TT-03 | Criada pelo ESS | SUBMIT (ESS) → APPROVE (Admin) | W1, W7 | INITIATED, SUBMITTED, PAID | não passa por APPROVED (R1) |
+| TT-04 | Criada pelo ESS | SUBMIT (ESS) → REJECT (Admin) → SUBMIT (ESS) | W1, W8, W4 | INITIATED, SUBMITTED, REJECTED | `submittedDate` atualizado na ressubmissão |
+| TT-05 | Criada pelo ESS; ESS ligado ao supervisor | SUBMIT (ESS) → APPROVE (Sup.) → REJECT (Admin) | W1, W11, W6 | INITIATED, SUBMITTED, APPROVED, REJECTED | – |
+| TT-06 | idem | SUBMIT (ESS) → APPROVE (Sup.) → PAY (Admin) | W1, W11, W9 | INITIATED, SUBMITTED, APPROVED, PAID | **fluxo principal (FP)** |
+| TT-07 | idem | SUBMIT (ESS) → REJECT (Sup.) | W1, W12 | INITIATED, SUBMITTED, REJECTED | – |
+| TT-08a | Criada pelo Admin (*Assign Claim*) | SUBMIT (Admin) | W5 | INITIATED, PAID | nasce paga (R1) |
+| TT-08b | Criada pelo **ESS** | SUBMIT (Admin) | W5 | INITIATED, PAID | gestor submete rascunho alheio (R7) |
+| TT-09a | Criada pelo supervisor (*Assign Claim*) | SUBMIT (Sup.) | W10 | INITIATED, APPROVED | – |
+| TT-09b | Criada pelo **ESS** | SUBMIT (Sup.) | W10 | INITIATED, APPROVED | gestor submete rascunho alheio (R7) |
+| TT-10 | Criada pelo **Admin para si mesmo** (*Submit Claim*) | SUBMIT (Admin, dono) | W1 (esperado) | INITIATED, SUBMITTED | o Admin não pode aprovar o próprio reembolso: esperado SUBMITTED, e não PAID (R8) |
+
+**Cobertura:**
+
+- **Estados:** 6 de 6. O conjunto mínimo é TT-01, TT-04 e TT-06.
+- **Transições:** 12 de 12 (100%). Os 9 caminhos TT-01 a TT-09a cobrem todas; TT-08b e TT-09b repetem W5 e W10
+  com outra pré-condição, por causa de R7, e TT-10 repete W1 com um usuário de dois papéis, por causa de R8.
+- Comparação: os testes originais cobrem 5 de 12 (#5).
+
+### 3.3 Transições proibidas (*sneak paths*)
+
+São 6 estados × 3 papéis × 5 ações = 90 combinações, das quais 12 são válidas. Critério de seleção: **pelo menos
+uma ação proibida para cada par (estado, papel)**, que dá 18 pares, priorizando a ação que mais "parece" possível
+(ex.: pagar logo depois de aprovar). Somam-se o caso de um usuário sem vínculo e o de uma ação inexistente.
+
+Resultado esperado em todos (salvo SP-21): **HTTP 403**, estado inalterado e `submittedDate` inalterado.
+
+| ID | Estado | Papel | Ação | Motivo da escolha |
+|---|---|---|---|---|
+| SP-01 | INITIATED | ESS (dono) | APPROVE | funcionário aprovando a própria |
+| SP-02 | INITIATED | Supervisor | APPROVE | aprovar sem submissão |
+| SP-03 | INITIATED | Admin | PAY | pagar sem submissão |
+| SP-04 | SUBMITTED | ESS (dono) | APPROVE | observado no servidor (2.6) |
+| SP-05 | SUBMITTED | ESS (dono) | PAY | – |
+| SP-06 | SUBMITTED | Supervisor | PAY | supervisor pulando a aprovação |
+| SP-07 | SUBMITTED | Admin | PAY | pagar sem aprovar (o Admin só chega a PAID por APPROVE) |
+| SP-08 | APPROVED | ESS (dono) | CANCEL | observado no servidor (2.6) |
+| SP-09 | APPROVED | Supervisor | PAY | observado no servidor (2.6); nome enganoso no teste original (#5) |
+| SP-10 | APPROVED | Supervisor | REJECT | R6 |
+| SP-11 | APPROVED | Admin | APPROVE | aprovar duas vezes |
+| SP-12 | REJECTED | ESS (dono) | CANCEL | observado no servidor (2.6) |
+| SP-13 | REJECTED | Supervisor | APPROVE | rever a própria rejeição |
+| SP-14 | REJECTED | Admin | PAY | pagar o que foi rejeitado |
+| SP-15 | CANCELLED | ESS (dono) | SUBMIT | observado no servidor (2.6) |
+| SP-16 | CANCELLED | Supervisor | APPROVE | – |
+| SP-17 | CANCELLED | Admin | APPROVE | – |
+| SP-18 | PAID | ESS (dono) | SUBMIT | – |
+| SP-19 | PAID | Supervisor | REJECT | – |
+| SP-20 | PAID | Admin | CANCEL | observado no servidor (2.6) |
+| SP-21 | SUBMITTED | Admin | `FOO` (ação inexistente) | esperado **422** (validação), não 403 |
+| SP-22 | SUBMITTED | ESS **sem vínculo** (outro funcionário, não supervisor) | APPROVE | usuário alheio à reivindicação |
+
+Cobertura de *sneak paths*: 18 de 18 pares (estado, papel), 20 das 78 combinações proibidas. Os casos de 2.6, já
+observados, são repetidos aqui para que façam parte da suíte automatizada.
 
 ## Uso de IA
 

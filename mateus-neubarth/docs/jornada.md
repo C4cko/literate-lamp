@@ -39,7 +39,7 @@
 | Create Login Details | Não | liga a criação do usuário | `SaveEmployee.vue` |
 | Username | Sim, se login | **5 a 40** caracteres, **único** entre usuários não excluídos | `UserService::USERNAME_MIN/MAX_LENGTH`; `UserAPI` |
 | Status | Sim, se login | Enabled / Disabled | `UserAPI` (`BOOL_TYPE`) |
-| Password | Sim, se login* | máx. **64**; política padrão: mín. **8** caracteres, ≥1 maiúscula, ≥1 minúscula, ≥1 número, ≥1 caractere especial, sem espaços, força mínima *strong* (zxcvbn score ≥ 3). | `Rules\Password`; `PasswordStrengthService::checkPasswordPolicies`; valores padrão em `installer/Migration/V5_4_0/Migration.php` |
+| Password | Sim, se login* | máx. **64**; política padrão: mín. **8** caracteres, ≥1 maiúscula, ≥1 minúscula, ≥1 número, ≥1 caractere especial, sem espaços, força mínima *strong* (zxcvbn score ≥ 3). **Na prática o mínimo é 9**: nenhuma senha de 8 caracteres atinge a força exigida (defeito D2) | `Rules\Password`; `PasswordStrengthService::checkPasswordPolicies`; valores padrão em `installer/Migration/V5_4_0/Migration.php` |
 | Confirm Password | Sim, se login | igual à senha ("Passwords do not match") | `PasswordInput.vue` |
 
 \* A senha deixa de ser obrigatória quando a autenticação por rede social está ativa (`isPasswordRequired`).
@@ -84,14 +84,19 @@ Estas observações orientam os casos de teste e serão confirmadas (ou descarta
 - **R1 – Criação não atômica (A2).** O funcionário e o usuário são criados em duas requisições separadas
   (`SaveEmployee.vue`, método `onSave`). Se a segunda falhar no servidor (ex.: username tomado entre a
   validação e o envio, ou senha recusada pela política do back-end), o funcionário **fica criado sem login**
-  e o formulário não mostra o erro de forma clara.
+  e o formulário não mostra o erro de forma clara. *Comportamento confirmado pela API em 12/11/2026 (IT-11):* com
+  a 2ª requisição recusada, o funcionário permanece sem nenhum usuário. Na interface o caso é difícil de provocar,
+  porque as mesmas regras são validadas antes do envio; fica registrado como risco de projeto, não como defeito.
 - **R2 – Contador de ID não incrementado no fluxo com foto (A1).** Em `EmployeeAPI::create()`, só o ramo
   *sem* foto chama `EmployeeService::saveNewEmployee()`, que é quem chama `IDGeneratorService::incrementId()`.
-  O ramo com foto chama apenas `EmployeePictureService::saveEmployeePicture()`. **Hipótese:** depois de cadastrar alguém com
+  O ramo com foto chama apenas `EmployeePictureService::saveEmployeePicture()`. Depois de cadastrar alguém com
   foto, o próximo formulário sugere de novo o **mesmo** Employee Id, o que provoca E2 para quem não alterar o
-  campo.
-- **R3 – Tamanho da foto validado só no cliente.** O limite de 1 MB está apenas no Vue; a API valida tipo,
-  extensão e nome do arquivo, mas não o tamanho.
+  campo. **Confirmado em 12/11/2026: defeito D1** (ver [defeitos.md](defeitos.md)).
+- **R3 – Tamanho da foto validado só no cliente.** *Descartado em 12/11/2026.* A leitura inicial viu o limite
+  de 1 MB só no Vue, mas a regra `Base64Attachment` da API também confere o tamanho
+  (`ConfigService::MAX_ATTACHMENT_SIZE` = 1.048.576 bytes) e, por padrão (`checkSizeStrictly`), compara o tamanho
+  declarado com o conteúdo real. Testado no limite pelo IT-07 (1.048.576 aceito; 1.048.577 e tamanho declarado
+  falso recusados).
 - **R4 – Unicidade só entre registros não expurgados.** Um ID de funcionário expurgado (*purged*) pode ser
   reutilizado, o que é intencional, mas merece um caso de teste.
 

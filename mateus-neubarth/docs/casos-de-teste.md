@@ -58,7 +58,7 @@ REST Assured quanto o Playwright têm suporte oficial a ela.
 | Employee Id | V4: vazio (API); V5: 1–10, único | I5: > 10; I6: já existente | 10, 11 |
 | Foto | V6: gif/jpg/jpeg/jfif/png ≤ 1 MB | I7: outro tipo (pdf, bmp, svg); I8: > 1 MB; I9: nome > 100 | 1 MB, 1 MB + 1 byte |
 | Username | V7: 5–40, único | I10: < 5; I11: > 40; I12: existente | 4, 5, 40, 41 |
-| Password | V8: 8–64, atende à política | I13: < 8; I14: sem maiúscula; I15: sem minúscula; I16: sem número; I17: sem especial; I18: com espaço; I19: > 64; I20: fraca/adivinhável | 7, 8, 64, 65 |
+| Password | V8: 8–64, atende à política (na prática 9–64, ver D2) | I13: < 8; I14: sem maiúscula; I15: sem minúscula; I16: sem número; I17: sem especial; I18: com espaço; I19: > 64; I20: fraca/adivinhável | 7, 8, 64, 65 |
 | Confirm Password | V9: igual | I21: diferente | – |
 
 \* Comportamento com nome só de espaços não está definido no código; o caso serve para descobrir o comportamento.

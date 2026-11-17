@@ -1,0 +1,116 @@
+Input Validation (OrangeHRM\Tests\Claim\T2ClaimIntegracao\InputValidation)
+ [x] I t 15 evento e moeda with data set "V1+V2: evento ativo e USD"
+ [x] I t 15 evento e moeda with data set "I1: evento ausente"
+ [x] I t 15 evento e moeda with data set "I2: evento inativo"
+ [x] I t 15 evento e moeda with data set "I3: evento inexistente"
+ [x] I t 15 evento e moeda with data set "I4: evento 0"
+ [x] I t 15 evento e moeda with data set "I5: moeda ausente"
+ [x] I t 15 evento e moeda with data set "I6: moeda inexistente (XYZ)"
+ [x] I t 16 remarks with data set "V3: ausente"
+ [x] I t 16 remarks with data set "V4: 1 caractere"
+ [x] I t 16 remarks with data set "V4: 1000 caracteres"
+ [x] I t 16 remarks with data set "I7: 1001 caracteres"
+ [x] I t 17 valor na criacao with data set "I15: -0,01"
+ [x] I t 17 valor na criacao with data set "I14: 0"
+ [x] I t 17 valor na criacao with data set "V9: 0,01 (mínimo)"
+ [x] I t 17 valor na criacao with data set "V9: 1 (sem casas)"
+ [x] I t 17 valor na criacao with data set "V9: 7000,1 (1 casa)"
+ [x] I t 17 valor na criacao with data set "V9: 7000,12 (2 casas)"
+ [x] I t 17 valor na criacao with data set "I17: 7000,123 (3 casas)"
+ [x] I t 17 valor na criacao with data set "V9: 9 999 999 999,99 (máximo)"
+ [x] I t 17 valor na criacao with data set "I16: 10 000 000 000,00"
+ [x] I t 17 valor na criacao with data set "I18: não numérico"
+ [x] I t 17 valor na criacao with data set "I19: ausente"
+ [x] I t 18 edicao para um centavo
+ [ ] I t 18 edicao para zero deve ser recusada
+ [x] I t 19 tipo de despesa with data set "V5: ativo"
+ [x] I t 19 tipo de despesa with data set "I8: ausente"
+ [x] I t 19 tipo de despesa with data set "I9: inativo"
+ [x] I t 19 tipo de despesa with data set "I10: inexistente"
+ [x] I t 20 data da despesa with data set "V6: 2026-02-28"
+ [x] I t 20 data da despesa with data set "I13: 2026-02-29 (não bissexto)"
+ [x] I t 20 data da despesa with data set "V6: 2028-02-29 (bissexto)"
+ [x] I t 20 data da despesa with data set "I12: 17/11/2026"
+ [x] I t 20 data da despesa with data set "I11: ausente"
+ [x] I t 20 data da despesa with data set "V7? futura: 2027-01-01 (caracteriza)"
+ [x] I t 20 data da despesa with data set "V8? anterior à criação: 2020-01-01 (caracteriza)"
+ [x] I t 21 nota with data set "V11: 1000"
+ [x] I t 21 nota with data set "I20: 1001"
+ [x] I t 22 despesa conforme o estado with data set "SUBMITTED, create"
+ [x] I t 22 despesa conforme o estado with data set "SUBMITTED, update"
+ [x] I t 22 despesa conforme o estado with data set "SUBMITTED, delete"
+ [x] I t 22 despesa conforme o estado with data set "APPROVED, create"
+ [x] I t 22 despesa conforme o estado with data set "APPROVED, update"
+ [x] I t 22 despesa conforme o estado with data set "APPROVED, delete"
+ [x] I t 22 despesa conforme o estado with data set "PAID, create"
+ [x] I t 22 despesa conforme o estado with data set "PAID, update"
+ [x] I t 22 despesa conforme o estado with data set "PAID, delete"
+ [x] I t 22 despesa conforme o estado with data set "CANCELLED, create"
+ [x] I t 22 despesa conforme o estado with data set "CANCELLED, update"
+ [x] I t 22 despesa conforme o estado with data set "CANCELLED, delete"
+ [x] I t 22 despesa conforme o estado with data set "REJECTED, create"
+ [x] I t 22 despesa conforme o estado with data set "REJECTED, update"
+ [x] I t 22 despesa conforme o estado with data set "REJECTED, delete"
+ [x] I t 23 submeter sem despesas
+ [x] I t 24 reivindicacao para funcionario desligado
+ [x] I t 25 descricao do anexo with data set "V13: 200"
+ [x] I t 25 descricao do anexo with data set "I21: 201"
+ [x] I t 26 numero de referencia de duas reivindicacoes seguidas
+
+Resulting State Priority (OrangeHRM\Tests\Claim\T2ClaimIntegracao\ResultingStatePriority)
+ [x] I t 12 admin submete a propria na ordem padrao
+ [x] I t 12 admin submete a propria com as linhas em ordem inversa
+
+State Machine (OrangeHRM\Tests\Claim\T2ClaimIntegracao\StateMachine)
+ [x] I t 01 cancelar antes de submeter
+ [x] I t 02 submeter e cancelar
+ [x] I t 03 admin aprova vai direto para pago
+ [x] I t 04 rejeitar e ressubmeter
+ [x] I t 05 supervisor aprova e admin rejeita
+ [x] I t 06 fluxo principal ate pago
+ [x] I t 07 supervisor rejeita
+ [x] I t 08 admin submete atribuida por ele
+ [x] I t 09 admin submete rascunho do funcionario
+ [x] I t 10 supervisor submete atribuida por ele
+ [x] I t 11 supervisor submete rascunho do funcionario
+ [x] I t 13 transicao proibida with data set "SP-01 INITIATED, ESS, APPROVE"
+ [x] I t 13 transicao proibida with data set "SP-02 INITIATED, Supervisor, APPROVE"
+ [x] I t 13 transicao proibida with data set "SP-03 INITIATED, Admin, PAY"
+ [x] I t 13 transicao proibida with data set "SP-04 SUBMITTED, ESS, APPROVE"
+ [x] I t 13 transicao proibida with data set "SP-05 SUBMITTED, ESS, PAY"
+ [x] I t 13 transicao proibida with data set "SP-06 SUBMITTED, Supervisor, PAY"
+ [x] I t 13 transicao proibida with data set "SP-07 SUBMITTED, Admin, PAY"
+ [x] I t 13 transicao proibida with data set "SP-08 APPROVED, ESS, CANCEL"
+ [x] I t 13 transicao proibida with data set "SP-09 APPROVED, Supervisor, PAY"
+ [x] I t 13 transicao proibida with data set "SP-10 APPROVED, Supervisor, REJECT (R6)"
+ [x] I t 13 transicao proibida with data set "SP-11 APPROVED, Admin, APPROVE"
+ [x] I t 13 transicao proibida with data set "SP-12 REJECTED, ESS, CANCEL"
+ [x] I t 13 transicao proibida with data set "SP-13 REJECTED, Supervisor, APPROVE"
+ [x] I t 13 transicao proibida with data set "SP-14 REJECTED, Admin, PAY"
+ [x] I t 13 transicao proibida with data set "SP-15 CANCELLED, ESS, SUBMIT"
+ [x] I t 13 transicao proibida with data set "SP-16 CANCELLED, Supervisor, APPROVE"
+ [x] I t 13 transicao proibida with data set "SP-17 CANCELLED, Admin, APPROVE"
+ [x] I t 13 transicao proibida with data set "SP-18 PAID, ESS, SUBMIT"
+ [x] I t 13 transicao proibida with data set "SP-19 PAID, Supervisor, REJECT"
+ [x] I t 13 transicao proibida with data set "SP-20 PAID, Admin, CANCEL"
+ [x] I t 13 transicao proibida with data set "SP-21 SUBMITTED, Admin, FOO (ação inexistente)"
+ [x] I t 13 transicao proibida with data set "SP-22 SUBMITTED, ESS sem vínculo, APPROVE"
+ [x] I t 14 acoes disponiveis with data set "INITIATED, ESS"
+ [x] I t 14 acoes disponiveis with data set "INITIATED, Supervisor"
+ [x] I t 14 acoes disponiveis with data set "INITIATED, Admin"
+ [x] I t 14 acoes disponiveis with data set "SUBMITTED, ESS"
+ [x] I t 14 acoes disponiveis with data set "SUBMITTED, Supervisor"
+ [x] I t 14 acoes disponiveis with data set "SUBMITTED, Admin"
+ [x] I t 14 acoes disponiveis with data set "APPROVED, ESS"
+ [x] I t 14 acoes disponiveis with data set "APPROVED, Supervisor"
+ [x] I t 14 acoes disponiveis with data set "APPROVED, Admin"
+ [x] I t 14 acoes disponiveis with data set "REJECTED, ESS"
+ [x] I t 14 acoes disponiveis with data set "REJECTED, Supervisor"
+ [x] I t 14 acoes disponiveis with data set "REJECTED, Admin"
+ [x] I t 14 acoes disponiveis with data set "CANCELLED, ESS"
+ [x] I t 14 acoes disponiveis with data set "CANCELLED, Supervisor"
+ [x] I t 14 acoes disponiveis with data set "CANCELLED, Admin"
+ [x] I t 14 acoes disponiveis with data set "PAID, ESS"
+ [x] I t 14 acoes disponiveis with data set "PAID, Supervisor"
+ [x] I t 14 acoes disponiveis with data set "PAID, Admin"
+

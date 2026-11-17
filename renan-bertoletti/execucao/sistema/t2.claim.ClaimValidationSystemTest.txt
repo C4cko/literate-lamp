@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: t2.claim.ClaimValidationSystemTest
+-------------------------------------------------------------------------------
+Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 221.4 s -- in t2.claim.ClaimValidationSystemTest

@@ -1,0 +1,21 @@
+-------------------------------------------------------------------------------
+Test set: t2.claim.ClaimValidationSystemTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 311.7 s <<< FAILURE! -- in t2.claim.ClaimValidationSystemTest
+t2.claim.ClaimValidationSystemTest.st13EdicaoParaZero -- Time elapsed: 311.7 s <<< ERROR!
+org.openqa.selenium.TimeoutException: 
+Expected condition failed: waiting for t2.claim.pages.ClaimDetailPage$$Lambda/0x0000020ab5321c60@18eec010 (tried for 30 second(s) with 500 milliseconds interval)
+Build info: version: '4.27.0', revision: 'd6e718d134'
+System info: os.name: 'Windows 11', os.arch: 'amd64', os.version: '10.0', java.version: '21.0.13'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 157.0.8103.79, chrome: {chromedriverVersion: 157.0.8103.78 (4b3d0dabb825..., userDataDir: C:\Users\renan\AppData\Loca...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:60143}, goog:processID: 41728, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:60143/devtoo..., se:cdpVersion: 157.0.8103.79, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, userAgent: Mozilla/5.0 (Windows NT 10...., webauthn:extension:cmtgKey: true, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
+Session ID: d1c0afbb1c2d3a18aaafb11b10f822a1
+	at org.openqa.selenium.support.ui.WebDriverWait.timeoutException(WebDriverWait.java:84)
+	at org.openqa.selenium.support.ui.FluentWait.until(FluentWait.java:228)
+	at t2.claim.pages.ClaimDetailPage.<init>(ClaimDetailPage.java:29)
+	at t2.claim.pages.ClaimDetailPage.asOwner(ClaimDetailPage.java:33)
+	at t2.claim.ClaimValidationSystemTest.st13EdicaoParaZero(ClaimValidationSystemTest.java:113)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+

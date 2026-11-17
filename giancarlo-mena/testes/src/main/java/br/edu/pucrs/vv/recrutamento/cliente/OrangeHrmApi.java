@@ -126,6 +126,11 @@ public final class OrangeHrmApi {
         return nums;
     }
 
+    /** Dados de um funcionário ({@code firstName}, {@code lastName}...). */
+    public JsonNode funcionario(int empNumber) {
+        return exigir(get("/pim/employees/" + empNumber)).data();
+    }
+
     /** Funcionários (ativos ou não) cujo nome ou id contém o texto. */
     public JsonNode buscarFuncionarios(String nomeOuId) {
         return exigir(get("/pim/employees?limit=50&includeEmployees=currentAndPast&nameOrId="

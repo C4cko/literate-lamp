@@ -8,7 +8,7 @@ Running 1 test using 1 worker
   x  1 suzan-stockey\testes\sistema\specs\contatos.spec.js:108:1 › ST01 cadastro e atualizacao persistidos (33.9s)
 
 
-  1) suzan-stockey\testes\sistema\specs\contatos.spec.js:108:1 › ST01 cadastro e atualizacao persistidos 
+  1) suzan-stockey\testes\sistema\specs\contatos.spec.js:108:1 › ST01 cadastro e atualizacao persistidos
 
     Error: Use funcionario sintetico proprio sem contatos
 
@@ -42,4 +42,4 @@ Running 1 test using 1 worker
     Error Context: suzan-stockey\testes\sistema\test-results\contatos-ST01-cadastro-e-atualizacao-persistidos\error-context.md
 
   1 failed
-    suzan-stockey\testes\sistema\specs\contatos.spec.js:108:1 › ST01 cadastro e atualizacao persistidos 
+    suzan-stockey\testes\sistema\specs\contatos.spec.js:108:1 › ST01 cadastro e atualizacao persistidos

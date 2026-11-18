@@ -31,7 +31,7 @@ $env:PLAYWRIGHT_JUNIT_OUTPUT_FILE = 'caminho/absoluto/sistema.xml'
 npx --prefix suzan-stockey/testes/sistema playwright test --config=suzan-stockey/testes/sistema/playwright.config.js --reporter=list,junit --max-failures=1
 ```
 
-A execução completa foi sequencial, com um worker e sem retries automáticos. A evidência preserva a saída de cada variante, os JUnit XML e os códigos de saída. Não foi considerado aprovado um caso apenas porque o comando terminou.
+A execução completa foi sequencial, com um worker e sem retries automáticos. A evidência preserva a saída de cada variante, os JUnit XML e os códigos de saída. Não foi considerado aprovado um caso apenas porque o comando terminou. Os logs textuais tiveram apenas codificação/quebras de linha e espaços finais normalizados; mensagens e resultados foram preservados.
 
 ## Resultados finais
 

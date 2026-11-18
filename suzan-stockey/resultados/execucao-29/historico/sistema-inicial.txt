@@ -8,7 +8,7 @@ Running 1 test using 1 worker
   x  1 suzan-stockey\testes\sistema\specs\contatos.spec.js:108:1 › ST01 cadastro e atualizacao persistidos (1.1m)
 
 
-  1) suzan-stockey\testes\sistema\specs\contatos.spec.js:108:1 › ST01 cadastro e atualizacao persistidos 
+  1) suzan-stockey\testes\sistema\specs\contatos.spec.js:108:1 › ST01 cadastro e atualizacao persistidos
 
     [31mTest timeout of 60000ms exceeded.[39m
 
@@ -36,4 +36,4 @@ Running 1 test using 1 worker
     Error Context: suzan-stockey\testes\sistema\test-results\contatos-ST01-cadastro-e-atualizacao-persistidos\error-context.md
 
   1 failed
-    suzan-stockey\testes\sistema\specs\contatos.spec.js:108:1 › ST01 cadastro e atualizacao persistidos 
+    suzan-stockey\testes\sistema\specs\contatos.spec.js:108:1 › ST01 cadastro e atualizacao persistidos

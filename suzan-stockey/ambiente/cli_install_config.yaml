@@ -1,4 +1,4 @@
-# Credenciais exclusivas do banco local descartável; nenhuma porta é publicada.
+# Credenciais exclusivas do banco temporário do GitHub Actions; o workflow adapta o host para 127.0.0.1.
 database:
   hostName: db
   hostPort: 3306

@@ -1,5 +1,0 @@
-Etapa: inicialização do ambiente isolado
-Data: 17/11/2026
-Comando: docker compose up -d --build db phpunit
-Código de saída: 1
-failed to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: O sistema não pode encontrar o arquivo especificado.

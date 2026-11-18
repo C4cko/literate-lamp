@@ -32,7 +32,7 @@ class ContactJourney {
     for (const [key, value] of Object.entries(values)) await this.field(key).fill(value);
   }
   async add() {
-    await this.page.getByRole('button', {name: 'Add', exact: true}).first().click();
+    await this.page.getByRole('button', {name: /Add$/}).first().click();
     await expect(this.page.getByRole('heading', {name: 'Save Emergency Contact', exact: true})).toBeVisible();
     await this.fill({name: this.name, relationship: 'Irma', homePhone: '51999990000'});
   }
@@ -71,7 +71,7 @@ class ContactJourney {
     expect(count, 'Limpeza espera no maximo o unico contato criado por este caso').toBeLessThanOrEqual(1);
     if (count === 1) {
       await this.rows.locator('button').filter({has: this.page.locator('.bi-trash')}).click();
-      await this.page.getByRole('button', {name: 'Yes, Delete', exact: true}).click();
+      await this.page.getByRole('button', {name: /Yes, Delete$/}).click();
     }
     await expect(this.rows).toHaveCount(0);
   }

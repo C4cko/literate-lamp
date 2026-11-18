@@ -1,0 +1,17 @@
+Data do registro: 2026-11-17T22:57:02-03:00
+Codigo dos testes: b806d71b6af4913bf31281cf15eb83436e0c024b
+OrangeHRM fonte: 56e23b3b09e7af29317a0943523b825843fff527
+SO: Microsoft Windows NT 10.0.26200.0
+PHP: 7.4.33 NTS x64
+Composer: 2.8.12
+PHPUnit: 9.6.16
+MariaDB: 10.11.11-MariaDB (portatil, sem servico Windows)
+Banco de testes: test_suzan_t2_execucao_dev; 127.0.0.1:33317
+Node.js: 24.12.0
+Playwright: 1.58.2
+Chrome: 157.0.8103.79
+Sistema: https://opensource-demo.orangehrmlive.com/web/index.php
+Versao exibida na demo: OrangeHRM OS 5.9; commit do servidor nao publicado
+Funcionario sintetico: T2Suzan Execucao29; Employee Id SZT229; empNumber 171 (reexecucao final; anteriormente 274)
+Apos IT01/IT02: 0 funcionarios com employee_id T2-Suzan-% apos rollback
+MariaDB temporario encerrado apos execucao; ausencia do processo confirmada

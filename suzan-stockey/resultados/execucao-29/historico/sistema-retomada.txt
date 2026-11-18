@@ -1,0 +1,45 @@
+
+Running 1 test using 1 worker
+
+(node:19216) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:19216) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 suzan-stockey\testes\sistema\specs\contatos.spec.js:108:1 › ST01 cadastro e atualizacao persistidos (33.9s)
+
+
+  1) suzan-stockey\testes\sistema\specs\contatos.spec.js:108:1 › ST01 cadastro e atualizacao persistidos
+
+    Error: Use funcionario sintetico proprio sem contatos
+
+    [2mexpect([22m[31mlocator[39m[2m).[22mtoHaveCount[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Locator:  locator('.oxd-table-card')
+    Expected: [32m0[39m
+    Received: [31m1[39m
+    Timeout:  10000ms
+
+    Call log:
+    [2m  - Use funcionario sintetico proprio sem contatos with timeout 10000ms[22m
+    [2m  - waiting for locator('.oxd-table-card')[22m
+    [2m    13 × locator resolved to 1 element[22m
+    [2m       - unexpected value "1"[22m
+
+
+      101 |     await journey.reload();
+      102 |     // Funcionario sintetico dedicado e vazio: garante que limites numericos nao atinjam contatos alheios.
+    > 103 |     await expect(journey.rows, 'Use funcionario sintetico proprio sem contatos').toHaveCount(0);
+          |                                                                                  ^
+      104 |     try { await use(journey); } finally { await journey.cleanup(); }
+      105 |   },
+      106 | });
+        at Object.journey (C:\Users\suzan\Development\Verificação e Validação de Software\veri-val-t1\entrega\t2\literate-lamp\suzan-stockey\testes\sistema\specs\contatos.spec.js:103:82)
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    suzan-stockey\testes\sistema\test-results\contatos-ST01-cadastro-e-atualizacao-persistidos\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: suzan-stockey\testes\sistema\test-results\contatos-ST01-cadastro-e-atualizacao-persistidos\error-context.md
+
+  1 failed
+    suzan-stockey\testes\sistema\specs\contatos.spec.js:108:1 › ST01 cadastro e atualizacao persistidos

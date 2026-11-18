@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="C:\Users\suzan\Development\Verificação e Validação de Software\veri-val-t1\entrega\t2\literate-lamp\suzan-stockey\testes\php\integracao" tests="2" assertions="12" errors="1" warnings="0" failures="0" skipped="0" time="0.747817">
+    <testsuite name="Suzan\EmergencyContacts\PersistenciaContatoTest" file="C:\Users\suzan\Development\Verificação e Validação de Software\veri-val-t1\entrega\t2\literate-lamp\suzan-stockey\testes\php\integracao\PersistenciaContatoTest.php" tests="2" assertions="12" errors="1" warnings="0" failures="0" skipped="0" time="0.747817">
+      <testcase name="testIT01CadastroConsultaEVinculo" class="Suzan\EmergencyContacts\PersistenciaContatoTest" classname="Suzan.EmergencyContacts.PersistenciaContatoTest" file="C:\Users\suzan\Development\Verificação e Validação de Software\veri-val-t1\entrega\t2\literate-lamp\suzan-stockey\testes\php\integracao\PersistenciaContatoTest.php" line="60" assertions="11" time="0.695939"/>
+      <testcase name="testIT02AtualizacaoSemDuplicacao" class="Suzan\EmergencyContacts\PersistenciaContatoTest" classname="Suzan.EmergencyContacts.PersistenciaContatoTest" file="C:\Users\suzan\Development\Verificação e Validação de Software\veri-val-t1\entrega\t2\literate-lamp\suzan-stockey\testes\php\integracao\PersistenciaContatoTest.php" line="77" assertions="1" time="0.051878">
+        <error type="Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException">Suzan\EmergencyContacts\PersistenciaContatoTest::testIT02AtualizacaoSemDuplicacao
+Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException: An exception occurred while executing a query: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`test_suzan_t2_execucao_dev`.`hs_hr_emp_emergency_contacts`, CONSTRAINT `hs_hr_emp_emergency_contacts_ibfk_1` FOREIGN KEY (`emp_number`) REFERENCES `hs_hr_employee` (`emp_number`) ON DELETE CASCADE)
+
+C:\Users\suzan\Development\Verificação e Validação de Software\veri-val-t1\entrega\t2\fontes\orangehrm\src\vendor\doctrine\dbal\src\Driver\API\MySQL\ExceptionConverter.php:56
+C:\Users\suzan\Development\Verificação e Validação de Software\veri-val-t1\entrega\t2\fontes\orangehrm\src\vendor\doctrine\dbal\src\Connection.php:1943
+C:\Users\suzan\Development\Verificação e Validação de Software\veri-val-t1\entrega\t2\fontes\orangehrm\src\vendor\doctrine\dbal\src\Connection.php:1885
+C:\Users\suzan\Development\Verificação e Validação de Software\veri-val-t1\entrega\t2\fontes\orangehrm\src\vendor\doctrine\dbal\src\Statement.php:194
+C:\Users\suzan\Development\Verificação e Validação de Software\veri-val-t1\entrega\t2\fontes\orangehrm\src\vendor\doctrine\dbal\src\Statement.php:249
+C:\Users\suzan\Development\Verificação e Validação de Software\veri-val-t1\entrega\t2\fontes\orangehrm\src\vendor\doctrine\orm\src\Persisters\Entity\BasicEntityPersister.php:288
+C:\Users\suzan\Development\Verificação e Validação de Software\veri-val-t1\entrega\t2\fontes\orangehrm\src\vendor\doctrine\orm\src\UnitOfWork.php:1190
+C:\Users\suzan\Development\Verificação e Validação de Software\veri-val-t1\entrega\t2\fontes\orangehrm\src\vendor\doctrine\orm\src\UnitOfWork.php:450
+C:\Users\suzan\Development\Verificação e Validação de Software\veri-val-t1\entrega\t2\fontes\orangehrm\src\vendor\doctrine\orm\src\EntityManager.php:414
+C:\Users\suzan\Development\Verificação e Validação de Software\veri-val-t1\entrega\t2\fontes\orangehrm\src\plugins\orangehrmCorePlugin\Traits\ORM\EntityManagerHelperTrait.php:51
+C:\Users\suzan\Development\Verificação e Validação de Software\veri-val-t1\entrega\t2\fontes\orangehrm\src\plugins\orangehrmPimPlugin\Dao\EmpEmergencyContactDao.php:55
+C:\Users\suzan\Development\Verificação e Validação de Software\veri-val-t1\entrega\t2\fontes\orangehrm\src\plugins\orangehrmPimPlugin\Service\EmpEmergencyContactService.php:79
+C:\Users\suzan\Development\Verificação e Validação de Software\veri-val-t1\entrega\t2\literate-lamp\suzan-stockey\testes\php\integracao\PersistenciaContatoTest.php:56
+C:\Users\suzan\Development\Verificação e Validação de Software\veri-val-t1\entrega\t2\literate-lamp\suzan-stockey\testes\php\integracao\PersistenciaContatoTest.php:79
+phpvfscomposer://C:\Users\suzan\Development\Verificação e Validação de Software\veri-val-t1\entrega\t2\fontes\orangehrm\src\vendor\phpunit\phpunit\phpunit:106</error>
+      </testcase>
+    </testsuite>
+  </testsuite>
+</testsuites>

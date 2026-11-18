@@ -55,7 +55,7 @@ CA05 na API é um oráculo de consistência derivado da interface, e não uma al
 | Integração (IT) | PHPUnit e utilitários do OrangeHRM: endpoint real, validação explícita da coleção de regras, serviço/DAO reais e MariaDB | Fixtures próprias; autenticação/permissões preparadas pelos utilitários do projeto; limpar EntityManager antes de conferir dados. Não classificar chamada direta de método como teste HTTP |
 | Sistema (ST) | Playwright para navegar na interface do OrangeHRM 5.9; ações de cadastro/edição sempre pela UI | Preparação e limpeza de dados sintéticos; asserções por campos/mensagens/lista e após recarregar, sem esperas fixas arbitrárias |
 
-A execução PHP utilizará o ambiente GitHub Actions já verificado na #26 (PHP 7.4, MariaDB 10.11, versão exata registrada a cada execução). Instruções atuais em [ambiente-local.md](ambiente-local.md). Testes de sistema podem usar a demo pública fornecida no enunciado; a versão exibida e data de cada execução serão registradas, sem presumir que a demo corresponde ao commit do clone. Não depende de instalação de Docker no computador da autora.
+A execução PHP utilizará o ambiente GitHub Actions já verificado na #26 (PHP 7.4, MariaDB 10.11, versão exata registrada a cada execução). Instruções atuais em [ambiente-local.md](https://github.com/masmangan/literate-lamp/blob/bc0552f/suzan-stockey/docs/ambiente-local.md). Testes de sistema podem usar a demo pública fornecida no enunciado; a versão exibida e data de cada execução serão registradas, sem presumir que a demo corresponde ao commit do clone. Não depende de instalação de Docker no computador da autora.
 
 **Massa base M0:** nome `Contato Ficticio T2 <sufixo>`, parentesco `Irma`, homePhone `51999990000`, mobilePhone e officePhone vazios. O sufixo identifica execução e caso. Preparar dois funcionários sintéticos A/B e um contato de controle que não seja alvo da operação. Nenhum dado pessoal real. Na demonstração, alterar e limpar apenas registros próprios, identificados por seus IDs; não apagar registros existentes da turma.
 
@@ -148,9 +148,9 @@ Cada regra fica na camada apropriada; não é necessário repetir todos os compo
 ## 11. Fontes e uso de IA
 
 - [Enunciado T2](https://moodle.pucrs.br/mod/page/view.php?id=3938865).
-- [Análise dos testes originais e fontes fixadas](analise-testes-originais.md).
-- [Validações UI/API e avaliação do material de terceiros](analise-validacoes-e-terceiros.md).
-- [Exploração manual e evidências de Suzan](exploracao-contatos-emergencia.md).
-- [Linha de base original: 16 testes e 56 asserções](execucao-testes-originais.md).
+- [Análise dos testes originais e fontes fixadas](https://github.com/masmangan/literate-lamp/blob/bc0552f/suzan-stockey/docs/analise-testes-originais.md).
+- [Validações UI/API e avaliação do material de terceiros](https://github.com/masmangan/literate-lamp/blob/bc0552f/suzan-stockey/docs/analise-validacoes-e-terceiros.md).
+- [Exploração manual e evidências de Suzan](https://github.com/masmangan/literate-lamp/blob/bc0552f/suzan-stockey/docs/exploracao-contatos-emergencia.md).
+- [Linha de base original: 16 testes e 56 asserções](https://github.com/masmangan/literate-lamp/blob/bc0552f/suzan-stockey/docs/execucao-testes-originais.md).
 
 Plano estruturado e redigido com auxílio do ChatGPT/Codex (OpenAI), com base no escopo revisado por Suzan Stockey Pereira na #25, em sua exploração manual e nas análises da #26. A elaboração deste documento não implica que os novos casos já tenham sido implementados ou executados. A execução original no GitHub Actions é uma linha de base distinta.

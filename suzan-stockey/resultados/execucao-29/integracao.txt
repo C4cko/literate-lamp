@@ -1,0 +1,9 @@
+PHPUnit 9.6.16 by Sebastian Bergmann and contributors.
+
+Persistencia Contato (Suzan\EmergencyContacts\PersistenciaContato)
+ ✔ I t 01 cadastro consulta e vinculo
+ ✔ I t 02 atualizacao sem duplicacao
+
+Time: 00:00.046, Memory: 14.00 MB
+
+OK (2 tests, 19 assertions)

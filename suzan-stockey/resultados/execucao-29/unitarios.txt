@@ -1,0 +1,32 @@
+PHPUnit 9.6.16 by Sebastian Bergmann and contributors.
+
+Servico Contato (Suzan\EmergencyContacts\ServicoContato)
+ ✔ U t 04 delegacao sem banco
+
+Validacoes Contato (Suzan\EmergencyContacts\ValidacoesContato)
+ ✔ U t 01 obrigatorios with data set "vazio"
+ ✔ U t 01 obrigatorios with data set "espacos"
+ ✔ U t 01 obrigatorios with data set "texto"
+ ✔ U t 02 formato original with data set "numero"
+ ✔ U t 02 formato original with data set "letras"
+ ✔ U t 02 formato original with data set "arroba"
+ ✔ U t 02 formato original with data set "sinais-caracterizacao"
+ ✔ U t 03 limite original with data set "name-99"
+ ✔ U t 03 limite original with data set "name-100"
+ ✔ U t 03 limite original with data set "name-101"
+ ✔ U t 03 limite original with data set "relationship-99"
+ ✔ U t 03 limite original with data set "relationship-100"
+ ✔ U t 03 limite original with data set "relationship-101"
+ ✔ U t 03 limite original with data set "homePhone-29"
+ ✔ U t 03 limite original with data set "homePhone-30"
+ ✔ U t 03 limite original with data set "homePhone-31"
+ ✔ U t 03 limite original with data set "mobilePhone-29"
+ ✔ U t 03 limite original with data set "mobilePhone-30"
+ ✔ U t 03 limite original with data set "mobilePhone-31"
+ ✔ U t 03 limite original with data set "officePhone-29"
+ ✔ U t 03 limite original with data set "officePhone-30"
+ ✔ U t 03 limite original with data set "officePhone-31"
+
+Time: 00:00.054, Memory: 6.00 MB
+
+OK (23 tests, 30 assertions)

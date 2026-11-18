@@ -1,0 +1,39 @@
+
+Running 1 test using 1 worker
+
+(node:39916) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:39916) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 suzan-stockey\testes\sistema\specs\contatos.spec.js:108:1 › ST01 cadastro e atualizacao persistidos (1.1m)
+
+
+  1) suzan-stockey\testes\sistema\specs\contatos.spec.js:108:1 › ST01 cadastro e atualizacao persistidos 
+
+    [31mTest timeout of 60000ms exceeded.[39m
+
+    Error: locator.click: Test timeout of 60000ms exceeded.
+    Call log:
+    [2m  - waiting for getByRole('button', { name: 'Add', exact: true }).first()[22m
+    [2m    - waiting for" https://opensource-demo.orangehrmlive.com/web/index.php/pim/viewEmergencyContacts/empNumber/274" navigation to finish...[22m
+    [2m    - navigated to "https://opensource-demo.orangehrmlive.com/web/index.php/pim/viewEmergencyContacts/empNumber/274"[22m
+
+
+      33 |   }
+      34 |   async add() {
+    > 35 |     await this.page.getByRole('button', {name: 'Add', exact: true}).first().click();
+         |                                                                             ^
+      36 |     await expect(this.page.getByRole('heading', {name: 'Save Emergency Contact', exact: true})).toBeVisible();
+      37 |     await this.fill({name: this.name, relationship: 'Irma', homePhone: '51999990000'});
+      38 |   }
+        at ContactJourney.add (C:\Users\suzan\Development\Verificação e Validação de Software\veri-val-t1\entrega\t2\literate-lamp\suzan-stockey\testes\sistema\specs\contatos.spec.js:35:77)
+        at C:\Users\suzan\Development\Verificação e Validação de Software\veri-val-t1\entrega\t2\literate-lamp\suzan-stockey\testes\sistema\specs\contatos.spec.js:109:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    suzan-stockey\testes\sistema\test-results\contatos-ST01-cadastro-e-atualizacao-persistidos\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: suzan-stockey\testes\sistema\test-results\contatos-ST01-cadastro-e-atualizacao-persistidos\error-context.md
+
+  1 failed
+    suzan-stockey\testes\sistema\specs\contatos.spec.js:108:1 › ST01 cadastro e atualizacao persistidos 

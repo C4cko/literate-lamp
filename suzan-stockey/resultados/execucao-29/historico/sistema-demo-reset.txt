@@ -1,0 +1,19 @@
+
+Running 29 tests using 1 worker
+
+  ok  1 suzan-stockey\testes\sistema\specs\contatos.spec.js:108:1 › ST01 cadastro e atualizacao persistidos (24.9s)
+  ok  2 suzan-stockey\testes\sistema\specs\contatos.spec.js:122:3 › ST02 cancelar criacao (14.3s)
+  ok  3 suzan-stockey\testes\sistema\specs\contatos.spec.js:122:3 › ST02 cancelar edicao (20.9s)
+  ok  4 suzan-stockey\testes\sistema\specs\contatos.spec.js:137:5 › ST03 name vazio (14.2s)
+  ok  5 suzan-stockey\testes\sistema\specs\contatos.spec.js:137:5 › ST03 name espacos (15.3s)
+  ok  6 suzan-stockey\testes\sistema\specs\contatos.spec.js:137:5 › ST03 relationship vazio (14.7s)
+  ok  7 suzan-stockey\testes\sistema\specs\contatos.spec.js:137:5 › ST03 relationship espacos (14.6s)
+  ok  8 suzan-stockey\testes\sistema\specs\contatos.spec.js:146:3 › ST04 telefone nenhum (14.6s)
+  ok  9 suzan-stockey\testes\sistema\specs\contatos.spec.js:146:3 › ST04 telefone homePhone (19.4s)
+  ok 10 suzan-stockey\testes\sistema\specs\contatos.spec.js:146:3 › ST04 telefone mobilePhone (19.6s)
+  ok 11 suzan-stockey\testes\sistema\specs\contatos.spec.js:146:3 › ST04 telefone officePhone (36.0s)
+  ok 12 suzan-stockey\testes\sistema\specs\contatos.spec.js:160:3 › ST05 formato abc (15.4s)
+  ok 13 suzan-stockey\testes\sistema\specs\contatos.spec.js:160:3 › ST05 formato 123@456 (15.5s)
+  x  14 suzan-stockey\testes\sistema\specs\contatos.spec.js:160:3 › ST05 formato +++++++++ (32.7s)
+  x  15 suzan-stockey\testes\sistema\specs\contatos.spec.js:175:5 › ST06 name 99 caracteres (16.8s)
+  x  16 suzan-stockey\testes\sistema\specs\contatos.spec.js:175:5 › ST06 name 100 caracteres (17.0s)

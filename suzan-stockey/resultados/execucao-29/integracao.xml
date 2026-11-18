@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="C:\Users\suzan\Development\Verificação e Validação de Software\veri-val-t1\entrega\t2\literate-lamp\suzan-stockey\testes\php\integracao" tests="2" assertions="19" errors="0" warnings="0" failures="0" skipped="0" time="0.042703">
+    <testsuite name="Suzan\EmergencyContacts\PersistenciaContatoTest" file="C:\Users\suzan\Development\Verificação e Validação de Software\veri-val-t1\entrega\t2\literate-lamp\suzan-stockey\testes\php\integracao\PersistenciaContatoTest.php" tests="2" assertions="19" errors="0" warnings="0" failures="0" skipped="0" time="0.042703">
+      <testcase name="testIT01CadastroConsultaEVinculo" class="Suzan\EmergencyContacts\PersistenciaContatoTest" classname="Suzan.EmergencyContacts.PersistenciaContatoTest" file="C:\Users\suzan\Development\Verificação e Validação de Software\veri-val-t1\entrega\t2\literate-lamp\suzan-stockey\testes\php\integracao\PersistenciaContatoTest.php" line="58" assertions="11" time="0.039023"/>
+      <testcase name="testIT02AtualizacaoSemDuplicacao" class="Suzan\EmergencyContacts\PersistenciaContatoTest" classname="Suzan.EmergencyContacts.PersistenciaContatoTest" file="C:\Users\suzan\Development\Verificação e Validação de Software\veri-val-t1\entrega\t2\literate-lamp\suzan-stockey\testes\php\integracao\PersistenciaContatoTest.php" line="75" assertions="8" time="0.003680"/>
+    </testsuite>
+  </testsuite>
+</testsuites>

@@ -1,0 +1,62 @@
+<testsuites id="" name="" tests="29" failures="0" skipped="0" errors="0" time="539.9046010000001">
+<testsuite name="contatos.spec.js" timestamp="2026-11-18T02:02:33.236Z" hostname="" tests="29" failures="0" skipped="0" time="538.263" errors="0">
+<testcase name="ST01 cadastro e atualizacao persistidos" classname="contatos.spec.js" time="24.437">
+</testcase>
+<testcase name="ST02 cancelar criacao" classname="contatos.spec.js" time="18.881">
+</testcase>
+<testcase name="ST02 cancelar edicao" classname="contatos.spec.js" time="20.297">
+</testcase>
+<testcase name="ST03 name vazio" classname="contatos.spec.js" time="14.846">
+</testcase>
+<testcase name="ST03 name espacos" classname="contatos.spec.js" time="13.792">
+</testcase>
+<testcase name="ST03 relationship vazio" classname="contatos.spec.js" time="13.749">
+</testcase>
+<testcase name="ST03 relationship espacos" classname="contatos.spec.js" time="15.543">
+</testcase>
+<testcase name="ST04 telefone nenhum" classname="contatos.spec.js" time="14.074">
+</testcase>
+<testcase name="ST04 telefone homePhone" classname="contatos.spec.js" time="18.841">
+</testcase>
+<testcase name="ST04 telefone mobilePhone" classname="contatos.spec.js" time="20.776">
+</testcase>
+<testcase name="ST04 telefone officePhone" classname="contatos.spec.js" time="19.603">
+</testcase>
+<testcase name="ST05 formato abc" classname="contatos.spec.js" time="17.739">
+</testcase>
+<testcase name="ST05 formato 123@456" classname="contatos.spec.js" time="16.064">
+</testcase>
+<testcase name="ST05 formato +++++++++" classname="contatos.spec.js" time="17.066">
+</testcase>
+<testcase name="ST06 name 99 caracteres" classname="contatos.spec.js" time="18.338">
+</testcase>
+<testcase name="ST06 name 100 caracteres" classname="contatos.spec.js" time="19.387">
+</testcase>
+<testcase name="ST06 name 101 caracteres" classname="contatos.spec.js" time="15.755">
+</testcase>
+<testcase name="ST06 relationship 99 caracteres" classname="contatos.spec.js" time="18.484">
+</testcase>
+<testcase name="ST06 relationship 100 caracteres" classname="contatos.spec.js" time="19.341">
+</testcase>
+<testcase name="ST06 relationship 101 caracteres" classname="contatos.spec.js" time="17.487">
+</testcase>
+<testcase name="ST06 homePhone 29 caracteres" classname="contatos.spec.js" time="22.8">
+</testcase>
+<testcase name="ST06 homePhone 30 caracteres" classname="contatos.spec.js" time="36.891">
+</testcase>
+<testcase name="ST06 homePhone 31 caracteres" classname="contatos.spec.js" time="14.631">
+</testcase>
+<testcase name="ST06 mobilePhone 29 caracteres" classname="contatos.spec.js" time="18.71">
+</testcase>
+<testcase name="ST06 mobilePhone 30 caracteres" classname="contatos.spec.js" time="18.814">
+</testcase>
+<testcase name="ST06 mobilePhone 31 caracteres" classname="contatos.spec.js" time="17.958">
+</testcase>
+<testcase name="ST06 officePhone 29 caracteres" classname="contatos.spec.js" time="18.717">
+</testcase>
+<testcase name="ST06 officePhone 30 caracteres" classname="contatos.spec.js" time="18.607">
+</testcase>
+<testcase name="ST06 officePhone 31 caracteres" classname="contatos.spec.js" time="16.635">
+</testcase>
+</testsuite>
+</testsuites>

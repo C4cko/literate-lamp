@@ -1,0 +1,6 @@
+# Dependencias e saidas geradas dos testes da #28
+node_modules/
+playwright-report/
+test-results/
+.env
+resultados/proprios/

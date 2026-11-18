@@ -1,0 +1,10 @@
+{
+  "name": "suzan-t2-emergency-contacts",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "test": "playwright test",
+    "list": "playwright test --list"
+  },
+  "devDependencies": { "@playwright/test": "1.58.2" }
+}

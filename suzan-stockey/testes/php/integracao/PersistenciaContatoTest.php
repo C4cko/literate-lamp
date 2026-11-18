@@ -19,16 +19,14 @@ class PersistenciaContatoTest extends TestCase
         $this->em = Doctrine::getEntityManager();
         $this->em->clear();
         $this->em->getConnection()->beginTransaction();
-        // Numeracao livre no banco de testes; sem truncar tabelas ou reutilizar funcionario alheio.
-        $max = $this->em->createQuery('SELECT MAX(e.empNumber) FROM ' . Employee::class . ' e')->getSingleScalarResult();
-        $this->empNumber = (int) $max + 1;
+        // Deixar o banco atribuir o identificador; rollback nao reinicia AUTO_INCREMENT.
         $employee = new Employee();
-        $employee->setEmpNumber($this->empNumber);
-        $employee->setEmployeeId('T2-Suzan-' . $this->empNumber);
+        $employee->setEmployeeId('T2-Suzan-' . uniqid());
         $employee->setFirstName('Teste');
         $employee->setLastName('T2 Suzan');
         $this->em->persist($employee);
         $this->em->flush();
+        $this->empNumber = $employee->getEmpNumber();
         $this->service = new EmpEmergencyContactService();
     }
 

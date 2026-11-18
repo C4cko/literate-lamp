@@ -28,7 +28,7 @@ Com o mesmo `OHRM_ROOT` e o banco de testes já preparado:
 php "$env:OHRM_ROOT/src/vendor/bin/phpunit" --no-configuration --bootstrap "$t2Tests/bootstrap-integracao.php" --testdox "$t2Tests/integracao"
 ```
 
-Os casos usam o bootstrap oficial e serviço/DAO reais. Cada caso abre uma transação, cria um funcionário sintético com número livre, grava seu contato, limpa o EntityManager e consulta novamente. O rollback no `tearDown` desfaz os dados do caso, inclusive quando uma asserção falha. Não há truncamento de tabelas ou alteração de funcionário existente. Executar a suíte sem concorrência no mesmo banco de testes.
+Os casos usam o bootstrap oficial e serviço/DAO reais. Cada caso abre uma transação, cria um funcionário sintético com identificador atribuído pelo banco, grava seu contato, limpa o EntityManager e consulta novamente. O rollback no `tearDown` desfaz os dados do caso, inclusive quando uma asserção falha. Não há truncamento de tabelas ou alteração de funcionário existente. Executar a suíte sem concorrência no mesmo banco de testes.
 
 Esses testes verificam a persistência por serviço/DAO; não são testes HTTP nem substituem as validações da interface.
 
@@ -38,6 +38,7 @@ Esses testes verificam a persistência por serviço/DAO; não são testes HTTP n
 cd suzan-stockey/testes/sistema
 npm ci
 npx playwright install chromium
+# Alternativa, se Chrome ja estiver instalado: definir OHRM_BROWSER_CHANNEL=chrome
 $env:OHRM_URL = 'https://sua-instancia/web/index.php'
 $env:OHRM_USER = 'usuario-de-teste'
 $env:OHRM_PASSWORD = 'senha-de-teste'
@@ -46,6 +47,8 @@ $env:OHRM_EMP_NUMBER = 'numero-interno-do-mesmo-funcionario'
 npm run list
 npm test
 ```
+
+Para usar Chrome já instalado, defina `$env:OHRM_BROWSER_CHANNEL = 'chrome'`; sem essa variável, a suíte usa o Chromium do Playwright. O timeout de 120 segundos inclui a preparação pela interface da demo e não é uma espera fixa.
 
 Substituir os valores de exemplo pelos dados do ambiente. Não versionar credenciais. `OHRM_EMPLOYEE_ID` é o campo Employee Id usado na busca; `OHRM_EMP_NUMBER` é o número presente na URL do perfil. O teste confere que o perfil aberto corresponde ao número informado.
 
@@ -74,7 +77,7 @@ São 12 grupos do plano, com 54 execuções previstas (23 unitárias, 2 de integ
 
 ## Verificações de desenvolvimento e registro
 
-Os cinco arquivos PHP passaram por análise sintática compatível com PHP 7.4 (php-parser 3.7.0, usado temporariamente fora da entrega). A sintaxe JavaScript foi conferida com `node --check` e o Playwright descobriu os 29 casos de sistema com `npm run list`. Essas verificações não acessam a instância e não demonstram aprovação funcional. A execução consolidada dos três níveis e a classificação dos resultados pertencem à #29. O PHP não está disponível no PATH da estação usada nesta implementação; nenhum resultado de execução PHP é declarado aqui.
+Os cinco arquivos PHP passaram por análise sintática compatível com PHP 7.4 (php-parser 3.7.0, usado temporariamente fora da entrega). A sintaxe JavaScript foi conferida com `node --check` e o Playwright descobriu os 29 casos de sistema com `npm run list`. Essas verificações não acessam a instância e não demonstram aprovação funcional. A execução consolidada dos três níveis e a classificação dos resultados pertencem à #29. Os resultados da execução funcional posterior são registrados separadamente na #29.
 
 Para registrar saídas PHPUnit na execução consolidada, acrescentar `--log-junit caminho/resultado.xml` aos comandos e preservar também a saída textual. Conferir a quantidade de testes executados, asserções, falhas e código de saída; não considerar somente o término do comando como aprovação. Não reutilizar os relatórios da linha de base como resultado destes casos próprios.
 

@@ -11,6 +11,9 @@ incluindo descurtir, curtir comentários e a aba Most Liked Posts.
 | #51 | Relatório da execução | [docs/03-relatorio-execucao.md](docs/03-relatorio-execucao.md) |
 | #58 | Ampliação: curtidas (descurtir, curtir comentário, Most Liked) | plano, testes e relatório |
 
+**Vídeo da execução (sem áudio):** <https://youtu.be/WXV6dP7OnkE>. Mostra o teste de sistema TS-01 rodando no
+Chrome: login, publicação, comentário, curtida e exclusão de um post no Buzz.
+
 ## Introdução
 
 O OrangeHRM é um sistema de RH de código aberto (PHP/Symfony no servidor e Vue no front-end). O Buzz é a rede

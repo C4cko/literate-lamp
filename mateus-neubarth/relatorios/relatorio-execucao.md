@@ -175,7 +175,7 @@ Os dois foram reproduzidos de forma independente nos três níveis.
   - executar as suítes e investigar as falhas;
   - escrever a primeira versão deste relatório.
 
-  Todo o material foi revisado pelo autor. O registro detalhado (data e finalidade) está no diário do trabalho.
+  Todo o material foi revisado pelo autor.
 - **Fontes:**
   - OrangeHRM, https://github.com/orangehrm/orangehrm (commit `56e23b3b`) e imagem `orangehrm/orangehrm:5.9`.
   - zxcvbn-php (`bjeavons/zxcvbn-php` ~1.3.1, https://github.com/bjeavons/zxcvbn-php), biblioteca de força de

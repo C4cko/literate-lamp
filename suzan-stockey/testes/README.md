@@ -74,7 +74,7 @@ São 12 grupos do plano, com 54 execuções previstas (23 unitárias, 2 de integ
 
 ## Verificações de desenvolvimento e registro
 
-A sintaxe JavaScript foi conferida com `node --check` e o Playwright descobriu os 29 casos de sistema com `npm run list`. Essas verificações não acessam a instância e não demonstram aprovação funcional. A execução consolidada dos três níveis e a classificação dos resultados pertencem à #29. O PHP não está disponível no PATH da estação usada nesta implementação; nenhum resultado de execução PHP é declarado aqui.
+Os cinco arquivos PHP passaram por análise sintática compatível com PHP 7.4 (php-parser 3.7.0, usado temporariamente fora da entrega). A sintaxe JavaScript foi conferida com `node --check` e o Playwright descobriu os 29 casos de sistema com `npm run list`. Essas verificações não acessam a instância e não demonstram aprovação funcional. A execução consolidada dos três níveis e a classificação dos resultados pertencem à #29. O PHP não está disponível no PATH da estação usada nesta implementação; nenhum resultado de execução PHP é declarado aqui.
 
 Para registrar saídas PHPUnit na execução consolidada, acrescentar `--log-junit caminho/resultado.xml` aos comandos e preservar também a saída textual. Conferir a quantidade de testes executados, asserções, falhas e código de saída; não considerar somente o término do comando como aprovação. Não reutilizar os relatórios da linha de base como resultado destes casos próprios.
 

@@ -1,156 +1,130 @@
-# Plano de Testes — Cadastro e atualização de contatos de emergência
+# Plano de Testes — Contatos de emergência
 
-**Autora da contribuição:** Suzan Stockey Pereira (@SuzanStockey). **Data:** 17/11/2026. **Planejamento:** [#27](https://github.com/masmangan/literate-lamp/issues/27). **Jornada:** [#25](https://github.com/masmangan/literate-lamp/issues/25). **Implementação:** [#28](https://github.com/masmangan/literate-lamp/issues/28). **Execução:** [#29](https://github.com/masmangan/literate-lamp/issues/29).
+**Autora:** Suzan Stockey Pereira (@SuzanStockey). **Data:** 17/11/2026.
+**Jornada:** [#25](https://github.com/masmangan/literate-lamp/issues/25). **Plano:** [#27](https://github.com/masmangan/literate-lamp/issues/27). **Implementação:** [#28](https://github.com/masmangan/literate-lamp/issues/28). **Execução:** [#29](https://github.com/masmangan/literate-lamp/issues/29).
 
-## 1. Introdução e objetivo
+## 1. Objetivo e escopo
 
-O OrangeHRM é um sistema de gestão de recursos humanos. Esta contribuição verifica se um responsável de RH consegue cadastrar, consultar e atualizar um contato de emergência de um funcionário, com validação dos dados e persistência correta. Código-fonte: [orangehrm/orangehrm](https://github.com/orangehrm/orangehrm), revisão de referência `56e23b3b09e7af29317a0943523b825843fff527` (OrangeHRM 5.9).
+Verificar a jornada de cadastro e atualização de um contato de emergência de um funcionário no OrangeHRM, com testes unitários, de integração e de sistema, conforme os níveis solicitados no T2. O plano utiliza a análise e a exploração da #26. Os testes próprios serão implementados na #28 e seus resultados registrados na #29; os 16 testes originais executados são uma linha de base distinta.
 
-O plano deriva da análise crítica e da exploração manual da #26. Os 16 testes originais aprovados constituem a linha de base, não substituem os casos próprios deste plano. O documento especifica testes a implementar e executar; os resultados serão registrados na #29, separados dos resultados exploratórios já obtidos.
+Código de referência: [OrangeHRM](https://github.com/orangehrm/orangehrm/tree/56e23b3b09e7af29317a0943523b825843fff527), revisão `56e23b3b09e7af29317a0943523b825843fff527`.
 
-## 2. Jornada de usuário
+**Incluído:** cadastro, consulta para conferência, atualização, cancelamento e validações dos campos dessa jornada.
 
-**Persona:** Ana, responsável de RH, mantém informações de funcionários para permitir contato com uma pessoa indicada em situações de emergência.
+**Fora do escopo:** testes de login, cadastro de funcionário, exclusão como jornada, anexos, outras abas, permissões de outros usuários, desempenho e alterações no produto. Login e funcionário sintético são somente pré-condições. Este plano não exige criação de workflow, Docker, serviços ou infraestrutura compartilhada.
 
-**História:** Como responsável de RH, quero cadastrar e atualizar os contatos de emergência de um funcionário para manter disponíveis informações corretas para contato em situações urgentes.
+## 2. Jornada
 
-**Pré-condições:** usuário autenticado com acesso ao funcionário; funcionário sintético existente; ambiente acessível. Login e cadastro do funcionário são preparação, não objetivos funcionais desta contribuição.
+**Persona:** responsável de RH que mantém o contato de emergência de um funcionário.
 
-**Fluxo principal (UC-EC-01):**
+**História:** como responsável de RH, quero cadastrar e atualizar um contato de emergência para manter os dados disponíveis em situações urgentes.
 
-1. Ana abre PIM → Employee List e seleciona o funcionário.
-2. Acessa Emergency Contacts e escolhe Add.
-3. Preenche nome, parentesco e pelo menos um telefone.
-4. Salva e confere os dados na lista.
-5. Recarrega a página e abre a edição do contato salvo.
-6. Atualiza o telefone, salva e verifica o valor após nova consulta.
+**Pré-condições:** sessão autenticada, funcionário sintético acessível e instância disponível.
 
-**Alternativas:** A1 — usar somente celular ou somente telefone comercial; A2 — usar mais de um telefone; A3 — cancelar criação ou edição sem gravar alterações.
+1. Acessar PIM → Employee List e selecionar o funcionário de teste.
+2. Abrir Emergency Contacts → Add.
+3. Informar nome, parentesco e pelo menos um telefone; salvar.
+4. Conferir os valores na lista e após recarregar.
+5. Editar o contato, alterar o telefone e salvar.
+6. Recarregar e confirmar o novo valor no mesmo contato.
 
-**Exceções:** E1 — nome/parentesco ausente ou em branco; E2 — nenhum telefone; E3 — formato de telefone com caracteres proibidos; E4 — comprimento acima do limite; E5 — usuário sem acesso ao funcionário. Após uma rejeição, o contato anterior e os registros de outros funcionários devem permanecer preservados.
+**Alternativas:** usar residencial, celular ou comercial; cancelar criação ou edição.
+**Exceções:** obrigatório vazio, nenhum telefone, formato inválido e comprimento excedido.
 
-**Fora do escopo:** login, criação funcional de funcionário/usuário, anexos, outras abas do PIM, exclusão como jornada de negócio, carga, desempenho, auditoria ampla de segurança e correções no produto. Exclusão de registros sintéticos serve apenas à limpeza dos testes. Não serão criados novos serviços ou ambientes além do necessário para os três níveis exigidos.
+## 3. Critérios e resultados esperados
 
-## 3. Critérios de aceitação e oráculos
-
-| ID | Dado / Quando / Então | Fundamento |
+| ID | Critério | Fonte do esperado |
 |---|---|---|
-| CA01 | Dado funcionário acessível e dados válidos, quando cadastrar e consultar novamente, então existe exatamente um novo contato com campos e vínculo corretos | Objetivo da jornada e fluxo observado |
-| CA02 | Dado contato existente, quando alterar telefone e consultar novamente, então a mesma identidade contém o novo valor, sem duplicar contato ou alterar outros registros | Objetivo de atualização e exploração |
-| CA03 | Dado formulário aberto, quando cancelar criação ou edição, então a operação não altera o estado persistido | Comportamento de Cancel e exploração |
-| CA04 | Dado nome ou parentesco vazio ou só com espaços, quando salvar, então a entrada é rejeitada e o estado persistido é preservado | `required`, `Required`, `NotBlankStringType` |
-| CA05 | Dados telefones de formato/comprimento aceitos, quando salvar, então ao menos um deve estar preenchido; qualquer um dos três pode satisfazer a regra | Regra conjunta dos formulários; na API é expectativa de consistência a verificar |
-| CA06 | Dado telefone preenchido, quando contiver letras ou símbolo não permitido, então rejeitar, mesmo com outro telefone válido | Expressões de formato e exploração |
-| CA07 | Dados campos ASCII válidos, quando nome/parentesco tiver até 100 e telefone até 30 caracteres, então aceitar; quando ultrapassar, rejeitar | Limites do código e exploração |
-| CA08 | Dado usuário sem acesso ao funcionário, quando tentar consultar/criar/atualizar seu contato, então negar a operação e preservar os dados | `IN_ACCESSIBLE_EMP_NUMBERS`; testar acesso, sem ampliar para auditoria de segurança |
-| CC01 | Dado telefone `+++++++++`, quando avaliar o formato e salvar, então caracterizar a aceitação atual e conferir persistência | Código e exploração; não é regra proposta de qualidade de um telefone real |
+| CA01 | Cadastrar um contato com os valores informados e associado ao funcionário escolhido; valores mantidos após nova consulta | Jornada e exploração |
+| CA02 | Atualizar o telefone do contato existente sem criar outro contato | Jornada e exploração |
+| CA03 | Cancelar criação ou edição sem gravar a alteração | Ação Cancel da interface |
+| CA04 | Rejeitar nome ou parentesco vazio ou somente com espaços | Regras de obrigatoriedade analisadas na #26 |
+| CA05 | Na interface, exigir pelo menos um dos três telefones | Validação observada na exploração |
+| CA06 | Rejeitar telefone com letras ou `@`; caracterizar a aceitação de `+++++++++` sem presumir defeito | Validador original e exploração |
+| CA07 | Aceitar nome/parentesco com 99 e 100 caracteres e rejeitar 101; aceitar telefones com 29 e 30 e rejeitar 31 | Código e valores-limite explorados |
 
-CA05 na API é um oráculo de consistência derivado da interface, e não uma alegação de comportamento já confirmado. Se a API aceitar todos os telefones vazios, registrar esperado versus obtido e evidências na #29. CC01 não exige rejeição de sinais: exigir dígitos seria uma mudança de requisito sem fundamento formal nesta etapa.
+A regra conjunta de telefones da interface não será tratada como requisito confirmado da API. Este plano não acrescenta cenários de autorização nem obriga a testar toda a API.
 
-## 4. Estratégia e ambiente
+## 4. Abordagem, ferramentas e dados
 
-| Nível | Ferramenta e fronteira | Isolamento e verificação |
+| Nível | Abordagem | Evidência |
 |---|---|---|
-| Unitário (UT) | PHPUnit 9.6: validadores originais `Required`, `NotBlankStringType`, `Phone`, regra de comprimento e serviço original com DAO mockado | Sem banco na lógica exercitada; objetos e mocks próprios por caso. Instanciar regras originais, sem copiar regex ou regra de negócio para o teste |
-| Integração (IT) | PHPUnit e utilitários do OrangeHRM: endpoint real, validação explícita da coleção de regras, serviço/DAO reais e MariaDB | Fixtures próprias; autenticação/permissões preparadas pelos utilitários do projeto; limpar EntityManager antes de conferir dados. Não classificar chamada direta de método como teste HTTP |
-| Sistema (ST) | Playwright para navegar na interface do OrangeHRM 5.9; ações de cadastro/edição sempre pela UI | Preparação e limpeza de dados sintéticos; asserções por campos/mensagens/lista e após recarregar, sem esperas fixas arbitrárias |
+| Unitário | PHPUnit e validadores originais; serviço com DAO mockado | Saída dos casos e asserções; mock não comprova persistência |
+| Integração | PHPUnit, serviço e DAO reais com banco de testes, utilizando o suporte existente do OrangeHRM | Gravação e leitura dos dados em nova consulta, sem mock do DAO |
+| Sistema | Jornada pela interface da instância indicada no enunciado, com Playwright | Resultados e capturas pertinentes; conferência após recarregar |
 
-A execução PHP utilizará o ambiente GitHub Actions já verificado na #26 (PHP 7.4, MariaDB 10.11, versão exata registrada a cada execução). Instruções atuais em [ambiente-local.md](https://github.com/masmangan/literate-lamp/blob/bc0552f/suzan-stockey/docs/ambiente-local.md). Testes de sistema podem usar a demo pública fornecida no enunciado; a versão exibida e data de cada execução serão registradas, sem presumir que a demo corresponde ao commit do clone. Não depende de instalação de Docker no computador da autora.
+Usar os recursos de teste existentes do OrangeHRM. A #28 registrará as dependências e os comandos efetivamente usados, sem criar infraestrutura adicional como entregável. A [descrição do ambiente da #26](https://github.com/masmangan/literate-lamp/blob/faff914/suzan-stockey/docs/ambiente-local.md) documenta a execução original; não estabelece uma nova automação obrigatória para este plano.
 
-**Massa base M0:** nome `Contato Ficticio T2 <sufixo>`, parentesco `Irma`, homePhone `51999990000`, mobilePhone e officePhone vazios. O sufixo identifica execução e caso. Preparar dois funcionários sintéticos A/B e um contato de controle que não seja alvo da operação. Nenhum dado pessoal real. Na demonstração, alterar e limpar apenas registros próprios, identificados por seus IDs; não apagar registros existentes da turma.
+Massa sintética: nome `Contato Ficticio T2`, parentesco `Irma`, telefone `51999990000`. Identificar os registros próprios de cada caso e alterar ou limpar somente esses registros. Para limites, usar a sequência `1234567890` repetida e cortada no comprimento indicado, mantendo os demais campos válidos. Registrar a versão exibida pela instância e a data, sem presumir igualdade entre a demo e a revisão do código.
 
-**Variações:** `D(n)` é a sequência ASCII `1234567890` repetida e cortada para produzir exatamente n caracteres. Cada linha parametrizada mantém os demais campos válidos e registra a variante usada. Valores em branco: `''` e `'   '`. Telefone inválido: `abc` e `123@456`. Telefone de caracterização: `+++++++++`.
+## 5. Casos unitários
 
-## 5. Tabela de decisão — presença dos telefones
-
-Nome e parentesco válidos; cada telefone preenchido tem formato/comprimento aceitos. H = residencial, M = celular, W = comercial. Aplicar a tabela à criação e à atualização; o estado inicial de cada variante é preparado independentemente.
-
-| Regra | H | M | W | Esperado segundo CA05 |
-|---|---|---|---|---|
-| D01 | vazio | vazio | vazio | Rejeitar |
-| D02 | preenchido | vazio | vazio | Aceitar |
-| D03 | vazio | preenchido | vazio | Aceitar |
-| D04 | vazio | vazio | preenchido | Aceitar |
-| D05 | preenchido | preenchido | vazio | Aceitar |
-| D06 | preenchido | vazio | preenchido | Aceitar |
-| D07 | vazio | preenchido | preenchido | Aceitar |
-| D08 | preenchido | preenchido | preenchido | Aceitar |
-
-Regra complementar D09: um telefone válido e outro inválido → rejeitar por formato. D01 na API investiga a divergência estática; não ajustar o esperado para ocultar eventual falha.
-
-## 6. Casos unitários
-
-Pré-condição comum: autoload das dependências originais disponível; sem persistência ou navegador. Cada variante recebe um sufixo rastreável no relatório.
-
-| ID | Técnica / dados | Passos | Resultado esperado | Critério |
-|---|---|---|---|---|
-| UT01 | Equivalência: `Required` com nulo, vazio e texto; `NotBlankStringType` com vazio, espaços, texto e número | Instanciar cada validador original e chamar `validate` | Required rejeita nulo/vazio e aceita texto; tipo rejeita espaços/número e aceita vazio/texto. A combinação de regras, não tipo isolado, garante obrigatoriedade | CA04 |
-| UT02 | Equivalência: Phone com vazio, número M0, `abc`, `123@456`, `+++++++++` | Avaliar cada entrada no validador original | Aceita vazio individual, número e sinais; rejeita letras e `@`. Vazio individual não comprova a regra conjunta | CA06, CC01 |
-| UT03 | Valor-limite: regra original de comprimento parametrizada com D(99/100/101) e D(29/30/31) | Instanciar a classe usada por `Rules::LENGTH` com os mesmos limites do endpoint e validar | Aceita limite−1 e limite; rejeita limite+1 | CA07 |
-| UT04 | Interação: serviço com contato M0 e DAO mockado | Esperar uma chamada `saveEmployeeEmergencyContact` com o contato; configurar retorno; chamar serviço | Delegação com argumento correto e retorno esperado; sem alegar persistência | CA01, CA02 |
-
-## 7. Casos de integração
-
-Pré-condição comum: banco exclusivo preparado, fixtures e contexto de usuário válidos. Usar o pipeline de validação antes de chamar a operação do endpoint; criar/atualizar diretamente sem validar não representa a fronteira planejada. Em rejeições, conferir ausência de inserção/alteração no banco. A leitura de conferência usa contexto ORM limpo.
-
-| ID | Técnica / dados | Passos | Resultado esperado | Critério |
-|---|---|---|---|---|
-| IT01 | Caso de uso: M0, funcionário A e controle B | Validar e criar pelo endpoint; limpar ORM; consultar pelo ID/funcionário | Exatamente um novo contato com campos/vínculo corretos; controle B preservado | CA01 |
-| IT02 | Transição criado → atualizado: contato existente de A | Atualizar telefone para `5133330000`; limpar ORM; consultar e contar | Mesmo ID, novo telefone, mesma quantidade; controle preservado | CA02 |
-| IT03 | Equivalência: nome e parentesco, cada um vazio e só espaços | Executar criação e atualização com cada variante | Validação rejeita o campo; banco preservado | CA04 |
-| IT04 | Tabela de decisão D01–D09 | Executar criação e atualização por variante; consultar estado após operação | D01/D09 rejeitados; demais aceitos; nenhum efeito parcial nas rejeições. Eventual aceitação de D01 é documentada como divergência | CA05, CA06 |
-| IT05 | Valor-limite por campo: nome/parentesco D(99/100/101); cada telefone D(29/30/31) | Validar e criar com um campo variando; consultar quando aceito | Dentro/no limite aceito e persistido; acima rejeitado sem inserção | CA07 |
-| IT06 | Autorização: usuário de A tentando acessar B | Validar consulta, criação e atualização com empNumber de B | Acesso negado pela validação/autorização; nenhum dado de B modificado ou retornado | CA08 |
-| IT07 | Caracterização: telefone `+++++++++` | Validar/criar e recuperar em contexto limpo | Valor aceito e persistido conforme regra atual; registrar separadamente de defeitos | CC01 |
-
-## 8. Casos de sistema
-
-Pré-condição comum: sessão Admin, funcionário sintético acessível e M0; contexto e ambiente registrados. Recarregar e reabrir a edição sempre que a persistência for o oráculo. Nas rejeições, corrigir/cancelar e conferir que o estado anterior foi preservado.
-
-| ID | Técnica / dados | Passos | Resultado esperado | Critério |
-|---|---|---|---|---|
-| ST01 | Caso de uso: M0 | Navegar pela jornada, adicionar, salvar, recarregar e editar | Um novo contato, com valores e funcionário corretos | CA01 |
-| ST02 | Transição de estado: contato existente | Alterar telefone, salvar, recarregar, editar e contar | Novo telefone no mesmo contato, sem duplicação | CA02 |
-| ST03 | Alternativas de caso de uso | Abrir Add com M0 e cancelar; separadamente editar nome para `NAO DEVE SALVAR` e cancelar; recarregar | Nenhuma criação no primeiro cenário; nome original mantido no segundo | CA03 |
-| ST04 | Equivalência: nome/parentesco vazio e espaços | Tentar salvar variando cada obrigatório isoladamente | Mensagem `Required` no campo e nenhuma gravação | CA04 |
-| ST05 | Tabela D01–D09 | Criar e editar por variante, com preparação independente | D01 exige pelo menos um telefone; D09 mostra erro de formato; demais persistem | CA05, CA06 |
-| ST06 | Valor-limite: cinco campos, mesmas variantes de IT05 | Preencher, tentar salvar e conferir persistência dos aceitos | Limite aceito; excesso rejeitado com `Should not exceed 100 characters` ou `Should not exceed 30 characters` | CA07 |
-| ST07 | Caracterização: `+++++++++` | Salvar telefone, recarregar e abrir edição | Mesmo valor preservado; caracterização, sem classificá-lo automaticamente como defeito | CC01 |
-
-Mensagens são verificadas com a interface em inglês, como na exploração. Textos específicos da obrigatoriedade conjunta e de formato devem corresponder à tradução utilizada pela instância e à captura da execução. O teste de acesso sem permissão está alocado em IT06 para evitar ampliar o fluxo de sistema com outra jornada de autenticação.
-
-Os IDs acima identificam famílias parametrizadas. O relatório contará execuções concretas por variante, separadas da quantidade de famílias; não apresentará 18 famílias como se fossem 18 execuções. A implementação manterá a identificação de campo, operação e variante em cada resultado.
-
-## 9. Matriz de rastreabilidade
-
-| Critério / fluxo | Unitário | Integração | Sistema |
+| ID | Dados e execução | Esperado | Critério |
 |---|---|---|---|
-| CA01 — cadastro e consulta / principal 1–5 | UT04 | IT01 | ST01 |
-| CA02 — atualização / principal 6 | UT04 | IT02 | ST02 |
-| CA03 — cancelar / A3 | — | Preservação verificada nos testes de rejeição, não como evento de Cancel | ST03 |
-| CA04 — obrigatórios / E1 | UT01 | IT03 | ST04 |
-| CA05 — presença dos telefones / A1, A2, E2 | Vazio individual em UT02; regra conjunta não é substituída por cópia no teste | IT04 | ST05 |
-| CA06 — formato / E3 | UT02 | IT04 | ST05 |
-| CA07 — comprimento / E4 | UT03 | IT05 | ST06 |
-| CA08 — acesso / E5 | — | IT06 | — |
-| CC01 — somente sinais | UT02 | IT07 | ST07 |
+| UT01 | Avaliar `Required` e `NotBlankStringType` originais com vazio, espaços e texto | A combinação das regras rejeita obrigatório vazio/espaços e aceita texto | CA04 |
+| UT02 | Avaliar `Phone` original com número, `abc`, `123@456` e `+++++++++` | Número e sinais aceitos pela regra atual; letras e `@` rejeitados | CA06 |
+| UT03 | Avaliar a regra original de comprimento com 99/100/101 para nome/parentesco e 29/30/31 para telefone | Limite−1 e limite aceitos; limite+1 rejeitado | CA07 |
+| UT04 | Chamar o serviço com contato sintético e DAO mockado | Argumento delegado e retorno conferidos; sem alegar persistência | CA01, CA02 |
 
-Cada regra fica na camada apropriada; não é necessário repetir todos os comportamentos nos três níveis. Em especial, um mock não será utilizado como evidência de persistência e um teste de DAO não será apresentado como teste da interface.
+## 6. Casos de integração
 
-## 10. Execução, evidências e conclusão
+Pré-condição: banco de testes e dados sintéticos preparados com os utilitários existentes do projeto. Conferir a leitura sem depender apenas do objeto que acabou de ser salvo em memória.
 
-**Entrada:** versão fixada, análise #26 disponível, dependências/banco configurados e dados próprios para a instância usada. Implementação na #28 deve informar comandos exatos de execução dos testes próprios e manter o escopo deste plano.
+| ID | Passos | Esperado | Critério |
+|---|---|---|---|
+| IT01 | Salvar um contato por serviço/DAO reais e consultar pelo funcionário e identificador | Campos e vínculo corretos no banco | CA01 |
+| IT02 | Preparar contato, alterar telefone, salvar e consultar novamente | Mesmo identificador, novo telefone e nenhuma duplicação | CA02 |
 
-**Registro na #29:** ID e variante, data/ambiente, esperado, obtido, aprovado/falhou/bloqueado/não executado, duração quando disponível e link para log/JUnit/captura/trace pertinente. Falhas de ambiente são separadas de falhas do produto. O relatório consolidado deve resumir os três níveis e eventuais defeitos, com passos reproduzíveis e fontes.
+Esses casos verificam a integração com persistência; não serão apresentados como testes HTTP ou validações da interface.
 
-**Saída:** todas as variantes planejadas possuem resultado explícito e evidência compatível; falhas investigadas; comandos e dados reproduzíveis; relatório do plano e da execução publicados nas respectivas Issues e arquivos versionados. Aprovação geral não será declarada quando houver divergências. Defeitos conhecidos serão preservados nos resultados e explicados, sem alterar o oráculo apenas para tornar a execução verde.
+## 7. Casos de sistema
 
-## 11. Fontes e uso de IA
+Pré-condição: sessão e funcionário sintético preparados. Cada variante começa com dados válidos e independentes. Em rejeições, conferir que não houve gravação da alteração.
+
+| ID | Passos e dados | Esperado | Critério |
+|---|---|---|---|
+| ST01 | Executar o fluxo principal: cadastrar, recarregar, editar telefone e recarregar | Contato criado e atualização mantida, sem duplicação | CA01, CA02 |
+| ST02 | Preencher Add e cancelar; em caso separado alterar contato e cancelar | Nenhuma criação ou alteração gravada | CA03 |
+| ST03 | Variar nome e parentesco, um por vez, com vazio e espaços | Obrigatoriedade indicada; gravação rejeitada | CA04 |
+| ST04 | Tentar salvar sem telefones; depois usar somente residencial, somente celular e somente comercial | Sem telefone rejeitado; cada telefone isolado permite salvar | CA05 |
+| ST05 | Variar telefone com `abc`, `123@456` e `+++++++++` | Letras e `@` rejeitados; sinais aceitos e mantidos conforme comportamento observado | CA06 |
+| ST06 | Variar nome/parentesco com 99/100/101 e cada telefone com 29/30/31 caracteres | Limites aceitos e persistidos; excesso rejeitado com mensagem de comprimento | CA07 |
+
+As linhas com vários dados são casos parametrizados. O relatório identificará campo e valor de cada execução. Usar classes de equivalência para vazios/formato, valores-limite para comprimento e o cenário da jornada para cadastro/atualização.
+
+Tabela de decisão de ST04 (nome e parentesco válidos):
+
+| Variante | Residencial | Celular | Comercial | Esperado na interface |
+|---|---|---|---|---|
+| Nenhum | Vazio | Vazio | Vazio | Rejeitar |
+| Residencial | Válido | Vazio | Vazio | Aceitar |
+| Celular | Vazio | Válido | Vazio | Aceitar |
+| Comercial | Vazio | Vazio | Válido | Aceitar |
+
+## 8. Rastreabilidade
+
+| Critério | Unitário | Integração | Sistema |
+|---|---|---|---|
+| CA01 — cadastro | UT04 | IT01 | ST01 |
+| CA02 — atualização | UT04 | IT02 | ST01 |
+| CA03 — cancelar | — | — | ST02 |
+| CA04 — obrigatórios | UT01 | — | ST03 |
+| CA05 — pelo menos um telefone | — | — | ST04 |
+| CA06 — formato e caracterização | UT02 | — | ST05 |
+| CA07 — comprimento | UT03 | — | ST06 |
+
+## 9. Registro e conclusão
+
+Na #29, registrar ID/variante, ambiente/data, dados, esperado, obtido, situação e link para log ou captura pertinente. Relatar separadamente os resultados originais e os testes próprios. Diferenciar falha do produto de problema do ambiente e registrar os casos não executados com seu motivo.
+
+Concluir a atividade com os casos implementados e seus resultados documentados, análise das divergências encontradas e links dos arquivos/commits/PRs nas Issues do plano e da execução. Não declarar aprovação de casos que não foram executados nem modificar o esperado apenas para obter aprovação.
+
+## 10. Fontes e uso de IA
 
 - [Enunciado T2](https://moodle.pucrs.br/mod/page/view.php?id=3938865).
-- [Análise dos testes originais e fontes fixadas](https://github.com/masmangan/literate-lamp/blob/bc0552f/suzan-stockey/docs/analise-testes-originais.md).
-- [Validações UI/API e avaliação do material de terceiros](https://github.com/masmangan/literate-lamp/blob/bc0552f/suzan-stockey/docs/analise-validacoes-e-terceiros.md).
-- [Exploração manual e evidências de Suzan](https://github.com/masmangan/literate-lamp/blob/bc0552f/suzan-stockey/docs/exploracao-contatos-emergencia.md).
-- [Linha de base original: 16 testes e 56 asserções](https://github.com/masmangan/literate-lamp/blob/bc0552f/suzan-stockey/docs/execucao-testes-originais.md).
+- [Análise dos testes originais](https://github.com/masmangan/literate-lamp/blob/faff914/suzan-stockey/docs/analise-testes-originais.md).
+- [Validações e material de terceiros](https://github.com/masmangan/literate-lamp/blob/faff914/suzan-stockey/docs/analise-validacoes-e-terceiros.md).
+- [Exploração e evidências](https://github.com/masmangan/literate-lamp/blob/faff914/suzan-stockey/docs/exploracao-contatos-emergencia.md).
+- [Execução dos testes originais](https://github.com/masmangan/literate-lamp/blob/faff914/suzan-stockey/docs/execucao-testes-originais.md).
 
-Plano estruturado e redigido com auxílio do ChatGPT/Codex (OpenAI), com base no escopo revisado por Suzan Stockey Pereira na #25, em sua exploração manual e nas análises da #26. A elaboração deste documento não implica que os novos casos já tenham sido implementados ou executados. A execução original no GitHub Actions é uma linha de base distinta.
+Plano redigido e revisado com auxílio do ChatGPT/Codex (OpenAI), a pedido de Suzan Stockey Pereira, com base no escopo que ela revisou na #25 e em sua exploração manual. Esta revisão simplifica o planejamento; não representa execução dos novos casos.

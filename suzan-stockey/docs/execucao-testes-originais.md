@@ -32,9 +32,9 @@ Evidências preservadas:
 
 Os totais do JUnit foram conferidos contra a saída textual. Os testes passaram nas condições dessa execução; esse resultado não demonstra cobertura das validações e dos fluxos ausentes nos arquivos analisados, discutidos na [análise crítica](analise-testes-originais.md).
 
-## Reprodução
+## Ambiente e rastreabilidade
 
-O [workflow](../../.github/workflows/suzan-emergency-contacts.yml) prepara o banco e executa o filtro no GitHub Actions. A documentação de [ambiente de testes](ambiente-local.md) descreve a configuração e os relatórios gerados.
+A documentação do [ambiente utilizado](ambiente-local.md) descreve a preparação e os relatórios gerados. O link do job e o commit registrados acima identificam a configuração usada na execução original.
 
 ## Uso de IA
 
